@@ -5,17 +5,18 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BuildABiocWorkshop • BuildABiocWorkshop</title>
+<title>BuildABiocWorkshop • CytoverseBioc2023</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="BuildABiocWorkshop">
-<meta property="og:description" content="This package serves as a template for using github actions to 
-    prepare a Bioconductor Workshop package for use. In particular,
-    a pkgdown website and docker image are generated based on workflow 
-    settings. ">
+<meta property="og:description" content="Multi-dimensional flow cytometry remains the gold standard for assessing the presence and abundance of cellular subpopulations in basic science and clinical and translational studies. 
+    There is increasing recognition of the importance of replacing ad-hoc GUI tools with automated and programmable workflows. 
+    For several years, Bioconductor has hosted the cytoverse: a set of interoperable packages, including flowCore, flowWorkspace, opencyto, ggcyto, cytoqc and others, which all facilitate programmatic flow cytometry analysis in R. 
+    Here we provide an overview of these packages in the context of re-analyzing a publicly available data set. 
+    At the end of the workshop, attendees will be able to i) import flow cytometry data, ii) understand the difference between uncompensated, compensated, and transformed data, iii) identify and generate important plots to assess data quality, iv) identify subpopulations by manually or semi-automated gating of markers, v) generate plots summarizing the expression of markers and abundance of various subpopulations.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -35,8 +36,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">BuildABiocWorkshop</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <a class="navbar-link" href="index.html">CytoverseBioc2023</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
       </span>
     </div>
 
@@ -63,7 +64,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/seandavi/BuildABiocWorkshop" class="external-link">
+  <a href="https://github.com/OzetteTech/cytoverse-bioc-2023" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -141,8 +142,8 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/seandavi/BuildABiocWorkshop/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/seandavi/BuildABiocWorkshop/issues/new/choose" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/OzetteTech/cytoverse-bioc-2023/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/OzetteTech/cytoverse-bioc-2023/issues/new/choose" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -158,14 +159,14 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing BuildABiocWorkshop</a></li>
+<li><a href="authors.html#citation">Citing CytoverseBioc2023</a></li>
 </ul>
 </div>
 
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Sean Davis <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8991-6458" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Andrew McDavid <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
@@ -177,7 +178,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Sean Davis.</p>
+<p>Developed by Andrew McDavid.</p>
 </div>
 
 <div class="pkgdown">
