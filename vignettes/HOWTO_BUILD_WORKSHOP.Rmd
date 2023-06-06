@@ -14,7 +14,7 @@ build all the pieces necessary for a workshop.
 
 ## Quickstart
 
-- [ ] Create a repo from this template and rename it (do not fork the repository).
+- [x] Create a repo from this template and rename it (do not fork the repository).
   - [ ] Ensure that "Read and Write Permissions" is checked under [General > Workflow permissions](https://github.com/seandavi/BuildABiocWorkshop/settings/actions). 
 - [ ] Edit `DESCRIPTION` file
   - [ ] Change package name
