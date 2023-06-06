@@ -1,4 +1,4 @@
-url: https://seandavi.github.io/BuildABiocWorkshop
+url: https://ozettetech.github.io/cytoverse-bioc-2023
 
 template:
   params:
@@ -13,6 +13,6 @@ home:
 navbar:
   right:
    - icon: fa-github
-     href: https://github.com/seandavi/BuildABiocWorkshop
+     href: https://github.com/OzetteTech/cytoverse-bioc-2023
      
 
