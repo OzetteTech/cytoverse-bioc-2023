@@ -2,10 +2,14 @@ Package: CytoverseBioc2023
 Title: Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse
 Version: 0.0.0.9001
 Authors@R: 
-    person(given = "Andrew",
+    c(person(given = "Andrew",
            family = "McDavid",
            role = c("aut", "cre"),
-           email = "andrew@ozette.com")
+           email = "andrew@ozette.com"),
+      person(given = "Arpan",
+            family = "Neupan",
+            role = c("aut"),
+            email = "arpan.neupan@ozette.com"))
 Description: Multi-dimensional flow cytometry remains the gold standard for assessing the presence and abundance of cellular subpopulations in basic science and clinical and translational studies. 
     There is increasing recognition of the importance of replacing ad-hoc GUI tools with automated and programmable workflows. 
     For several years, Bioconductor has hosted the cytoverse: a set of interoperable packages, including flowCore, flowWorkspace, opencyto, ggcyto, cytoqc and others, which all facilitate programmatic flow cytometry analysis in R. 
@@ -23,7 +27,9 @@ Depends:
     ggcyto,
     openCyto,
 Imports:
-    pheatmap
+    pheatmap,
+    gridExtra,
+    flowStats
 Suggests: 
     knitr,
     rmarkdown,
