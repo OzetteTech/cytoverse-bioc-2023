@@ -21,7 +21,9 @@ Depends:
     flowWorkspace,
     flowCore,
     ggcyto,
-    openCyto
+    openCyto,
+Imports:
+    pheatmap
 Suggests: 
     knitr,
     rmarkdown,
