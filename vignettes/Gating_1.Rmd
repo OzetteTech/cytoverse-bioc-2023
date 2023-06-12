@@ -1,0 +1,114 @@
+---
+title: "Gating Cells in cytoverse"
+output: html_notebook
+---
+
+# Background
+
+The purpose of flow cytometry is to make inferences regarding some cell type(s) of interest. Often this involves establishing/drawing a gating heirachy to sequentially filter down to the cell type(s) of interest. This process is very often done manually, and can be very labour intensive. Importantly, manual approach implies large variation when one person does it vs. the next, or even if the same person does it multiple times.
+The `cytoverse` offers a suite of tools to tackle this problem in a reproducible and programmatic manner. 
+
+## GatingSet and GatingHeirarchy
+
+So far, we have seen (and worked with) `flowFrame`, `flowSet`, `cytoframe`, and `cytoset`. These objects hold the underlying FCS data, allow us to visualize it, manipulate it etc. 
+
+In this section we work with `GatingSet` and `GatingHierarchy`. These objects, like the name suggets, store information regarding various gates and filters that we will generate. Importantly, we can also save the `GatingSet` which will completely package the analysis as well as the FCS files in a sharable opensource format, allowing reproducibility.
+
+Required libraries 
+
+```{r load_library}
+library(flowWorkspace)
+library(ggcyto)
+```
+
+Steps to create a `GatingSet`
+```{r intro_gatingset, eval = T, echo=TRUE}
+# create a cytoset
+cs <- flowWorkspace::load_cytoset_from_fcs(path = "data/fcs_data/",pattern = "TNK-CR1")
+
+# add metadata
+meta <- data.frame(names = sampleNames(cs), status = "Healthy", panel = "T Cell",row.names = sampleNames(cs))
+pData(cs) <- meta
+
+# creating a gatingset
+gs <- flowWorkspace::GatingSet(cs)
+
+gs
+```
+
+
+Now that we have created a `GatingSet` what can we do with it?
+
+We will revisit some of the concepts that we have seen previously: **compensation** and **transformation**
+
+```{r comp_trans_gs, echo=TRUE, eval=TRUE, fig.height=10, fig.width=10, message=FALSE}
+# compensate a GatingSet
+spill <- keyword(gs[[1]],"$SPILLOVER") # extract spillover matrix stored within the file
+
+compensate(gs,spill) # GatingSet will be compensated and stores the spill matrix as well
+
+recompute(gs) # update the gs
+
+# retrieve compensation information; return NULL is GatingSet was not compensated
+gs_spill <- gs_get_compensations(gs[[1]])
+
+# output is a rich spillover information
+slot(gs_spill[[1]],"spillover")[1:4, 1:4]
+
+# transformation of GatingSet
+
+my_trans_list <- flowWorkspace::transformerList(from = names(markernames(gs)),
+                                                trans = flowWorkspace::asinhtGml2_trans(T = sinh(1)*500, M = 0.4))
+
+transform(gs, my_trans_list) # transforms underlying data
+
+# gates for data cleanup; start by visualizing 
+
+singlet_vis <- autoplot(gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) extracts the underlying data
+          x = "FSC-A",
+          y = "FSC-H",
+          bins = 256
+          )+facet_wrap(~sampleNames(gs))
+
+# calculate and add a singlet gate
+singlet_gate <- fsApply(gs_pop_get_data(gs),function(x){
+                flowStats::gate_singlet(x, filterId = "singlet",wider_gate = FALSE,prediction_level = 0.95,subsample_pct = 0.5)
+})
+
+# add singlets gate
+gs_pop_add(gs,singlet_gate)
+
+recompute(gs)
+
+# calculate a live gate
+live_gate <- fsApply(gs_pop_get_data(gs,"singlet"), # indicating that estimation should be done on filtered data
+                     function(x){
+                       gate <- openCyto::gate_quantile(fr = x, channel = "U450-A", 
+                                                      probs = 0.95,
+                                                      filterId = "dead"
+                                                      )
+                       plot_1 <- autoplot(object = x, x = "U450-A",bins = 256)+
+                         geom_gate(gate)
+                       print(plot_1)
+                       return(gate)
+                     })
+
+# add live gate
+gs_pop_add(gs, parent = "singlet",gate = live_gate)
+recompute(gs)
+
+# calculate lymphocyte gate
+lymphocyte_gate <- fsApply(gs_pop_get_data(gs,"live"), # indicating that estimation should be 
+
+# visualize the gated data
+as.ggplot(autoplot(gs,"singlet", bins = 256)+
+  facet_wrap(~sampleNames(gs)))
+
+
+
+# visualize the Gating heirarchy
+plot(gs)
+
+```
+
+Now we break down each step 

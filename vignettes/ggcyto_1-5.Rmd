@@ -1,0 +1,16 @@
+---
+title: "Visualization (1.5)"
+output: html_notebook
+---
+
+We have spent a bit of time going over import, manupulation, compensation, and transformation of flow cytometry data. Importantly, we have used visualizations to highlight the importance of various steps. Here, we dedicate some time to visualization of flow cytometry data using `ggcyto` library from the `cytoverse`
+
+For those who have experience working with `ggplot`, the approach is going to be similar.
+
+```{r required_libraries, echo=T, eval=T}
+library(flowCore)
+library(ggcyto)
+```
+
+
+
