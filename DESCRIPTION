@@ -1,6 +1,6 @@
 Package: CytoverseBioc2023
 Title: Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person(given = "Andrew",
            family = "McDavid",
