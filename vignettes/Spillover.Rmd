@@ -1,6 +1,6 @@
 ---
 title: "Spillover, compensation, and Transformations"
-output: html_notebook
+output: rmarkdown::html_vignette
 ---
 
 # Background

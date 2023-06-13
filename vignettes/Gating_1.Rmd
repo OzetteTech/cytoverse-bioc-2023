@@ -1,6 +1,6 @@
 ---
 title: "Gating Cells in cytoverse"
-output: html_notebook
+output: rmarkdown::html_vignette
 ---
 
 # Background

@@ -1,6 +1,6 @@
 ---
 title: "Spillover, compensation, Transformations, and Visualization (1)"
-output: html_notebook
+output: rmarkdown::html_vignette
 runtime: shiny
 ---
 

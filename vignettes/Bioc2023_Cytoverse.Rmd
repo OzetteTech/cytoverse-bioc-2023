@@ -1,6 +1,6 @@
 ---
 title: "Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse"
-output: html_notebook
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse}
   %\VignetteEngine{knitr::rmarkdown}

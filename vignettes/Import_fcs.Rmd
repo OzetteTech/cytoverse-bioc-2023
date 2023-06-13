@@ -1,6 +1,6 @@
 ---
 title: "Importing and Basics of working with FCS files"
-output: html_notebook
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Importing and Basics of working with FCS files}
   %\VignetteEngine{knitr::rmarkdown}
