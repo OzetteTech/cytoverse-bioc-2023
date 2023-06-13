@@ -1,6 +1,10 @@
 ---
 title: "Importing and Basics of working with FCS files"
 output: html_notebook
+vignette: >
+  %\VignetteIndexEntry{Importing and Basics of working with FCS files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 Flow cytometry data (regardless of the type of instrument used) is generally saved as a **.fcs** file. This file is populated with various parameters: such as userid, instrumentid, 
