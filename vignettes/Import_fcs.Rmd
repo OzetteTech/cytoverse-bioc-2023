@@ -18,6 +18,8 @@ if(!("flowCore" %in% installed.packages()))
   BiocManager::install("flowCore")
 
 library("flowCore")
+library(CytoverseBioc2023)
+cache_workshop_data()
 ```
 ## Reading in FCS files
 
@@ -31,9 +33,15 @@ There are 3 approaches to read in FCS files:
 
 The function `read.FCS` is used to read in individual files as a `flowFrame` object. 
 
+Normally, you might download a folder with a set of FCS files and interact with that.  For instance,
+```{r}
+knitr::include_graphics("images/example_fcs_path.png")
+```
+
+For technical reasons, we can't easily distribute the FCS files in this way, but instead reference them through a file cache that is populated once.  But this is just a glorified set of folders.   If you want to explore it, you can examine it with `BiocFileCache::bfcquery(CytoverseBioc2023::bfc)`.
 
 ```{r read.FCS, eval=TRUE, echo=TRUE, message = FALSE}
-ff <- read.FCS("data/fcs_data/4000_TNK-CR1.fcs")
+ff <- read.FCS(get_workshop_data("data/fcs_data/4000_TNK-CR1.fcs")$rpath)
 
 # a flowFrame object
 ff
@@ -160,14 +168,14 @@ Options to create `flowSet`
 
 # option 1
 # load fcs files as a list
-fcs_list <- lapply(X = list.files(path = "data/fcs_data/",full.names = TRUE),FUN = read.FCS)
+fcs_list <- lapply(X = get_workshop_data(path = "data/fcs_data/")$rpath,FUN = read.FCS)
 
 # convert to flowSet
 fs <- as(fcs_list,"flowSet")
 fs
 
 # option 2 (preferred)
-fs <- read.flowSet(path = "data/fcs_data/")
+fs <- read.flowSet(files = get_workshop_data(path = "data/fcs_data/")$rpath)
 fs
 ```
 
@@ -176,7 +184,7 @@ Options to create a `cytoset`
 ```{r cytoset_example, echo=TRUE, message=TRUE}
 require(flowWorkspace)
 # option 1 (preferred)
-cs <- load_cytoset_from_fcs(path = "data/fcs_data/")
+cs <- load_cytoset_from_fcs(files = get_workshop_data(path = "data/fcs_data/")$rpath)
 
 # option 2 (convert flowSet to cytoset)
 cs <- flowSet_to_cytoset(fs)
