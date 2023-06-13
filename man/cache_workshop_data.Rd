@@ -3,7 +3,7 @@
 \name{cache_workshop_data}
 \alias{cache_workshop_data}
 \alias{get_workshop_data}
-\title{Download and cache workshop data}
+\title{Download and cache workshop data from CytoverseBioc2023:::zip_link}
 \usage{
 cache_workshop_data(force = FALSE)
 
@@ -11,12 +11,14 @@ get_workshop_data(path)
 }
 \arguments{
 \item{force}{Should we download and cache again even if it appears that data have already been downloaded?}
+
+\item{path}{\code{character} giving a path to file(s) in the original tarball}
 }
 \value{
 \code{\link[BiocFileCache:BiocFileCache-class]{BiocFileCache::BiocFileCache()}}, invisibly
 }
 \description{
-Download and cache workshop data
+Download and cache workshop data from CytoverseBioc2023:::zip_link
 }
 \section{Functions}{
 \itemize{
