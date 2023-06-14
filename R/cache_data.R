@@ -31,5 +31,6 @@ cache_workshop_data = function(force = FALSE){
 #' @describeIn cache_workshop_data return a `data.frame` with `rpath` pointing to the location of files whose paths match `path`
 #' @param path `character` giving a path to file(s) in the original tarball
 get_workshop_data = function(path){
+  bfc = .get_cache()
   bfcquery(bfc, path)
 }
