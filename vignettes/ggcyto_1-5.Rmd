@@ -1,6 +1,6 @@
 ---
 title: "Visualization (1.5)"
-output: html_notebook
+output: rmarkdown::html_vignette
 ---
 
 We have spent a bit of time going over import, manupulation, compensation, and transformation of flow cytometry data. Importantly, we have used visualizations to highlight the importance of various steps. Here, we dedicate some time to visualization of flow cytometry data using `ggcyto` library from the `cytoverse`
