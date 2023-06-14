@@ -1,6 +1,6 @@
 ---
 title: "Gating Cells in cytoverse"
-output: html_notebook
+output: rmarkdown::html_vignette
 ---
 
 # Background
@@ -19,13 +19,16 @@ Required libraries
 library(flowWorkspace)
 library(ggcyto)
 theme_set(theme_classic())
+library(CytoverseBioc2023)
+cache_workshop_data()
 ```
 
 Steps to create a `GatingSet`
 
 ```{r intro_gatingset, eval = T, echo=TRUE}
 # create a cytoset
-cs <- flowWorkspace::load_cytoset_from_fcs(path = "../../../data/fcs_data/",pattern = "TNK-CR1")
+fcs_files <- get_workshop_data("fcs_data/")
+cs <- flowWorkspace::load_cytoset_from_fcs(files = fcs_files$rpath)
 
 # add metadata
 meta <- data.frame(names = sampleNames(cs), status = "Healthy", panel = "T Cell",row.names = sampleNames(cs))
