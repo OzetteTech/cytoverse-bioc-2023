@@ -15,9 +15,10 @@ In this section we work with `GatingSet` and `GatingHierarchy`. These objects, l
 
 Required libraries
 
-```{r load_library, message=FALSE}
+```{r load_library, message=FALSE, echo = TRUE, eval=TRUE}
 library(flowWorkspace)
 library(ggcyto)
+# set ggcyto theme  
 theme_set(theme_classic())
 library(CytoverseBioc2023)
 cache_workshop_data()
@@ -28,21 +29,28 @@ Steps to create a `GatingSet`
 ```{r intro_gatingset, eval = T, echo=TRUE}
 # create a cytoset
 fcs_files <- get_workshop_data("fcs_data/")
-cs <- flowWorkspace::load_cytoset_from_fcs(files = fcs_files$rpath)
+fcs_files_TNK <- dplyr::filter(fcs_files, grepl(pattern = "TNK-CR1",x = rname))
+cs <- flowWorkspace::load_cytoset_from_fcs(files = fcs_files_TNK$rpath,
+                                           pattern = "TNK-CR1")
 
-# add metadata
-meta <- data.frame(names = sampleNames(cs), status = "Healthy", panel = "T Cell",row.names = sampleNames(cs))
+# add mock metadata
+meta <- data.frame(names = sampleNames(cs), 
+                   status = "Healthy", 
+                   panel = "T Cell",
+                   mock_treatment = sample(c("Treated","Control"),4,replace = TRUE),
+                   row.names = sampleNames(cs))
 pData(cs) <- meta
 
-# creating a gatingset
+# creating a GatingSet
 gs <- flowWorkspace::GatingSet(cs)
-
 gs
 ```
 
 Now that we have created a `GatingSet` what can we do with it?
 
-We will revisit some of the concepts that we have seen previously: **compensation** and **transformation**
+We will revisit some of the concepts that we have seen previously: **compensation** and **transformation.**
+
+We can directly compensate the `GatingSet` object.
 
 ```{r comp_trans_gs, echo=TRUE, eval=TRUE, fig.height=10, fig.width=10, message=FALSE,warning=FALSE}
 # compensate a GatingSet
@@ -57,38 +65,82 @@ gs_spill <- gs_get_compensations(gs[[1]])
 
 # output is a rich spillover information
 slot(gs_spill[[1]],"spillover")[1:4, 1:4]
+```
 
+As well we can transform the `GatingSet`.
+
+[DISCUSS WITH ANDREW WHY THIS ISN'T WORKING AS EXPECTED]
+```{r demo_transformation_gs, echo = TRUE, eval = TRUE}
 # transformation of GatingSet
+t.rds <- dplyr::filter(get_workshop_data("/fj_wsp"), # a previously defined transformation
+                       grepl(pattern = "transform", 
+                             x = rname))$rpath
+my_trans <- readRDS(file = t.rds)
 
-my_trans_list <- readRDS("../../../data/fj_wsp/fj_transform")
+# make into transformerList object
+my_trans_list <- flowWorkspace::transformerList(from = names(my_trans),
+                                                trans = my_trans)
+                                                
+flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
+```
 
-transform(gs, my_trans_list) # transforms underlying data
+## Adding gates and building a hierarchy
 
+Now that we have created a `GatingSet` we should start adding various gates that identifies cells of interest. Each sample within a `GatingSet` is associated with a `GatingHierarchy` that stores information regarding various gates that we would have created and applied to the samples.
+
+Below, we demonstrate various types of gates that can be applied to the samples within a `GatingSet` to build a hierachy.
+
+Note that the process is reliant on **visualization** of the data. As such, we will make ample use of the `ggcyto` library and highlighting its usage.
+
+```{r singlet_gate_viz, echo = T, eval = T }
 # gates for data cleanup; start by visualizing 
-
 singlet_vis <- autoplot(gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) extracts the underlying data
-          x = "FSC-A",
-          y = "FSC-H",
-          bins = 256
-          )+facet_wrap(~sampleNames(gs))
+                        x = "FSC-A",
+                        y = "FSC-H",
+                        bins = 256
+                        )+
+              facet_wrap(~sampleNames(gs)) # leverage the metadata that is saved within the GatingSet to facet plots 
 
 singlet_vis
+```
 
+Now, we add a gate that is used to filter out **singlets**. For this, we make use of the `flowStats` library from the `cytoverse`.
+
+```{r add_singlets_gate, echo = T, eval = T}
 # calculate and add a singlet gate
+singlet_gate <- fsApply(gs_pop_get_data(gs),function(x){ # sample wise calculation using fsApply
+                flowStats::gate_singlet(x, 
+                                        filterId = "singlet", # name for the gate
+                                        wider_gate = FALSE, # indicate if the returned gate should be linient
+                                        prediction_level = 0.95,
+                                        subsample_pct = 0.5 # percent of events to sample to calculate the gate
+                                        )
+  })
 
-singlet_gate <- fsApply(gs_pop_get_data(gs),function(x){
-                flowStats::gate_singlet(x, filterId = "singlet",wider_gate = FALSE,prediction_level = 0.95,subsample_pct = 0.5)
-})
+# visualize
+singlet_vis + 
+  geom_gate(singlet_gate)+ # geom_gate takes a single gate or a list of gates as an argument. list should have the same name as sampleNames(gs)
+  facet_wrap(~name)
 
-singlet_vis + geom_gate(singlet_gate)+facet_wrap(~names)
+```
 
-# Example of a singlets gate
-gs_pop_add(gs,singlet_gate)
-recompute(gs)
+Once visualized, we can add the gates to its respective samples.
 
-# calculate a live gate; 
+```{r add_singlets_gate_2, eval=T, echo=TRUE}
+# add gate to the GatingSet 
+gs_pop_add(gs,singlet_gate, parent = "root") # add singlet_gate to the root node
+recompute(gs) # recompute updates the gs
+```
+
+The next few examples are done in a similar manner:
+  - visualize marker(s) 
+  - use `openCyto` or `flowStats` to define gates
+  - add to `GatingSet`
+  
+```{r additional_gate_examples, echo=TRUE, eval=TRUE}
+# calculate a live gate 
 ## Example of a quantile gate
-live_gate <- fsApply(gs_pop_get_data(gs,"singlet"), # indicating that estimation should be done on filtered data
+live_gate <- fsApply(gs_pop_get_data(gs,"singlet"), # indicating that estimation should be done on filtered data: singlet
                      function(x){
                        gate <- openCyto::gate_quantile(fr = x, channel = "U450-A", 
                                                       probs = 0.95,
@@ -133,7 +185,7 @@ cd3_vis <- ggcyto(
   gs, subset = "lymphocytes", aes(x = "CD3", y = "CD56")
 )+
   geom_hex(bins = 256)+
-  facet_wrap(~names)#+
+  facet_wrap(~name)#+
   # axis_x_inverse_trans()+
   # axis_y_inverse_trans() 
 
@@ -156,7 +208,7 @@ recompute(gs)
 nkt_vis <- ggcyto(gs, subset = "CD3+ T cells",
                   aes(x = "CD1d", y = "CD3"))+ # fuzzy matching of marker names
   geom_hex(bins = 256)+
-  facet_wrap(~names)
+  facet_wrap(~name)
 nkt_vis
 
 # define coordinates
@@ -213,7 +265,7 @@ t_cell_vis <- ggcyto(
   gs, subset = "non-NKT Cells",
   aes(x = "Vg9", y = "Vd1")
 )+geom_hex(bins = 256)+
-  facet_wrap(~names)
+  facet_wrap(~name)
 
 # Example use multiple gating tools and piping
 ## Estimate gate by sampling the gatinset
@@ -228,14 +280,14 @@ conv_t_cell_gate <- gs |>
     all_exprs <- flowFrame(all_exprs)
     attrs = c("min","max")
                                # identify cutpoints
-                               g1 <- openCyto::quantileGate(all_exprs,
+                               g1 <- openCyto::gate_quantile(all_exprs,
                                                   channel = "B515-A",
                                                   prob = 0.98
                                                   )
                                g1_attrs <- sapply(attrs, function(y){
                                  attr(g1,y)
                                })
-                               g2 <- openCyto::quantileGate(all_exprs,
+                               g2 <- openCyto::gate_quantile(all_exprs,
                                                   channel = "G575-A",
                                                   prob = 0.90
                                                   )
@@ -254,7 +306,7 @@ conv_t_cell_gate <- gs |>
     
   })()
  
-t_cell_vis+ggcyto:::geom_gate(conv_t_cell_gate)+facet_wrap(~names)
+t_cell_vis+ggcyto:::geom_gate(conv_t_cell_gate)+facet_wrap(~name)
 
 # adjust gates
 conv_t_cell_gate <- flowCore::transform_gate(conv_t_cell_gate,
@@ -270,7 +322,7 @@ recompute(gs)
 mait_vis <- ggcyto(gs, subset = "conv_Tcells",
                    aes(x  = "TCR Va7_2", y = "CD161"))+
   geom_hex(bins = 256)+
-  facet_wrap(~names)
+  facet_wrap(~name)
 
 
 # add MAIT cells
@@ -284,14 +336,14 @@ mait_gate_all <- openCyto::gate_flowclust_2d(fr =  flowFrame(fsApply(gs_pop_get_
                                          ),
                                                   xChannel = "V710-A",
                                                   yChannel = "G660-A",target = c(175,175),
-                                                  K = 10,filterId = "MAIT Cells"
+                                                  K = 10,filterId = "MAIT Cells" # K indicates number of clusters to estimate
                                                   
                                          )
 # fix filterId
 mait_gate_all@filterId <- "MAIT Cells"
 
 # visualize
-mait_vis+geom_gate(mait_gate_all)+facet_wrap(~names)
+mait_vis+geom_gate(mait_gate_all)+facet_wrap(~name)
 
 # scale gate
 mait_gate_all <- scale_gate(mait_gate_all, scale = 2)
@@ -319,7 +371,7 @@ not_mait_gate <- lapply(seq(1,length(
     fl <- filter(ff,gate)
     idx <- which(!fl@subSet)
     set.seed(123)
-    sample_n <- min(length(idx),1E4)
+    sample_n <- min(length(idx),1E5)
     m.names <- colnames(gate@cov)
     events <- exprs(ff)[idx[sample(length(idx),sample_n)],m.names]
     c.hull <- chull(events)
@@ -337,7 +389,7 @@ recompute(gs)
 cd4_cd8 <- ggcyto(gs,subset = "not_MAIT",
                   aes(x = "CD4", y = "CD8"))+
   geom_hex(bins = 256)+
-  facet_wrap(~names)
+  facet_wrap(~name)
 cd4_cd8
 
 # add a quad gate
@@ -366,7 +418,7 @@ cd4_cd8_quad_gate <- lapply(gs_pop_get_data(gs,"not_MAIT"),
 # visualize
 cd4_cd8+
   geom_gate(cd4_cd8_quad_gate)+
-  facet_wrap(~names)
+  facet_wrap(~name)
 
 # add gate
 gs_pop_add(gs, cd4_cd8_quad_gate,parent = "not_MAIT_Polygon")
@@ -376,14 +428,7 @@ recompute(gs)
 cd4_t_subset <- ggcyto(gs, subset = "CD4+CD8a-",
                    aes(x = "CD45RA", y = "CCR7"))+
   geom_hex(bins = 256)+
-  facet_wrap(~names)
-
-cd4_subset <- lapply(gs_pop_get_gate(gs,"CD4+CD8a-"),
-                     function(x){
-                       
-  
-})
-
+  facet_wrap(~name)
 
 # plot the gating tree
 plot(gs, bool = TRUE)
@@ -392,8 +437,6 @@ plot(gs, bool = TRUE)
 final_plot <- autoplot(gs[[1]],bins = 256, bool = TRUE)+
   ggcyto_par_set(limits = "data") # set data range to be determined by data
 ```
-
-,
 
 Now to break it down:
 
