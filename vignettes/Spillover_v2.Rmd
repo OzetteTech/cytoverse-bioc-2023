@@ -35,26 +35,24 @@ Signal recovery (Compensation) requires a set of controls be present to calculat
 
 ## Importance of spillover correction
 
-Let's visualize the data to highlight the main issues related to spillover. I am using the `ggcyto` library from the `cytoverse`. We will dive into more details on the usage of `ggcyto` in a later section.
+Let's visualize the data to highlight the main issues related to spillover. We will make use of the `ggcyto` library from the `cytoverse` for this. We will dive into more details on the usage of `ggcyto` in a later section.
 
 ```{r viz_uncompensated_data, echo=FALSE, eval=T, message=FALSE, fig.width=10}
-# load required libraries
-library(flowCore)
-library(ggcyto)
-
 # read file
 ff <- read.FCS("data/fcs_data/4000_BDC-CR1.fcs")[,-32]
 
 # define transformation
-trans <- transformList(from = names(markernames(ff)),tfun = (function(x)asinh(x/500)))
+trans <- transformList(from = names(markernames(ff)),
+                       tfun = (function(x)asinh(x/500))) # user definition
 # transform
 ff_trans <- transform(ff,trans)
 
 # plot
-uncompensated <- as.ggplot(ggcyto(ff_trans, aes(x = "CD3", y = "CD5"))+
-  geom_hex(bins = 128)+
-  theme_bw()+
-  labs(title = "Uncompensated data"))
+uncompensated <- as.ggplot(ggcyto(ff_trans, # flowFrame, flowSet, cytoframe, cytoset, GatingSet, or GatingHierarchy can be used as data source
+                                  aes(x = "CD3", y = "CD5"))+ # automatic matching of markernames
+                          geom_hex(bins = 128)+
+                          theme_bw()+
+                          labs(title = "Uncompensated data"))
 
 # compensate
 ff_comp <- compensate(ff, spillover(ff)[[3]])
@@ -62,13 +60,17 @@ ff_comp <- compensate(ff, spillover(ff)[[3]])
 ff_comp <- transform(ff_comp,trans)
 
 # plot
-compensated <- as.ggplot(ggcyto(ff_comp, aes(x = "CD3", y = "CD5"))+
-  geom_hex(bins = 128)+
-  theme_bw()+
-  labs(title = "Compensated data")+
-    axis_x_inverse_trans())
+compensated <- as.ggplot(ggcyto(ff_comp, 
+                                aes(x = "CD3", y = "CD5"))+
+                        geom_hex(bins = 128)+
+                        theme_bw()+
+                        labs(title = "Compensated data")+
+                        axis_x_inverse_trans()) # axis is transformed instead of data
 
-gridExtra::grid.arrange(uncompensated,compensated,nrow = 1, top = "1. Difficulty resolving the correct populations")
+gridExtra::grid.arrange(uncompensated,
+                        compensated,
+                        nrow = 1, 
+                        top = "1. Difficulty resolving the correct populations")
 
 ```
 
@@ -76,17 +78,22 @@ Another example:
 
 ```{r uncompensated_data_issue,echo=FALSE,eval=TRUE, fig.width=10}
 
-uncompensated <- as.ggplot(ggcyto(ff_trans, aes(x = "SSC-A", y = "Live"))+
-  geom_hex(bins = 128)+
-  theme_bw()+
-  labs(title = "Uncompensated data"))
+uncompensated <- as.ggplot(ggcyto(ff_trans, 
+                                  aes(x = "SSC-A", y = "Live"))+
+                                  geom_hex(bins = 128)+
+                                  theme_bw()+
+                                  labs(title = "Uncompensated data"))
 
-compensated <- as.ggplot(ggcyto(ff_comp, aes(x = "SSC-A", y = "Live"))+
-  geom_hex(bins = 128)+
-  theme_bw()+
-  labs(title = "Compensated data"))
+compensated <- as.ggplot(ggcyto(ff_comp, 
+                                aes(x = "SSC-A", y = "Live"))+
+                                geom_hex(bins = 128)+
+                                theme_bw()+
+                                labs(title = "Compensated data"))
 
-gridExtra::grid.arrange(uncompensated, compensated, nrow = 1, top = "2. Wrong conclusions")
+gridExtra::grid.arrange(uncompensated, 
+                        compensated, 
+                        nrow = 1, 
+                        top = "2. Wrong conclusions")
 
 ```
 
@@ -114,7 +121,14 @@ The columns of the spillover matrix are the detectors while the rows are contrib
 s.mat <- spillover(ff)[[3]]
 rownames(s.mat) <- markernames(ff)
 
-pheatmap::pheatmap(mat = s.mat,cluster_rows = F,cluster_cols = F,color = colorRampPalette(c("black","orange","cyan","magenta"))(100),display_numbers = T,number_format = "%.2f",legend = FALSE,number_color = "white")
+pheatmap::pheatmap(mat = s.mat,
+                   cluster_rows = F,
+                   cluster_cols = F,
+                   color = colorRampPalette(c("black","orange","cyan","magenta"))(100),
+                   display_numbers = T,
+                   number_format = "%.2f",
+                   legend = FALSE,
+                   number_color = "white")
 ```
 
 Looking at the figure, column 2: B610-A has high spillover from flurophore: PE-Dazzle594 and PE.
@@ -142,7 +156,8 @@ ff <- read.FCS("data/FlowRepository_FR-FCM-ZZ36_files/pbmc_luca.fcs")
 control_files <- read.csv("data/FlowRepository_FR-FCM-ZZ36_files/control_files.csv",row.names = 1)
 
 # load the set of compensation files
-comp_frames <- lapply(file.path("data", "FlowRepository_FR-FCM-ZZ36_files",control_files[["filename"]]),read.FCS)
+comp_frames <- lapply(file.path("data", "FlowRepository_FR-FCM-ZZ36_files",control_files[["filename"]]), # example of using lapply to read in FCS files into a list
+                      read.FCS) 
 names(comp_frames) <- control_files[["channel"]]
 
 # convert to flowSet
@@ -151,11 +166,11 @@ comp_fs <- as(comp_frames,"flowSet")
 
 # quick visualization of what the control files contain
 all_control_af488 <- ggcyto::as.ggplot(ggcyto(comp_fs,
-                  aes(x = "FSC-A", y = "Alexa Fluor 488-A"))+
-                    geom_hex(bins = 256)+
-                    theme_bw()+
-                    scale_y_flowCore_fasinh(b = 1/150)+
-                    labs(title = "Detection of Alexa Fluor 488 in all control samples "))
+                                      aes(x = "FSC-A", y = "Alexa Fluor 488-A"))+
+                                      geom_hex(bins = 256)+
+                                      theme_bw()+
+                                      scale_y_flowCore_fasinh(b = 1/150)+
+                                      labs(title = "Detection of Alexa Fluor 488 in all control samples "))
 
 # calculate spillover
 ## using spillover from flowStats
@@ -172,13 +187,19 @@ Now, let's visualize the spill matrix that we calculated.
 [NOTE: This needs to be corrected in the flowStats package. Normalization is with respect to the max value and not with respect to the intended channel.]
 
 ```{r viz_calculated_spill, eval=T, echo=FALSE}
-pheatmap::pheatmap(mat = spill,cluster_rows = F,cluster_cols = F,color = colorRampPalette(c("black","orange","cyan","magenta"))(100),display_numbers = T, legend = FALSE, number_color = "white",number_format = "%.3f")
-
+pheatmap::pheatmap(mat = spill,
+                   cluster_rows = F,
+                   cluster_cols = F,
+                   color = colorRampPalette(c("black","orange","cyan","magenta"))(100),
+                   display_numbers = T, 
+                   legend = FALSE,
+                   number_color = "white",
+                   number_format = "%.3f")
 ```
 
 *Note: "Close or related fluorophores will have some degree of overlap"*
 
-Lastly, we check the effect of "compensating" the files.
+Lastly, we check the effect of *compensating* the files.
 
 ```{r show_comp_effect, echo=T, eval=TRUE}
 # read in FCS
@@ -189,12 +210,11 @@ trans <- flowCore::transformList(from = setdiff(sampleNames(comp_fs),"Unstained"
 ff_trans <- transform(ff,trans) # transformation defined above
 
 # plot pre-compensation
-pre_compensation <- as.ggplot(autoplot(ff_trans, 
+pre_compensation <- as.ggplot(autoplot(ff_trans,          # autoplot can be used to generate plots rapidly
                                        x = "PE-Cy5-5-A", 
                                        y = "PE-Cy5-A", 
                                        bins = 256)+
-                                labs(title = "Uncompensated data")
-                              )
+                                labs(title = "Uncompensated data"))
 
 # compensate
 ff_comp <- compensate(ff,final)
@@ -205,10 +225,11 @@ post_compensation <- as.ggplot(autoplot(ff_comp,
                                        x = "PE-Cy5-5-A", 
                                        y = "PE-Cy5-A", 
                                        bins = 256)+
-                                 labs(title = "Compensated data")
-                               )
+                                 labs(title = "Compensated data"))
 
-gridExtra::grid.arrange(pre_compensation, post_compensation, nrow = 1)
+gridExtra::grid.arrange(pre_compensation, 
+                        post_compensation, 
+                        nrow = 1)
 ```
 
 ## Transformation and visualization
@@ -219,7 +240,7 @@ There are multiple approaches to transform the data in `cytoverse`. We will iden
 
 First, let's visualize why transformation is necessary.
 
-```{r transformation_demo, echo=FALSE, eval=FALSE,message=FALSE,}
+```{r transformation_demo, echo=FALSE, eval=FALSE,message=FALSE}
 library(shiny)
 ff <- read.FCS("data/fcs_data/4000_BDC-CR1.fcs")
 ff <- compensate(ff, spillover(ff)[[3]])
@@ -338,7 +359,13 @@ logicle <- as.ggplot(autoplot(ff,
   scale_y_logicle()+
   labs(title = "Logicle transformation"))
 
-gridExtra::grid.arrange(no_transform,biexp, log_trans,asinh_t, logicle, nrow = 2,bottom = "Generic transformations of compensated data")
+gridExtra::grid.arrange(no_transform,
+                        biexp, 
+                        log_trans,
+                        asinh_t, 
+                        logicle, 
+                        nrow = 2,
+                        bottom = "Generic transformations of compensated data")
 ```
 
 As we see, the variety of transformations aids in visualization and interpretation of the data.
@@ -410,13 +437,13 @@ Transforming a set of FCS files
 
 ```{r transform_flowset, echo=TRUE, eval=TRUE}
 # read in a flowSet
-fs <- flowCore::read.flowSet(path = "data/fcs_data/",pattern = "BDC-CR1")
+fs <- flowCore::read.flowSet(path = "../../../data/fcs_data/",pattern = "BDC-CR1") # read in a set of FCS files as flowSet
 
 # compensate
-fs <- fsApply(fs, function(x){
-  spill = spillover(x)[[3]]
-  compensate(x,spillover = spill)
-})
+fs <- fsApply(fs, function(x){ # fsApply will return a the same object as input
+              spill = spillover(x)[[3]]
+              compensate(x,spillover = spill)
+            })
 
 # using asinh_trans defined previously
 my_trans_list <- flowCore::transformList(from = names(markernames(ff)),
@@ -425,22 +452,22 @@ my_trans_list <- flowCore::transformList(from = names(markernames(ff)),
 fs_transformed <- transform(fs, my_trans_list)
 
 # visualize
-fs_raw <- as.ggplot(autoplot(fs,
+fs_raw <- as.ggplot(autoplot(fs, # autoplot being used to plot a flowSet
                    x = "CD14",
                    y = "HLA-DR",
                    bins = 256)+
-  labs(title = "Untransformed flowSet"))
+                   labs(title = "Untransformed flowSet"))
 
 fs_trans <- as.ggplot(autoplot(fs_transformed,
                      x = "CD14",
                      y = "HLA-DR",
                      bins = 256)+
-  labs(title = "Transformed flowSet"))
+                     labs(title = "Transformed flowSet"))
 
-gridExtra::grid.arrange(fs_raw, fs_trans)
+gridExtra::grid.arrange(fs_raw, fs_trans, nrow = 1)
 ```
 
-Transformation of `cytoset` take a slightly different (but mostly similar) path.
+Transformation of `cytoset` takes a path.
 
 ```{r trans_cytoset, echo=TRUE, eval=TRUE}
 # load a cytoset from fcs files
