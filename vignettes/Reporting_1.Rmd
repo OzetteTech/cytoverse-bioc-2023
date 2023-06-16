@@ -1,0 +1,48 @@
+---
+title: "Reporting: Bringing Everything Eogether"
+output: rmarkdown::html_vignette
+---
+
+# Background
+
+The final step in the analysis of flow cytometry data is **Reporting**. At this stage, we bring all the tools that we have ...[COMPLETE THIS]
+
+```{r libraries, echo=T, eval=T, message=FALSE}
+library(flowCore)
+library(flowWorkspace)
+library(ggcyto)
+library(CytoverseBioc2023)
+cache_workshop_data()
+```
+
+```{r get_gatingset, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+# get GatingSet
+source("../../cytoverse-bioc-2023/R/workshop_gs.R")
+```
+
+## Counts, Frequencies, and MFI
+
+[WRITE STUFF HERE]
+
+```{r counts, message = FALSE}
+# get count for all
+counts <- gs_pop_get_count_fast(gs,  # indicate which GatingSet to use
+                                statistic = "count", # indicate what statistic is requested
+                                format = "wide") # indicate if data should be in wide (samples are columns) or long (each node for each sample gets a row) format
+
+knitr::kable(counts, caption = "Event counts")
+```
+
+```{r frequency, message = FALSE}
+freq <- gs_pop_get_count_fast(gs,
+                              statistic = "freq",
+                              format = "wide")
+knitr::kable(freq, caption = "Event frequencies relative to parent node")
+```
+
+What if one wants to report frequencies relative to a different population:
+
+```{r}
+plot(gs, bool = TRUE)
+```
+
