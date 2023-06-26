@@ -41,12 +41,12 @@ For this workshop, we will use subset of a public dataset: [FR-FCM-Z5PC](https:/
 
 ## Workshop schedule
 
-| Activity                                     | Time       |
-|----------------------------------------------|------------|
-| Basics of working with FCS files             | 15 minutes |
-| Spillover, Transformation, and Visualization | 15 minutes |
-| Gating Cells in cytoverse                    | 30 minutes |
-| Visualization 2                              | 20 minutes |
-| Reporting                                    | 10 minutes |
+| Activity                                         | Time       |
+|--------------------------------------------------|------------|
+| Basics of working with FCS files                 | 15 minutes |
+| Spillover, Transformation, and Visualization (1) | 15 minutes |
+| Gating Cells in the cytoverse                    | 40 minutes |
+| Visualization (2)                                | 10 minutes |
+| Reporting                                        | 10 minutes |
 
 # Journey into the Cytoverse!

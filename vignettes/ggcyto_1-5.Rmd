@@ -5,7 +5,7 @@ output: rmarkdown::html_vignette
 
 We have spent a bit of time going over import, manupulation, compensation, and transformation of flow cytometry data. Importantly, we have used visualizations to highlight the importance of various steps. Here, we dedicate some time to visualization of flow cytometry data using `ggcyto` library from the `cytoverse`
 
-For those who have experience working with `ggplot`, the approach is going to be similar. As such, `ggcyto` provides a easy to use yet power approach to visualize flow cytometry data.
+For those who have experience working with `ggplot`, the approach is going to be similar. As such, `ggcyto` provides a easy to use yet powerful approach to visualize flow cytometry data.
 
 It is also important to note that `ggcyto` works with each of `flowFrame`, `flowSet`, `cytoframe`, `cytoset`, `GatingSet`, and `GatingHierarchy` and allows the user to utilize various attributes of each of the object. For instance, **metadata** within `pData` slot in `flowSet`/`cytoset` and `GatingSet` to prepare insightful visualizations, rapidly.
 
