@@ -1,5 +1,5 @@
 ---
-title: "Reporting: Bringing Everything Eogether"
+title: "Reporting: Bringing Everything Together"
 output: rmarkdown::html_vignette
 ---
 
@@ -16,8 +16,7 @@ cache_workshop_data()
 ```
 
 ```{r get_gatingset, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
-# get GatingSet
-source("../../cytoverse-bioc-2023/R/workshop_gs.R")
+gs = make_transformed_gs()
 ```
 
 ## Counts, Frequencies, and MFI
