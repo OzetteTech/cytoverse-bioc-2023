@@ -10,7 +10,25 @@
     <loc>https://ozettetech.github.io/cytoverse-bioc-2023/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Bioc2023_Cytoverse.html</loc>
+  </url>
+  <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Gating_1.html</loc>
+  </url>
+  <url>
     <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/HOWTO_BUILD_WORKSHOP.html</loc>
+  </url>
+  <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Import_fcs.html</loc>
+  </url>
+  <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Reporting_1.html</loc>
+  </url>
+  <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Spillover_v2.html</loc>
+  </url>
+  <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/ggcyto_1-5.html</loc>
   </url>
   <url>
     <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/index.html</loc>
@@ -25,6 +43,12 @@
     <loc>https://ozettetech.github.io/cytoverse-bioc-2023/index.html</loc>
   </url>
   <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/reference/cache_workshop_data.html</loc>
+  </url>
+  <url>
     <loc>https://ozettetech.github.io/cytoverse-bioc-2023/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/reference/make_transformed_gs.html</loc>
   </url>
 </urlset>
