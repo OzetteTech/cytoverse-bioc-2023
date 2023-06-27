@@ -4,6 +4,6 @@ Dockerfile
 _pkgdown.yml
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^doc$
-^Meta$
-^docs$
+^doc.*
+^Meta.*
+^docs.*

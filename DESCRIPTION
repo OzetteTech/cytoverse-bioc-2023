@@ -32,7 +32,9 @@ Imports:
     flowStats,
     BiocFileCache,
     withr,
-    utils
+    utils,
+    stringr,
+    dplyr
 Suggests: 
     knitr,
     rmarkdown,
