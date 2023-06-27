@@ -1,8 +1,6 @@
 # Purpose: Run through a script to create a GatingSet
 
-library(flowCore)
-library(flowWorkspace)
-library(CytoverseBioc2023)
+make_transformed_gs = function(){
 cache_workshop_data()
 
 # create a cytoset
@@ -291,5 +289,5 @@ cd4_cd8_quad_gate <- lapply(gs_pop_get_data(gs,"not_MAIT"),
 gs_pop_add(gs, cd4_cd8_quad_gate,parent = "not_MAIT_Polygon")
 recompute(gs)
 
-# cleanup
-rm(list = ls()[!(ls() %in% "gs")])
+gs
+    }
