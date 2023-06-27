@@ -20,7 +20,7 @@ make_transformed_gs = function() {
   # add mock metadata
   set.seed(123)
   meta <- data.frame(
-    name = sampleNames(cs),
+    name = stringr::str_match(fcs_files_TNK$rname, "4[^.]+"),
     status = "Healthy",
     panel = "T Cell",
     mock_treatment = sample(
@@ -32,9 +32,10 @@ make_transformed_gs = function() {
     row.names = sampleNames(cs)
   )
   pData(cs) <- meta
-  
+
   # creating a GatingSet
   gs <- flowWorkspace::GatingSet(cs)
+  sampleNames(gs) <- pData(gs)$name
   
   spill <-
     keyword(gs[[1]], "$SPILLOVER") # extract spillover matrix stored within the file
@@ -185,8 +186,8 @@ make_transformed_gs = function() {
                       )
                     })
   
-  non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs` <-
-    transform_gate(non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs`,
+  non_nkt$`4002_TNK-CR1` <-
+    transform_gate(non_nkt$`4002_TNK-CR1`,
                    dx = 25)
   
   # add non_nkt
