@@ -1,6 +1,9 @@
 ---
 title: "Gating Cells in cytoverse"
-output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Gating Cells}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # Background
@@ -136,7 +139,7 @@ Once visualized, we can add the gates to its respective samples.
 
 ```{r add_singlets_gate_2, eval=T, echo=TRUE}
 # add gate to the GatingSet 
-gs_pop_add(gs,singlet_gate, parent = "root") # add singlet_gate to the root node
+gs_pop_add(gs, singlet_gate, parent = "root") # add singlet_gate to the root node
 recompute(gs) # recompute updates the gs
 ```
 
@@ -274,7 +277,10 @@ non_nkt <- lapply(gs,
 
 # visualize
 nkt_vis + geom_gate(non_nkt)
+```
 
+
+```{r broken-example, echo=TRUE, eval=FALSE}
 # sample 4002 looks like the gate wasn't set properly. Edit
 non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs` <- transform_gate(non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs`,
                                                          dx = 25) # small shift in x

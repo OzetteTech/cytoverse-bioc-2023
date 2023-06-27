@@ -10,6 +10,8 @@ library(flowCore)
 library(openCyto)
 library(flowWorkspace)
 library(flowStats)
+library(CytoverseBioc2023)
+cache_workshop_data()
 theme_set(theme_bw())
 ```
 
@@ -38,8 +40,9 @@ Signal recovery (Compensation) requires a set of controls be present to calculat
 Let's visualize the data to highlight the main issues related to spillover. We will make use of the `ggcyto` library from the `cytoverse` for this. We will dive into more details on the usage of `ggcyto` in a later section.
 
 ```{r viz_uncompensated_data, echo=FALSE, eval=T, message=FALSE, fig.width=10}
+
 # read file
-ff <- read.FCS("data/fcs_data/4000_BDC-CR1.fcs")[,-32]
+ff <- read.FCS(get_workshop_data("4000_BDC-CR1.fcs")$rpath)[,-32]
 
 # define transformation
 trans <- transformList(from = names(markernames(ff)),
@@ -145,7 +148,12 @@ Generally, there ought to be the same number of single colour controls as the nu
 
 The dataset that we are primarily going to be working with (i.e. [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932)) did not come with a set of control files to generate the spillover matrix. So for demonstration purposes, we will use single colour controls from a different dataset [FR-FCM-ZZ36](https://flowrepository.org/id/FR-FCM-ZZ36).
 
-```{r generating_spillover_with_controls, echo=TRUE, eval =TRUE, message=FALSE}
+```{r}
+has_fixed_paths = FALSE
+```
+
+
+```{r generating_spillover_with_controls, echo=TRUE, eval = has_fixed_paths, message=FALSE}
 # required libraries
 library(flowCore)
 
@@ -186,7 +194,7 @@ Now, let's visualize the spill matrix that we calculated.
 
 [NOTE: This needs to be corrected in the flowStats package. Normalization is with respect to the max value and not with respect to the intended channel.]
 
-```{r viz_calculated_spill, eval=T, echo=FALSE}
+```{r viz_calculated_spill, eval=has_fixed_paths, echo=FALSE}
 pheatmap::pheatmap(mat = spill,
                    cluster_rows = F,
                    cluster_cols = F,
@@ -201,7 +209,7 @@ pheatmap::pheatmap(mat = spill,
 
 Lastly, we check the effect of *compensating* the files.
 
-```{r show_comp_effect, echo=T, eval=TRUE}
+```{r show_comp_effect, echo=T, eval=has_fixed_paths}
 # read in FCS
 ff <- read.FCS("data/FlowRepository_FR-FCM-ZZ36_files/pbmc_luca.fcs")
 trans <- flowCore::transformList(from = setdiff(sampleNames(comp_fs),"Unstained"),
@@ -317,7 +325,7 @@ shinyApp(
 
 ```
 
-```{r demo_transformations, echo=FALSE, eval=T, fig.width=10, fig.height=10}
+```{r demo_transformations, echo=FALSE, eval=has_fixed_paths, fig.width=10, fig.height=10}
 ff <- read.FCS("data/fcs_data/4000_BDC-CR1.fcs")
 ff <- compensate(ff, spillover(ff)[[3]])
 
@@ -374,7 +382,7 @@ Steps to transform FCS data
 
 -   `cytoverse` libraries: `flowWorkspace` and `flowCore` have a multiple commonly used transformations as well, one can also create a custom transformation if required.
 
-```{r how_to_transform_builtin, echo=T, eval=T, message=F}
+```{r how_to_transform_builtin, echo=T, eval=has_fixed_paths, message=F}
 # transforming using cytoverse functions
 # define a transformation
 
@@ -408,7 +416,7 @@ gridExtra::grid.arrange(ff_comp, ff_comp_transformed, nrow = 1)
 
 User defined transformation.
 
-```{r user_defined_transformation,echo=TRUE,eval=TRUE}
+```{r user_defined_transformation,echo=TRUE,eval=has_fixed_paths}
 # define a transformation
 my_trans <- function(x){
   return(sqrt(abs(x)))
@@ -435,7 +443,7 @@ gridExtra::grid.arrange(ff_comp, ff_comp_transformed, nrow = 1)
 
 Transforming a set of FCS files
 
-```{r transform_flowset, echo=TRUE, eval=TRUE}
+```{r transform_flowset, echo=TRUE, eval=has_fixed_paths}
 # read in a flowSet
 fs <- flowCore::read.flowSet(path = "../../../data/fcs_data/",pattern = "BDC-CR1") # read in a set of FCS files as flowSet
 
@@ -469,7 +477,7 @@ gridExtra::grid.arrange(fs_raw, fs_trans, nrow = 1)
 
 Transformation of `cytoset` takes a path.
 
-```{r trans_cytoset, echo=TRUE, eval=TRUE}
+```{r trans_cytoset, echo=TRUE, eval=has_fixed_paths}
 # load a cytoset from fcs files
 cs <- flowWorkspace::load_cytoset_from_fcs(path = "data/fcs_data/",pattern = "BDC-CR1")
 
