@@ -120,16 +120,16 @@ tackle this problem in a reproducible and programmatic manner.</p>
 <div class="section level3">
 <h3 id="gatingset-and-gatingheirarchy">GatingSet and GatingHeirarchy<a class="anchor" aria-label="anchor" href="#gatingset-and-gatingheirarchy"></a>
 </h3>
-<p>In the previous sections, we have seen (and worked with)
-<code>flowFrame</code>, <code>flowSet</code>, <code>cytoframe</code>,
-and <code>cytoset</code>. These objects hold the underlying FCS data,
-allow us to visualize it, manipulate it etc.</p>
+<p>In the previous sections, we have worked with <code>flowFrame</code>,
+<code>flowSet</code>, <code>cytoframe</code>, and <code>cytoset</code>.
+These objects hold the underlying FCS data, allow us to visualize it,
+manipulate it etc.</p>
 <p>In this section we work with <code>GatingSet</code> and
 <code>GatingHierarchy</code>. These objects, like the name suggests,
 store information regarding various gates and filters that we will
 generate. Importantly, we can save the <code>GatingSet</code> which will
 completely package the analysis as well as the FCS files in an
-opensource format that can be shared, allowing reproducibility.</p>
+open-source format that can be shared, allowing reproducibility.</p>
 <p>First, we will go over variety of native methods that exist in the
 <code>cytoverse</code> which analysts can utilize to gate their cells of
 interest. Next, we will demonstrate how analysts can automate this
@@ -199,10 +199,8 @@ the metadata to help construct gates (if need be).</p>
 <p>As well we can transform the <code>GatingSet</code>. For convenience,
 we are using a previously defined <strong>transformerList</strong>
 object. The <strong>transformerList</strong> object was extracted from
-the workspace file created by the authors of the study[ADD RED]. While
-we don’t go over the process here, please look over [THIS SUPPLEMENTAL
-VIGNETTE: Small vignette to highlight how one can read a FJ workspace
-file] for details on how one could do it.</p>
+the workspace file created by the authors of <a href="https://doi.org/10.1038/s41467-022-34638-2" class="external-link">this</a> study and can
+be found <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># transformation of GatingSet</span></span>
 <span><span class="va">t.rds</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"/fj_wsp"</span><span class="op">)</span>, <span class="co"># a previously defined transformation</span></span>
@@ -263,7 +261,7 @@ use of the <code>ggcyto</code> library, highlighting its usage.</p>
 <em>Note:</em> Singlets gate was estimated for each sample.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add gate to the GatingSet </span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">singlet_gate</span>, parent <span class="op">=</span> <span class="st">"root"</span><span class="op">)</span> <span class="co"># add singlet_gate to the root node</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>,<span class="va">singlet_gate</span>, parent <span class="op">=</span> <span class="st">"root"</span><span class="op">)</span> <span class="co"># add singlet_gate to the root node</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 2</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span> <span class="co"># recompute updates the gs</span></span></code></pre></div>
@@ -534,6 +532,7 @@ gates</p></li>
 <span><span class="co"># add not MAIT gate</span></span>
 <span><span class="co">## Example of booleanFilter</span></span>
 <span><span class="va">not_mait</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/booleanFilter-class.html" class="external-link">booleanFilter</a></span><span class="op">(</span><span class="va">`!MAIT Cells`</span>, filterId <span class="op">=</span> <span class="st">"not_MAIT"</span><span class="op">)</span></span>
+<span></span>
 <span></span>
 <span><span class="co"># add boolean gate</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">not_mait</span>, parent <span class="op">=</span> <span class="st">"conv_Tcells"</span><span class="op">)</span></span>
