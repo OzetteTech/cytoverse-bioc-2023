@@ -93,7 +93,6 @@ gs <- flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
 ```
 
 
-
 ## Adding gates and building a hierarchy
 
 Now that we have created a `GatingSet` we should start adding various gates that identifies cells of interest. Each sample within a `GatingSet` is associated with a `GatingHierarchy` that stores information regarding various gates that we would have created and applied to the samples.
@@ -469,11 +468,25 @@ final_plot <- autoplot(gs[[1]],bins = 256, bool = TRUE)+
   ggcyto_par_set(limits = "data") # set data range to be determined by data
 ```
 
+Best to save the `GatingSet` now. 
+
 ```{r save_gs, echo=TRUE, eval=FALSE}
 # save your work
 save_gs(gs, path = "path/to/a/folder")
 ```
 
-Now to break it down:
 
-### 
+## Using openCyto gatingTemplate 
+
+WHAT IS A GATINGTEMPLATE
+
+HOW IS IT CREATED
+
+HERE IS HOW IT IS RUN
+
+```{r gatingTemplate, echo=TRUE, eval= FALSE}
+# read in gatingTemplate
+gt <- 
+
+```
+
