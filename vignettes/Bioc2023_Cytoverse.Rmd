@@ -9,13 +9,13 @@ vignette: >
 
 # The Cytoverse!
 
-The Cytoverse is a collection of opensource R based tools developed by the founders of **Ozette Technologies** which facilitate programmatic analysis of flow cytometry data.
+The `cytoverse` is a collection of opensource R based tools developed by the founders of **Ozette Technologies** which facilitate programmatic analysis of flow cytometry data.
 
-A number of packages make up the Cytoverse. [flowCore](https://bioconductor.org/packages/release/bioc/html/flowCore.html), [flowWorkspace](https://www.bioconductor.org/packages/release/bioc/html/flowWorkspace.html), [openCyto](https://bioconductor.org/packages/release/bioc/html/openCyto.html), and [ggcyto](https://www.bioconductor.org/packages/release/bioc/html/ggcyto.html) make up the core of the Cytoverse. These packages are, by and large, powerful and sufficient to create robost and reproducible analysis workflows for flow cytometry data. Additional available packages such as flowClust, flowStats, CytoQC, or CytoML can further utilized for niche applications including, but not limited to: TBD
+A number of packages make up the `cytoverse`. [flowCore](https://bioconductor.org/packages/release/bioc/html/flowCore.html), [flowWorkspace](https://www.bioconductor.org/packages/release/bioc/html/flowWorkspace.html), [openCyto](https://bioconductor.org/packages/release/bioc/html/openCyto.html), and [ggcyto](https://www.bioconductor.org/packages/release/bioc/html/ggcyto.html) make up the core of the Cytoverse. These packages are, by and large, powerful and sufficient to create robost and reproducible analysis workflows for flow cytometry data. Additional available packages such as `flowClust`, `flowStats`, `CytoQC`, or `CytoML` can further utilized for niche applications including, model based clustering of flow cytometry data, QC and standardization of set of FCS files, parsing of workspaces from FlowJo or cytobank.
 
 # Workshop outlines
 
-## Aim
+## Learning goals
 
 The aim of this workshop is to empower flow cytometry users and analysts towards reproducible and programmatic analysis.
 
@@ -27,11 +27,26 @@ By the end of this workshop, the attendees will be able to
 -   identify subpopulations by manually or semi-automated gating of markers,
 -   generate plots summarizing the expression of markers and abundance of various subpopulations
 
+## Prerequisites/assumptions
+
+-   Some R knowledge
+
+-   Basic flow cytometry knowledge
+
+-   Willingness to ask questions and lean
+
 ## Data
 
 For this workshop, we will use subset of a public dataset: [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932) that can be found in **flowrepository.org**.
 
+## Workshop schedule
+
+| Activity                                         | Time       |
+|--------------------------------------------------|------------|
+| Basics of working with FCS files                 | 15 minutes |
+| Spillover, Transformation, and Visualization (1) | 15 minutes |
+| Gating Cells in the cytoverse                    | 40 minutes |
+| Visualization (2)                                | 10 minutes |
+| Reporting                                        | 10 minutes |
 
 # Journey into the Cytoverse!
-
-
