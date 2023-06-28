@@ -9,9 +9,9 @@ The purpose of flow cytometry is to make inferences regarding some cell type(s) 
 
 ## GatingSet and GatingHeirarchy
 
-In the previous sections, we have seen (and worked with) `flowFrame`, `flowSet`, `cytoframe`, and `cytoset`. These objects hold the underlying FCS data, allow us to visualize it, manipulate it etc.
+In the previous sections, we have worked with `flowFrame`, `flowSet`, `cytoframe`, and `cytoset`. These objects hold the underlying FCS data, allow us to visualize it, manipulate it etc.
 
-In this section we work with `GatingSet` and `GatingHierarchy`. These objects, like the name suggests, store information regarding various gates and filters that we will generate. Importantly, we can save the `GatingSet` which will completely package the analysis as well as the FCS files in an opensource format that can be shared, allowing reproducibility.
+In this section we work with `GatingSet` and `GatingHierarchy`. These objects, like the name suggests, store information regarding various gates and filters that we will generate. Importantly, we can save the `GatingSet` which will completely package the analysis as well as the FCS files in an open-source format that can be shared, allowing reproducibility.
 
 First, we will go over variety of native methods that exist in the `cytoverse` which analysts can utilize to gate their cells of interest. Next, we will demonstrate how analysts can automate this process by utilizing a `gatingTemplate` (a csv file that can be used to define and build the hierarchy).
 
@@ -73,7 +73,7 @@ slot(gs_spill[[1]],"spillover")[1:4, 1:4]
 ```
 
 As well we can transform the `GatingSet`. 
-For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of the study[ADD RED]. While we don't go over the process here, please look over [THIS SUPPLEMENTAL VIGNETTE: Small vignette to highlight how one can read a FJ workspace file] for details on how one could do it. 
+For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
 
 ```{r demo_transformation_gs, echo = TRUE, eval = TRUE}
 # transformation of GatingSet

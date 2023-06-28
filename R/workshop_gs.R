@@ -150,7 +150,7 @@ non_nkt <- lapply(gs,
                     )
                   })
 
-non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs` <- transform_gate(non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs`,
+non_nkt$`4002_TNK-CR1.fcs` <- transform_gate(non_nkt$`4002_TNK-CR1.fcs`,
                                                          dx = 25)
 
 # add non_nkt

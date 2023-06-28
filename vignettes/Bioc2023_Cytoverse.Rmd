@@ -37,7 +37,7 @@ By the end of this workshop, the attendees will be able to
 
 ## Data
 
-For this workshop, we will use subset of a public dataset: [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932) that can be found in **flowrepository.org**.
+For this workshop, we will use subset of a public dataset: [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932) that can be found in **flowrepository.org**. The dataset was published in the following [paper](https://doi.org/10.1038/s41467-022-34638-2).
 
 ## Workshop schedule
 
