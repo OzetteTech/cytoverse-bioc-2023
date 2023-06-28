@@ -1,6 +1,9 @@
 ---
 title: "Gating Cells in cytoverse"
-output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Gating Cells}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # Background
@@ -74,6 +77,7 @@ slot(gs_spill[[1]],"spillover")[1:4, 1:4]
 
 As well we can transform the `GatingSet`. 
 For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
+
 
 ```{r demo_transformation_gs, echo = TRUE, eval = TRUE}
 # transformation of GatingSet
@@ -190,7 +194,6 @@ lymphocyte_gate <- lapply(lymphocyte_gate,
 # add lymphocyte gate
 gs_pop_add(gs, parent = "live", gate = lymphocyte_gate)
 recompute(gs)
-
 
 # add T cells gate
 ## Example of rectangleGate
@@ -380,6 +383,7 @@ recompute(gs)
 # add not MAIT gate
 ## Example of booleanFilter
 not_mait <- booleanFilter(`!MAIT Cells`, filterId = "not_MAIT")
+
 
 # add boolean gate
 gs_pop_add(gs, not_mait, parent = "conv_Tcells")

@@ -1,6 +1,9 @@
 ---
 title: "Visualization (1.5)"
-output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Visualizing flow cytometry data with ggcyto}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 We have spent a bit of time going over import, manupulation, compensation, and transformation of flow cytometry data. Importantly, we have used visualizations to highlight the importance of various steps. Here, we dedicate some time to visualization of flow cytometry data using `ggcyto` library from the `cytoverse`
@@ -21,9 +24,7 @@ cache_workshop_data()
 ```
 
 ```{r echo=F, eval=T, message=FALSE}
-# will have up generate a gatingset which can be used to highlight inverse transformations
-# can I source an R script?
-source("../R/workshop_gs.R")
+gs <- make_transformed_gs()
 ff <- gh_pop_get_data(gs[[1]],"root",
                       returnType = "flowFrame")
 ```
@@ -67,7 +68,7 @@ autoplot(gs[[2]], # single GatingHierachy will plot the entire gating path
 ```{r gs_autoplot_gate, echo=TRUE, eval=TRUE, message = FALSE}
 # GatingSet: single gate
 autoplot(gs,
-         gate = "conv_Tcells", # plot a specific gate for all samples 
+         gate = "CD3+ T cells", # plot a specific gate for all samples 
          bins = 256)+
          ggcyto_par_set(limits = "data")+
          axis_x_inverse_trans()+ # inverse transform the axes
@@ -193,7 +194,7 @@ Below, we go through another example where we ask the question: what is the gene
 
 ```{r ggcyto_gs_geom_overlay, fig.width=10}
 mait_expression <- ggcyto(gs,
-                          subset = "conv_Tcells",
+                          subset = "CD3+ T cells",
                           aes(x = "CD4", y = "CD8a"))+
                    geom_hex(bins = 256)+
                    geom_overlay(data = 
