@@ -47,31 +47,59 @@ What if one wants to report frequencies relative to a different population?
 plot(gs, bool = TRUE)
 ```
 
-Let's consider the scenario here: you would like to calculate the frequency of **MAIT Cells** relative to total **CD3+ Cells**.
+Let's consider the scenario here: you would like to calculate the frequency of **MAIT Cells**, and **True_NKT Cells** relative to total **CD3+ Cells**.
 
-We can easily achieve this since the output of `gs_pop_get_count_fast` is a data frame. 
+We can easily achieve this by using `gs_pop_get_stats` and indicating which node(s) we want
 
 ```{r grand_parent_populations, echo=TRUE, eval=TRUE, message=FALSE}
 library(dplyr)
 # show the population paths
 gs_get_pop_paths(gs)
 
-# CD3+ T Cells 
-cd3_parent_count <- gs_pop_get_count_fast(gs,
-                                    statistic = "count",
-                                    subpopulations = gs_get_pop_paths(gs)[5] # at index 5
-                                    )
-mait_count <- gs_pop_get_count_fast(gs,
-                                    statistic = "count",
-                                    subpopulations = gs_get_pop_paths(gs)[9] # at index 9
-                                    )
+# get count for specified nodes and make wider 
+pop_counts <- gs_pop_get_stats(gs,
+                                    node = c("CD3+ Cells","MAIT Cells", "True_NKT Cells"),
+                                    type = "count"
+                                    ) %>% # output is a long column
+  tidyr::pivot_wider(names_from = pop, 
+                     values_from = count,names_prefix = "count_") %>% # convert to wide
+  mutate(MAIT_freq = `count_MAIT Cells`/`count_CD3+ Cells`,
+         NKT_freq = `count_True_NKT Cells`/`count_CD3+ Cells`)
 
-joined <- dplyr::left_join(cd3_parent_count,
-                            mait_count,
-                            by = "name",
-                            suffix = c("_CD3","_MAIT")) %>% 
-          mutate(frequency = Count_MAIT/Count_CD3)
 
-knitr::kable(select(joined, c(name, c(Count_CD3, Count_MAIT, frequency))),caption = "Frequency of MAIT Cells (relative to CD3+ T Cells)")
+knitr::kable(pop_counts,caption = "Frequency of MAIT and NKT Cells (relative to CD3+ T Cells)")
 ```
+
+Another common statistic that is reported if MFI (median fluorescence intensity). To extract MFI, we can again make use of `gs_pop_get_stat`. It is important to realize that MFI is often reported in *raw/linear scale*. 
+
+```{r get_MFI, eval=FALSE, echo=TRUE, message=FALSE}
+mfi_dataframe <- gs_pop_get_stats(gs,
+                 nodes = c("CD3+ Cells", "MAIT Cells", "CD4+ T Cells", "CD8+ T Cells"),
+                 type = pop.MFI,
+                 inverse.transform = FALSE)
+mfi_dataframe[1:5, 1:5]
+
+```
+For convenience, MFI are extracted for all markers for each of the specified population. 
+
+## (Optional) Additional statistics
+
+It is also possible to calculate additional statistics for the population of interest. For instance, if you were interested in 10th percentile expression you could define a function and use it in `gs_pop_get_stats` like so:
+
+```{r user_stats_function, eval=FALSE, echo=TRUE, message=TRUE}
+# define function
+my_quantile <- function(fr,percentile){
+  chnls <- names(markernames(fr))
+  res <- apply(exprs(fr)[,chnls],2,quantile,percentile)
+  names(res) <- markernames(fr)
+  return(res)
+}
+
+gs_pop_get_stats(gs,
+                 "CD3+ Cells",
+                 type = my_quantile,
+                 stats.fun.arg = list(percentile = .1))
+
+```
+
 
