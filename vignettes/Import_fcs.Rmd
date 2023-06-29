@@ -7,12 +7,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Flow cytometry data (regardless of the type of instrument used) is generally saved as a **.fcs** file. This file is populated with various parameters: such as userid, instrumentid, 
-
+Flow cytometry data (regardless of the type of instrument used) is generally saved as a **.fcs** file. This file is populated with various parameters: such as userid or instrumentid, in addition to the actual single cell data [WRITE MORE]. 
 
 ## Installing/loading required libraries 
 
-Start by installing and loading the Cytoverse package **flowCore** hosted at **bioconductor.org**. This package allows us to read and manipulate the **.fcs** file in R.
+Start by installing and loading the Cytoverse package **flowCore** hosted at **biocosamnductor.org**. This package allows us to read and manipulate the **.fcs** file in R.
 
 ```{r load_libraries, echo=TRUE, eval=FALSE, message=FALSE}
 install.packages("BioManager")

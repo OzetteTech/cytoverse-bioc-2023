@@ -5,7 +5,7 @@ output: rmarkdown::html_vignette
 
 # Background
 
-The final step in the analysis of flow cytometry data is **Reporting**. At this stage, we bring all the tools that we have ...[COMPLETE THIS]
+The final step in the analysis of flow cytometry data is **Reporting**. Below, we show how analysts can quickly extract counts, frequencies, and expression values for their population(s) of interest.
 
 ```{r libraries, echo=T, eval=T, message=FALSE}
 library(flowCore)
@@ -21,7 +21,7 @@ gs = make_transformed_gs()
 
 ## Counts, Frequencies, and MFI
 
-[WRITE STUFF HERE]
+Event counts can be easily extracted in a table f
 
 ```{r counts, message = FALSE}
 # get count for all
