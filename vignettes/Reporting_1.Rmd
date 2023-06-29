@@ -5,7 +5,7 @@ output: rmarkdown::html_vignette
 
 # Background
 
-The final step in the analysis of flow cytometry data is **Reporting**. At this stage, we bring all the tools that we have ...[COMPLETE THIS]
+The final step in the analysis of flow cytometry data is **Reporting**. Often this involves extracting statistics including Counts, Frequencies, and MFI for various population of interest. 
 
 ```{r libraries, echo=T, eval=T, message=FALSE}
 library(flowCore)
@@ -21,7 +21,7 @@ gs = make_transformed_gs()
 
 ## Counts, Frequencies, and MFI
 
-[WRITE STUFF HERE]
+We can easily extract Counts and Frequencies of the gated cell population from the `GatingSet`. 
 
 ```{r counts, message = FALSE}
 # get count for all
@@ -32,6 +32,8 @@ counts <- gs_pop_get_count_fast(gs,  # indicate which GatingSet to use
 knitr::kable(counts, caption = "Event counts")
 ```
 
+Changing `statistic` to `freq` return frequency of the gated population with respect to the parent population. 
+
 ```{r frequency, message = FALSE}
 freq <- gs_pop_get_count_fast(gs,
                               statistic = "freq",
@@ -39,9 +41,37 @@ freq <- gs_pop_get_count_fast(gs,
 knitr::kable(freq, caption = "Event frequencies relative to parent node")
 ```
 
-What if one wants to report frequencies relative to a different population:
+What if one wants to report frequencies relative to a different population?
 
-```{r}
+```{r plot_gating_hierarchy, echo=TRUE, eval=TRUE, message = FALSE}
 plot(gs, bool = TRUE)
+```
+
+Let's consider the scenario here: you would like to calculate the frequency of **MAIT Cells** relative to total **CD3+ Cells**.
+
+We can easily achieve this since the output of `gs_pop_get_count_fast` is a data frame. 
+
+```{r grand_parent_populations, echo=TRUE, eval=TRUE, message=FALSE}
+library(dplyr)
+# show the population paths
+gs_get_pop_paths(gs)
+
+# CD3+ T Cells 
+cd3_parent_count <- gs_pop_get_count_fast(gs,
+                                    statistic = "count",
+                                    subpopulations = gs_get_pop_paths(gs)[5] # at index 5
+                                    )
+mait_count <- gs_pop_get_count_fast(gs,
+                                    statistic = "count",
+                                    subpopulations = gs_get_pop_paths(gs)[9] # at index 9
+                                    )
+
+joined <- dplyr::left_join(cd3_parent_count,
+                            mait_count,
+                            by = "name",
+                            suffix = c("_CD3","_MAIT")) %>% 
+          mutate(frequency = Count_MAIT/Count_CD3)
+
+knitr::kable(select(joined, c(name, c(Count_CD3, Count_MAIT, frequency))),caption = "Frequency of MAIT Cells (relative to CD3+ T Cells)")
 ```
 

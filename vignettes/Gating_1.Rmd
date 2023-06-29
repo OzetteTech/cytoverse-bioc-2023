@@ -478,15 +478,42 @@ save_gs(gs, path = "path/to/a/folder")
 
 ## Using openCyto gatingTemplate 
 
-WHAT IS A GATINGTEMPLATE
+A gatingTemplate is a csv file which describes the gating methods, gating otf
 
 HOW IS IT CREATED
 
 HERE IS HOW IT IS RUN
 
-```{r gatingTemplate, echo=TRUE, eval= FALSE}
-# read in gatingTemplate
-gt <- 
+NEED TO UPDATE THE CACHE TO INCLUDE A GATING TEMPLATE
+```{r gatingTemplate}
 
+```
+
+
+```{r gatingTemplate_load, echo=TRUE, eval= FALSE, message = FALSE}
+# required library
+library(openCyto)
+# read in gatingTemplate
+gt <- openCyto::gatingTemplate("path/to/csv/file")
+
+# visualize the anticipated gating heirarchy
+plot(gt)
+```
+
+Since we have saved our `GatingSet` let's first remove all the nodes including and downstream of `singlet`.
+
+```{r gatingTemplate_run, echo = TRUE, eval = FALSE, message = FALSE}
+# clean gs
+gs_pop_remove(gs, "singlet") # removes singlet and all children nodes
+recompute(gs)
+
+# add gates defined in gatingTemplate
+gt_gating(gt, gs) # simply provide the parsed gatingTemplate and the GatingSet
+recompute(gs)
+
+# visualize
+plot(gs, bool = TRUE)
+
+autoplot(gs[[1]], bool = TRUE, bins = 128)
 ```
 
