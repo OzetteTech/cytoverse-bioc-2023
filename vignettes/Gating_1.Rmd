@@ -76,7 +76,8 @@ slot(gs_spill[[1]],"spillover")[1:4, 1:4]
 ```
 
 As well we can transform the `GatingSet`. 
-For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of the study[ADD RED]. While we don't go over the process here, please look over [THIS SUPPLEMENTAL VIGNETTE: Small vignette to highlight how one can read a FJ workspace file] for details on how one could do it. 
+For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
+
 
 ```{r demo_transformation_gs, echo = TRUE, eval = TRUE}
 # transformation of GatingSet
@@ -192,7 +193,6 @@ lymphocyte_gate <- lapply(lymphocyte_gate,
 # add lymphocyte gate
 gs_pop_add(gs, parent = "live", gate = lymphocyte_gate)
 recompute(gs)
-
 
 # add T cells gate
 ## Example of rectangleGate

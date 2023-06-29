@@ -24,8 +24,6 @@ cache_workshop_data()
 ```
 
 ```{r echo=F, eval=T, message=FALSE}
-# will have up generate a gatingset which can be used to highlight inverse transformations
-# can I source an R script?
 gs <- make_transformed_gs()
 ff <- gh_pop_get_data(gs[[1]],"root",
                       returnType = "flowFrame")
@@ -94,7 +92,7 @@ ggcyto(gs,
   facet_wrap(~name)
 ```
 
-The marker combination "CD8a vs CD4" is used to at the node `gs_get_pop_paths(gs)[8]` to define CD4+ vs CD8+ T cells. Unlike with `autoplot`, `ggcyto` method allows us to look at the data from the point of `subset`. In the above example, `subset = "singlet`.
+The marker combination "CD8a vs CD4" is used to at the node `gs_get_pop_paths(gs)[8]` to define CD4+ vs CD8+ T cells. Unlike with `autoplot`, `ggcyto` method allows us to look at the data from the point of `subset`. In the above example, `subset = "singlet"`.
 
 2. Adding a gate and stats layer that doesn't exist in the `subset` node
 

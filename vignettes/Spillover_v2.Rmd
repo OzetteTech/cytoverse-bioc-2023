@@ -42,7 +42,6 @@ Signal recovery (Compensation) requires a set of controls be present to calculat
 Let's visualize the data to highlight the main issues related to spillover. We will make use of the `ggcyto` library from the `cytoverse` for this. We will dive into more details on the usage of `ggcyto` in a later section.
 
 ```{r viz_uncompensated_data, echo=FALSE, eval=T, message=FALSE, fig.width=10}
-
 # read file
 ff <- read.FCS(get_workshop_data("4000_BDC-CR1.fcs")$rpath)[,-32]
 
