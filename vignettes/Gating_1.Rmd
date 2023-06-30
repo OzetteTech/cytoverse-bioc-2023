@@ -1,5 +1,5 @@
 ---
-title: "Gating Cells in cytoverse"
+title: "Gating Cells in cytoverse: Part 1"
 vignette: >
   %\VignetteIndexEntry{Gating Cells}
   %\VignetteEngine{knitr::rmarkdown}
@@ -478,27 +478,36 @@ save_gs(gs, path = "path/to/a/folder")
 
 ## Using openCyto gatingTemplate 
 
-A gatingTemplate is a csv file which describes the gating methods, gating otf
+A `gatingTemplate` is a csv file that describes the gating sequence and the gating methods. In the `gatingTemplate` csv file, we can leverage the various automated gating methods that we have previously  seen, without explicitly requiring to script it in **R**.
 
-HOW IS IT CREATED
+Let's take a look at an example gatingTemplate
 
-HERE IS HOW IT IS RUN
-
-NEED TO UPDATE THE CACHE TO INCLUDE A GATING TEMPLATE
-```{r gatingTemplate}
-
+```{r gatingTemplate_load, echo=FALSE, eval= FALSE, message = FALSE}
+knitr::kable(read.csv("gating_template/gating_template_TNK.csv"))
 ```
 
+There are 10 columns that are required in a gatingTemplate csv file:
 
-```{r gatingTemplate_load, echo=TRUE, eval= FALSE, message = FALSE}
+  - **alias* **: name (alias) of the gate
+  - **pop* **: + or -, or a combination such as: --, -+, ++, +-, or [ADD]
+  - **parent* **: parent population
+  - **dims* **: channels or markernames
+  - **gating_method* **: gating method to be used. example: *mindensity*
+  - **gating_args**: additional arguments that can be passed to **gating_methods**
+  - **collapseDataForGating**: **logical** indicating if the data is to be collapsed onto a single `flowFrame` before estimation
+  - **groupBy**: string indicating the grouping variable (within `pData` slot of the `GatingSet`)
+  - **preprocessing_method**: preprocessing method to be used
+  - **preprocessing_args**: additional arguments that can be passed to **preprocessing_method**
+
+*Note:* * indicates that these fields must be completed. Other can be left blank.
+
+```{r gatingTemplate_show, echo=TRUE, eval = FALSE,message=FALSE}
 # required library
 library(openCyto)
 # read in gatingTemplate
 gt <- openCyto::gatingTemplate("path/to/csv/file")
-
-# visualize the anticipated gating heirarchy
-plot(gt)
 ```
+
 
 Since we have saved our `GatingSet` let's first remove all the nodes including and downstream of `singlet`.
 
