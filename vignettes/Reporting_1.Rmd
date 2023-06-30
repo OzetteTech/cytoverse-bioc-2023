@@ -1,17 +1,23 @@
 ---
-title: "Reporting: Bringing Everything Together"
-output: rmarkdown::html_vignette
+title: "Reporting: Counts, Frequency, etc"
+vignette: >
+  %\VignetteIndexEntry{Reporting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # Background
 
-The final step in the analysis of flow cytometry data is **Reporting**. Below, we show how analysts can quickly extract counts, frequencies, and expression values for their population(s) of interest.
+The final step in the analysis of flow cytometry data is **Reporting**. Below, we show how we can quickly extract counts, frequencies, and expression values for their population(s) of interest.
 
 ```{r libraries, echo=T, eval=T, message=FALSE}
 library(flowCore)
 library(flowWorkspace)
 library(ggcyto)
 library(CytoverseBioc2023)
+theme_set(
+  theme_bw()
+)
 cache_workshop_data()
 ```
 
@@ -23,22 +29,22 @@ gs = make_transformed_gs()
 
 We can easily extract Counts and Frequencies of the gated cell population from the `GatingSet`. 
 
-```{r counts, message = FALSE}
+```{r counts, echo = TRUE, eval = TRUE, message = FALSE}
 # get count for all
 counts <- gs_pop_get_count_fast(gs,  # indicate which GatingSet to use
                                 statistic = "count", # indicate what statistic is requested
                                 format = "wide") # indicate if data should be in wide (samples are columns) or long (each node for each sample gets a row) format
 
-knitr::kable(counts, caption = "Event counts")
+knitr::kable(head(counts,20), caption = "Event counts")
 ```
 
 Changing `statistic` to `freq` return frequency of the gated population with respect to the parent population. 
 
-```{r frequency, message = FALSE}
+```{r frequency, echo = TRUE, eval = TRUE, message = FALSE}
 freq <- gs_pop_get_count_fast(gs,
                               statistic = "freq",
                               format = "wide")
-knitr::kable(freq, caption = "Event frequencies relative to parent node")
+knitr::kable(head(freq,20), caption = "Event frequencies relative to parent node")
 ```
 
 What if one wants to report frequencies relative to a different population?
@@ -51,14 +57,10 @@ Let's consider the scenario here: you would like to calculate the frequency of *
 
 We can easily achieve this by using `gs_pop_get_stats` and indicating which node(s) we want
 
-```{r grand_parent_populations, echo=TRUE, eval=TRUE, message=FALSE}
-library(dplyr)
-# show the population paths
-gs_get_pop_paths(gs)
-
+```{r grand_parent_populations, echo=TRUE, eval=FALSE, message=FALSE}
 # get count for specified nodes and make wider 
 pop_counts <- gs_pop_get_stats(gs,
-                                    node = c("CD3+ Cells","MAIT Cells", "True_NKT Cells"),
+                                    node = c("CD3+ T Cells","MAIT Cells", "NKT Cells"),
                                     type = "count"
                                     ) %>% # output is a long column
   tidyr::pivot_wider(names_from = pop, 
@@ -74,32 +76,97 @@ Another common statistic that is reported if MFI (median fluorescence intensity)
 
 ```{r get_MFI, eval=FALSE, echo=TRUE, message=FALSE}
 mfi_dataframe <- gs_pop_get_stats(gs,
-                 nodes = c("CD3+ Cells", "MAIT Cells", "CD4+ T Cells", "CD8+ T Cells"),
+                 nodes = c("CD3+ T cells", "MAIT Cells", "CD4+CD8a-", "CD4-CD8a+"),
                  type = pop.MFI,
-                 inverse.transform = FALSE)
-mfi_dataframe[1:5, 1:5]
+                 inverse.transform = TRUE)
 
+mfi_dataframe[1:5, 1:5]
 ```
 For convenience, MFI are extracted for all markers for each of the specified population. 
 
-## (Optional) Additional statistics
+## A simple report
 
-It is also possible to calculate additional statistics for the population of interest. For instance, if you were interested in 10th percentile expression you could define a function and use it in `gs_pop_get_stats` like so:
+In the table above, we noticed that expression of **PD1** is higher in MAIT Cells. Below, we create 2 plots to help drive this point (if this is of interest). We will make use of `ggcyto` and `ggplot2`
 
-```{r user_stats_function, eval=FALSE, echo=TRUE, message=TRUE}
-# define function
-my_quantile <- function(fr,percentile){
-  chnls <- names(markernames(fr))
-  res <- apply(exprs(fr)[,chnls],2,quantile,percentile)
-  names(res) <- markernames(fr)
-  return(res)
-}
+### Boxplot
 
-gs_pop_get_stats(gs,
-                 "CD3+ Cells",
-                 type = my_quantile,
-                 stats.fun.arg = list(percentile = .1))
+```{r dotplot_pd1, eval=FALSE, echo=TRUE, message=FALSE}
+library(dplyr)
+
+# plot some data
+pd1_mfi_plot <- left_join(pData(gs),mfi_dataframe, 
+          by = c("name" = "sample")) %>% 
+  ggplot(aes(x = mock_treatment, y = `PD1 BB660`, fill = pop))+
+  geom_boxplot()+
+  labs(x = "Cell Type", y = "median PD1 expression")+
+  scale_fill_manual(values = c("CD3+ T cells" = "black",
+                               "MAIT Cells" = "red",
+                               "CD4+CD8a-" = "blue",
+                               "CD4-CD8a+" = "green"),
+                    )+
+  theme(aspect.ratio = 1, 
+        legend.position = "right")
+```
+
+### Overlaid histogram
+
+```{r histogram_overlay, eval = FALSE, echo = TRUE}
+pd1_overlay <- ggcyto(gs,
+       subset = "MAIT Cells",
+       aes(x = "PD1"))+
+  geom_density(fill = "red", alpha = 0.3)+ # MAIT Cells in red
+  geom_overlay(
+    data = gs_pop_get_data(gs,"CD3+ T cells"),
+    fill = "black", alpha = 0.5)+ # CD3+ Cells in black
+   geom_overlay(
+    data = gs_pop_get_data(gs,"CD4+CD8a-"),
+    fill = "blue", alpha = 0.5)+ # CD4+ T Cells in blue
+   geom_overlay(
+    data = gs_pop_get_data(gs,"CD4-CD8a+"),
+    fill = "green", alpha = 0.5)+ # CD8+ T Cells in green
+  axis_x_inverse_trans()+
+  facet_wrap(mock_treatment~name, nrow = 1)+
+  labs(title = "",x = "PD1")+
+  theme(aspect.ratio = 1)
+pd1_overlay <- as.ggplot(pd1_overlay)
+```
+
+### Final Figure
+
+```{r final_figure, eval = FALSE, echo=TRUE, message=FALSE}
+gridExtra::grid.arrange(
+ pd1_mfi_plot,
+ pd1_overlay,
+ nrow = 2,
+ left = "PD1 expression in T cell subsets"
+)
 
 ```
 
+It is now clear that the expression of PD1 indeed tends to be higher on MAIT Cells compared to non-MAIT T Cells. 
+
+## (Optional) Additional statistics
+
+It is also possible to calculate additional statistics for the population of interest. For instance, if you were interested in nth percentile expression of a specific marker you could define a function and use it in `gs_pop_get_stats` like so:
+
+```{r user_stats_function, eval=FALSE, echo=TRUE, message=TRUE}
+# define a function
+my_quantile <- function(fr,percentile,chnl){
+  matched_chnl <- flowCore::getChannelMarker(fr,chnl) # match channel name
+  res <- apply(exprs(fr)[,matched_chnl[["name"]],drop = FALSE], 2, quantile,percentile) # get quantile for specific channel
+  names(res) <- matched_chnl[["desc"]]
+  return(res)
+}
+
+# get stats
+gs_pop_get_stats(gs,
+                 c("lymphocytes","CD3+ T cells","CD4+CD8a-","CD4-CD8a+"), 
+                 type = my_quantile,
+                 #inverse.transform = TRUE,
+                 stats.fun.arg = list(percentile = .5,
+                                      chnl = "cd4")) 
+
+```
+
+As we see, we were able to extract median expression of the marker **CD4** on 4 different populations. As expected, expression is highest on **CD4+ T Cells** and lowest on **CD8+ T Cells**.
 
