@@ -233,7 +233,7 @@ Lastly, we check the effect of *compensating* the files.
 
 ```{r show_comp_effect, echo=T, eval=TRUE}
 # read in FCS
-luca_fcs_file <- dplyr::filter(fcs_files, grepl(x = rname,
+luca_fcs_file <- dplyr::filter(data_files, grepl(x = rname,
                                                 pattern = "pbmc_luca.fcs")) %>% 
                  pull(rpath)
 
