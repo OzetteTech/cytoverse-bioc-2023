@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gating Cells in cytoverse • CytoverseBioc2023</title>
+<title>Gating Cells in cytoverse: Part 1 • CytoverseBioc2023</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Gating Cells in cytoverse">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Gating Cells in cytoverse: Part 1">
 <meta property="og:description" content="CytoverseBioc2023">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -53,7 +53,7 @@
       <a href="../articles/Bioc2023_Cytoverse.html">Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse</a>
     </li>
     <li>
-      <a href="../articles/Gating_1.html">Gating Cells in cytoverse</a>
+      <a href="../articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
     </li>
     <li>
       <a href="../articles/HOWTO_BUILD_WORKSHOP.html">How To Build A Workshop Package</a>
@@ -96,7 +96,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Gating Cells in cytoverse</h1>
+      <h1 data-toc-skip>Gating Cells in cytoverse: Part 1</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/OzetteTech/cytoverse-bioc-2023/blob/HEAD/vignettes/Gating_1.Rmd" class="external-link"><code>vignettes/Gating_1.Rmd</code></a></small>
@@ -621,19 +621,54 @@ gates</p></li>
 <div class="section level3">
 <h3 id="using-opencyto-gatingtemplate">Using openCyto gatingTemplate<a class="anchor" aria-label="anchor" href="#using-opencyto-gatingtemplate"></a>
 </h3>
-<p>A gatingTemplate is a csv file which describes the gating methods,
-gating otf</p>
-<p>HOW IS IT CREATED</p>
-<p>HERE IS HOW IT IS RUN</p>
-<p>NEED TO UPDATE THE CACHE TO INCLUDE A GATING TEMPLATE</p>
+<p>A <code>gatingTemplate</code> is a csv file that describes the gating
+sequence and the gating methods. In the <code>gatingTemplate</code> csv
+file, we can leverage the various automated gating methods that we have
+previously seen, without explicitly requiring to script it in
+<strong>R</strong>.</p>
+<p>Let’s take a look at an example gatingTemplate</p>
+<p>There are 10 columns that are required in a gatingTemplate csv
+file:</p>
+<ul>
+<li>
+<strong>alias* </strong>: name (alias) of the gate</li>
+<li>
+<strong>pop* </strong>: + or -, or a combination such as: –, -+, ++,
++-, or [ADD]</li>
+<li>
+<strong>parent* </strong>: parent population</li>
+<li>
+<strong>dims* </strong>: channels or markernames</li>
+<li>
+<strong>gating_method* </strong>: gating method to be used. example:
+<em>mindensity</em>
+</li>
+<li>
+<strong>gating_args</strong>: additional arguments that can be
+passed to <strong>gating_methods</strong>
+</li>
+<li>
+<strong>collapseDataForGating</strong>: <strong>logical</strong>
+indicating if the data is to be collapsed onto a single
+<code>flowFrame</code> before estimation</li>
+<li>
+<strong>groupBy</strong>: string indicating the grouping variable
+(within <code>pData</code> slot of the <code>GatingSet</code>)</li>
+<li>
+<strong>preprocessing_method</strong>: preprocessing method to be
+used</li>
+<li>
+<strong>preprocessing_args</strong>: additional arguments that can
+be passed to <strong>preprocessing_method</strong>
+</li>
+</ul>
+<p><em>Note:</em> * indicates that these fields must be completed. Other
+can be left blank.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># required library</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">openCyto</span><span class="op">)</span></span>
 <span><span class="co"># read in gatingTemplate</span></span>
-<span><span class="va">gt</span> <span class="op">&lt;-</span> <span class="fu">openCyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gatingTemplate-class.html" class="external-link">gatingTemplate</a></span><span class="op">(</span><span class="st">"path/to/csv/file"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># visualize the anticipated gating heirarchy</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gt</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">gt</span> <span class="op">&lt;-</span> <span class="fu">openCyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gatingTemplate-class.html" class="external-link">gatingTemplate</a></span><span class="op">(</span><span class="st">"path/to/csv/file"</span><span class="op">)</span></span></code></pre></div>
 <p>Since we have saved our <code>GatingSet</code> let’s first remove all
 the nodes including and downstream of <code>singlet</code>.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
@@ -665,7 +700,7 @@ the nodes including and downstream of <code>singlet</code>.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Andrew McDavid, Arpan Neupan.</p>
+<p>Developed by Andrew McDavid, Arpan Neupane.</p>
 </div>
 
 <div class="pkgdown">

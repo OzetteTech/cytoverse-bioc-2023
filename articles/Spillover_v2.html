@@ -53,7 +53,7 @@
       <a href="../articles/Bioc2023_Cytoverse.html">Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse</a>
     </li>
     <li>
-      <a href="../articles/Gating_1.html">Gating Cells in cytoverse</a>
+      <a href="../articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
     </li>
     <li>
       <a href="../articles/HOWTO_BUILD_WORKSHOP.html">How To Build A Workshop Package</a>
@@ -372,8 +372,257 @@ sometimes more helpful</p>
 flurophore: PE-Dazzle594 and PE.</p>
 <p>In fact, when we look at the emission spectrum of the 2 dyes we see
 that this issue is apparent:</p>
-<p><img src="images/spectrumChart.png" alt="Spectra from PE and BB630P2."> The image was created at <a href="https://www.bdbiosciences.com/en-ca/resources/bd-spectrum-viewer" class="external-link uri">https://www.bdbiosciences.com/en-ca/resources/bd-spectrum-viewer</a>
+<p><img src="images/spectrumChart.png" alt="Spectra from PE and BB630P2.">The image was created at <a href="https://www.bdbiosciences.com/en-ca/resources/bd-spectrum-viewer" class="external-link uri">https://www.bdbiosciences.com/en-ca/resources/bd-spectrum-viewer</a>
 using the BD spectrum viewer tool.</p>
+<div class="section level4">
+<h4 id="calculating-spillover-from-single-colour-controls">Calculating spillover from single colour controls<a class="anchor" aria-label="anchor" href="#calculating-spillover-from-single-colour-controls"></a>
+</h4>
+<p>Another way to calculate spillover is by using a set of single colour
+controls. This is generally a part of experiment/instrument set up
+before acquisition begins.</p>
+<p>Generally, there ought to be the same number of single colour
+controls as the number of markers being assessed + 1 unstained to
+estimate the background auto-fluorescence of cells.</p>
+<p>The dataset that we are primarily working with (i.e. <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">FR-FCM-Z5PC</a>)
+did not come with a set of control files to generate the spillover
+matrix. So for demonstration purposes, we will use single colour
+controls from a different dataset <a href="https://flowrepository.org/id/FR-FCM-ZZ36" class="external-link">FR-FCM-ZZ36</a>. The
+data was published in this <a href="10.1002/cyto.a.22278">manuscript</a>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"FlowRepository_FR-FCM-ZZ36_files/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># load csv identifying the mapping of control files</span></span>
+<span><span class="va">control_files</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data_files</span>, </span>
+<span>                               <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rname</span>, </span>
+<span>                                     pattern <span class="op">=</span> <span class="st">"control_files.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># csv is saved as control files</span></span>
+<span>                 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">rpath</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                 <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"data"</span>,</span>
+<span>                                             <span class="st">"FlowRepository_FR-FCM-ZZ36_files"</span>,</span>
+<span>                                             <span class="va">.</span><span class="op">[[</span><span class="st">"filename"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="co"># folder structure</span></span>
+<span></span>
+<span><span class="co"># get file locations</span></span>
+<span><span class="va">control_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data_files</span>,</span>
+<span>                        <span class="va">rname</span> <span class="op"><a href="https://rdrr.io/pkg/flowCore/man/filter-in-methods.html" class="external-link">%in%</a></span> <span class="va">control_files</span><span class="op">[[</span><span class="st">"filename"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">rname</span>,<span class="va">rpath</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">control_files</span>,</span>
+<span>                            y <span class="op">=</span> <span class="va">.</span>,</span>
+<span>                            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"filename"</span> <span class="op">=</span> <span class="st">"rname"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># load the set of compensation files</span></span>
+<span><span class="va">comp_frames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">control_files</span><span class="op">[[</span><span class="st">"rpath"</span><span class="op">]</span><span class="op">]</span>, <span class="va">read.FCS</span><span class="op">)</span> <span class="co"># example of using lapply to read in FCS files into a list</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">comp_frames</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">control_files</span><span class="op">[[</span><span class="st">"channel"</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># convert to flowSet</span></span>
+<span><span class="va">comp_fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">comp_frames</span>,<span class="st">"flowSet"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># quick visualization of what the control files contain</span></span>
+<span><span class="va">all_control_percp</span> <span class="op">&lt;-</span> <span class="fu">ggcyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">comp_fs</span>,</span>
+<span>                                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"FSC-A"</span>, y <span class="op">=</span> <span class="st">"PerCP-Cy5-5-A"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>                                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html" class="external-link">geom_hex</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
+<span>                                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>                                      <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/scale_x_flowCore_fasinh.html" class="external-link">scale_y_flowCore_fasinh</a></span><span class="op">(</span>b <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">150</span><span class="op">)</span><span class="op">+</span></span>
+<span>                                      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Detection of PerCP-Cy5-5 in all control samples "</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">all_control_percp</span></span></code></pre></div>
+<p><img src="Spillover_v2_files/figure-html/generating_spillover_with_controls-1.png" width="960"></p>
+<p>Notice that the signal recieved in the channel PerCP-Cy5-5-A is
+highest for PerCP Cy5.5. At the same time, other fluorophores are also
+spilling over into this channel, for instance PE.</p>
+<p>Now, we calculate the spillover matrix using the set of controls. We
+will use <code>spillover</code> function from <code>flowStats</code>
+package within the <code>cytoverse</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># calculate spillover</span></span>
+<span><span class="co">## using spillover from flowStats</span></span>
+<span><span class="va">spill</span> <span class="op">&lt;-</span> <span class="fu">flowStats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">comp_fs</span>,</span>
+<span>                   unstained <span class="op">=</span> <span class="st">"Unstained"</span>, <span class="co"># indicate how the unstained file is named in flowset</span></span>
+<span>                   patt <span class="op">=</span> <span class="st">"-A"</span>, <span class="co"># indicate which parameter should be considered </span></span>
+<span>                   fsc <span class="op">=</span> <span class="st">"FSC-A"</span>,</span>
+<span>                   ssc <span class="op">=</span> <span class="st">"SSC-A"</span>,</span>
+<span>                   stain_match <span class="op">=</span> <span class="st">"regexpr"</span>,</span>
+<span>                   useNormFilt <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Now, let’s visualize the spill matrix that we calculated.</p>
+<p>[NOTE: This needs to be corrected in the flowStats package.
+Normalization is with respect to the max value and not with respect to
+the intended channel].</p>
+<p><img src="Spillover_v2_files/figure-html/viz_calculated_spill-1.png" width="700"></p>
+<p><em>Note: “Close or related fluorophores will have some degree of
+overlap”</em></p>
+<p>Lastly, we check the effect of <em>compensating</em> the files.</p>
+<p>[NOTE: COMPENSATION MATRIX IS NOT CORRECT. THIS IS BECAUSE
+<code>spillover</code> in <code>flowStats</code> NORMALIZES TO MAX OF
+ROW INSTEAD OF MAX OF CHANNEL]</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># read in FCS</span></span>
+<span><span class="va">luca_fcs_file</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data_files</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rname</span>,</span>
+<span>                                                pattern <span class="op">=</span> <span class="st">"pbmc_luca.fcs"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">rpath</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/read.FCS.html" class="external-link">read.FCS</a></span><span class="op">(</span><span class="va">luca_fcs_file</span><span class="op">)</span></span>
+<span><span class="va">trans</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/featureNames.html" class="external-link">sampleNames</a></span><span class="op">(</span><span class="va">comp_fs</span><span class="op">)</span>,<span class="st">"Unstained"</span><span class="op">)</span>,</span>
+<span>                                 tfun <span class="op">=</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/arcsinhTransform.html" class="external-link">arcsinhTransform</a></span><span class="op">(</span>b <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">150</span><span class="op">)</span></span>
+<span>                                 <span class="op">)</span></span>
+<span><span class="va">ff_trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">ff</span>,<span class="va">trans</span><span class="op">)</span> <span class="co"># transformation defined above</span></span>
+<span></span>
+<span><span class="co"># plot pre-compensation</span></span>
+<span><span class="va">pre_compensation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff_trans</span>,          <span class="co"># autoplot can be used to generate plots rapidly</span></span>
+<span>                                       x <span class="op">=</span> <span class="st">"PE-Cy5-5-A"</span>, </span>
+<span>                                       y <span class="op">=</span> <span class="st">"PE-Cy5-A"</span>, </span>
+<span>                                       bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
+<span>                                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Uncompensated data"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># compensate</span></span>
+<span><span class="va">ff_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/compensation-class.html" class="external-link">compensate</a></span><span class="op">(</span><span class="va">ff</span>,<span class="va">spill</span><span class="op">)</span></span>
+<span><span class="va">ff_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">ff_comp</span>,<span class="va">trans</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plot post-compensation</span></span>
+<span><span class="va">post_compensation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff_comp</span>,</span>
+<span>                                       x <span class="op">=</span> <span class="st">"PE-Cy5-5-A"</span>, </span>
+<span>                                       y <span class="op">=</span> <span class="st">"PE-Cy5-A"</span>, </span>
+<span>                                       bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
+<span>                                 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Compensated data"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">pre_compensation</span>, </span>
+<span>                        <span class="va">post_compensation</span>, </span>
+<span>                        nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Spillover_v2_files/figure-html/show_comp_effect-1.png" width="700"></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="transformation-and-visualization">Transformation and visualization<a class="anchor" aria-label="anchor" href="#transformation-and-visualization"></a>
+</h3>
+<p>Cytometry data tends to have a very high dynamic range. For example:
+the range of values in <code>PE-Cy5-5-A</code> channel in the FCS we
+have been working with is <code>-111 2621543</code>. The difference
+between cells that do not express a marker of interest and a cell that
+expresses variable level of marker could be order of magnitude
+difference. In such a scenario, transformation of the data can aid in
+better visualization and representation of the biological phenomena.</p>
+<p>There are multiple approaches to transform the data in
+<code>cytoverse</code>. We will identify a few common ones as well as
+demonstrate how to create new transformations.</p>
+<p>First, let’s visualize why transformation is necessary. We go back to
+working with data from <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">FR-FCM-Z5PC</a>.</p>
+<p><img src="Spillover_v2_files/figure-html/demo_transformations-1.png" width="960"></p>
+<p>As we see, the variety of transformations aids in visualization and
+interpretation of the data.</p>
+<div class="section level4">
+<h4 id="steps-to-transform-data">Steps to transform data<a class="anchor" aria-label="anchor" href="#steps-to-transform-data"></a>
+</h4>
+<p>The <code>cytoverse</code> libraries: <code>flowWorkspace</code> and
+<code>flowCore</code> have a multiple commonly used transformations
+(some are shown above) as well, one can also create a custom
+transformation if required.</p>
+<p>Let’s first use a built in transformation.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># transforming using cytoverse functions</span></span>
+<span><span class="co"># define a transformation</span></span>
+<span><span class="va">asinh_trans</span> <span class="op">&lt;-</span> <span class="fu">flowWorkspace</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/asinh_Gml2.html" class="external-link">asinh_Gml2</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create a transformList that indicates which parameters to transform</span></span>
+<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">ff</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                         tfun <span class="op">=</span> <span class="va">asinh_trans</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># transform </span></span>
+<span><span class="va">ff_transformed</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">ff</span>, <span class="va">my_trans_list</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="va">ff_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff</span>,</span>
+<span>           x <span class="op">=</span> <span class="st">"CD14"</span>, </span>
+<span>           y <span class="op">=</span> <span class="st">"HLA-DR"</span>,</span>
+<span>           bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ff_comp_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff_transformed</span>,</span>
+<span>           x <span class="op">=</span> <span class="st">"CD14"</span>,</span>
+<span>           y <span class="op">=</span> <span class="st">"HLA-DR"</span>,</span>
+<span>           bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">ff_comp</span>, <span class="va">ff_comp_transformed</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Spillover_v2_files/figure-html/how_to_transform_builtin-1.png" width="700"></p>
+<p>Another option is to use a user defined transformation.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># define a transformation</span></span>
+<span><span class="va">my_trans</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># create a transformList</span></span>
+<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">ff</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                                         tfun <span class="op">=</span> <span class="va">my_trans</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># transform</span></span>
+<span><span class="va">ff_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">ff</span>, <span class="va">my_trans_list</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="va">ff_comp_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff_transformed</span>,</span>
+<span>           x <span class="op">=</span> <span class="st">"CD14"</span>,</span>
+<span>           y <span class="op">=</span> <span class="st">"HLA-DR"</span>,</span>
+<span>           bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">ff_comp</span>, <span class="va">ff_comp_transformed</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Spillover_v2_files/figure-html/user_defined_transformation-1.png" width="700"></p>
+<p>We can also transform a set of FCS files (<code>flowSet</code>)</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># read in a flowSet</span></span>
+<span><span class="va">fcs_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"fcs_data/"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rname</span>,</span>
+<span>                                     pattern <span class="op">=</span> <span class="st">"BDC-CR1"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">rpath</span><span class="op">)</span></span>
+<span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/read.flowSet.html" class="external-link">read.flowSet</a></span><span class="op">(</span>files <span class="op">=</span> <span class="va">fcs_files</span><span class="op">)</span> <span class="co"># read in a set of FCS files as flowSet</span></span>
+<span></span>
+<span><span class="co"># compensate</span></span>
+<span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="va">fs</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span> <span class="co"># fsApply will return a the same object as input</span></span>
+<span>              <span class="va">spill</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span>              <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/compensation-class.html" class="external-link">compensate</a></span><span class="op">(</span><span class="va">x</span>,spillover <span class="op">=</span> <span class="va">spill</span><span class="op">)</span></span>
+<span>            <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># using asinh_trans defined previously</span></span>
+<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">ff</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                         tfun <span class="op">=</span> <span class="va">asinh_trans</span><span class="op">)</span></span>
+<span><span class="co"># using the same approach as shown previously</span></span>
+<span><span class="va">fs_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">fs</span>, <span class="va">my_trans_list</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="va">fs_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">fs</span>, <span class="co"># autoplot being used to plot a flowSet</span></span>
+<span>                   x <span class="op">=</span> <span class="st">"CD14"</span>,</span>
+<span>                   y <span class="op">=</span> <span class="st">"HLA-DR"</span>,</span>
+<span>                   bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
+<span>                   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Untransformed flowSet"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fs_trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">fs_transformed</span>,</span>
+<span>                     x <span class="op">=</span> <span class="st">"CD14"</span>,</span>
+<span>                     y <span class="op">=</span> <span class="st">"HLA-DR"</span>,</span>
+<span>                     bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
+<span>                     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Transformed flowSet"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">fs_raw</span>, <span class="va">fs_trans</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Spillover_v2_files/figure-html/transform_flowset-1.png" width="700"></p>
+<p>Similarly, we also transform a <code>cytoset</code></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load a cytoset from fcs files</span></span>
+<span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu">flowWorkspace</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoset_from_fcs.html" class="external-link">load_cytoset_from_fcs</a></span><span class="op">(</span>files <span class="op">=</span> <span class="va">fcs_files</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># compensate</span></span>
+<span><span class="va">spill</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/compensation-class.html" class="external-link">compensate</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">spill</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># transform: this will transform the underlying data </span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs</span>,<span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## A cytoset with 4 samples.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##   column names:</span></span>
+<span><span class="co">##     FSC-A, FSC-H, SSC-A, B515-A, B610-A, B660-A, B710-A, B780-A, G575-A, G610-A, G660-A, G710-A, G780-A, R670-A, R730-A, R780-A, U390-A, U450-A, U500-A, U570-A, U660-A, U740-A, U785-A, V450-A, V510-A, V570-A, V605-A, V655-A, V710-A, V750-A, V785-A, remove_from_FS_FM, Time</span></span></code></pre>
+</div>
 </div>
 </div>
   </div>
@@ -390,7 +639,7 @@ using the BD spectrum viewer tool.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Andrew McDavid, Arpan Neupan.</p>
+<p>Developed by Andrew McDavid, Arpan Neupane.</p>
 </div>
 
 <div class="pkgdown">
