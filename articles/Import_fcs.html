@@ -62,7 +62,7 @@
       <a href="../articles/Import_fcs.html">Importing and Basics of working with FCS files</a>
     </li>
     <li>
-      <a href="../articles/Reporting_1.html">Reporting: Bringing Everything Together</a>
+      <a href="../articles/Reporting_1.html">Reporting: Counts, Frequency, etc</a>
     </li>
     <li>
       <a href="../articles/Spillover_v2.html">Spillover, compensation, Transformations, and Visualization</a>
@@ -482,61 +482,61 @@ Additionally, <code>cytoset</code> is built upon a collection of
 <span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4ac8f91d8c_4000_BDC-CR1.fcs   4ac8f91d8c_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac74e3f7f9_4000_BDC-CR2.fcs 4ac74e3f7f9_4000_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac25e9df4a_4000_TNK-CR1.fcs 4ac25e9df4a_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac5479f825_4000_TNK-CR2.fcs 4ac5479f825_4000_TNK-CR2.fcs</span></span>
-<span><span class="co">## 4ac44c16e9d_4001_BDC-CR1.fcs 4ac44c16e9d_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac1853a992_4001_BDC-CR2.fcs 4ac1853a992_4001_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac59ac59a1_4001_TNK-CR1.fcs 4ac59ac59a1_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac697a42ec_4001_TNK-CR2.fcs 4ac697a42ec_4001_TNK-CR2.fcs</span></span>
-<span><span class="co">## 4ac2399eb29_4002_BDC-CR1.fcs 4ac2399eb29_4002_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac5d18cb27_4002_BDC-CR2.fcs 4ac5d18cb27_4002_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac6837f294_4002_TNK-CR1.fcs 4ac6837f294_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac995abcf_4002_TNK-CR2.fcs   4ac995abcf_4002_TNK-CR2.fcs</span></span>
-<span><span class="co">## 4ac3090c1f4_4003_BDC-CR1.fcs 4ac3090c1f4_4003_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac585b9d93_4003_BDC-CR2.fcs 4ac585b9d93_4003_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac4b4ebae3_4003_TNK-CR1.fcs 4ac4b4ebae3_4003_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac54d13c36_4003_TNK-CR2.fcs 4ac54d13c36_4003_TNK-CR2.fcs</span></span></code></pre>
+<span><span class="co">## 5514addbaf8_4000_BDC-CR1.fcs 5514addbaf8_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5515076d9df_4000_BDC-CR2.fcs 5515076d9df_4000_BDC-CR2.fcs</span></span>
+<span><span class="co">## 551121afc59_4000_TNK-CR1.fcs 551121afc59_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 55155ade716_4000_TNK-CR2.fcs 55155ade716_4000_TNK-CR2.fcs</span></span>
+<span><span class="co">## 55140a79397_4001_BDC-CR1.fcs 55140a79397_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5515f6e0477_4001_BDC-CR2.fcs 5515f6e0477_4001_BDC-CR2.fcs</span></span>
+<span><span class="co">## 5513c35b233_4001_TNK-CR1.fcs 5513c35b233_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5517e4429b1_4001_TNK-CR2.fcs 5517e4429b1_4001_TNK-CR2.fcs</span></span>
+<span><span class="co">## 5511b09d307_4002_BDC-CR1.fcs 5511b09d307_4002_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5516f8223e3_4002_BDC-CR2.fcs 5516f8223e3_4002_BDC-CR2.fcs</span></span>
+<span><span class="co">## 55144ac4604_4002_TNK-CR1.fcs 55144ac4604_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 55172ea89f5_4002_TNK-CR2.fcs 55172ea89f5_4002_TNK-CR2.fcs</span></span>
+<span><span class="co">## 551358b76b7_4003_BDC-CR1.fcs 551358b76b7_4003_BDC-CR1.fcs</span></span>
+<span><span class="co">## 551ff579bd_4003_BDC-CR2.fcs   551ff579bd_4003_BDC-CR2.fcs</span></span>
+<span><span class="co">## 551333f05d4_4003_TNK-CR1.fcs 551333f05d4_4003_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5512f56c035_4003_TNK-CR2.fcs 5512f56c035_4003_TNK-CR2.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add metadata </span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4ac8f91d8c_4000_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac74e3f7f9_4000_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4ac25e9df4a_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4ac5479f825_4000_TNK-CR2.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4ac44c16e9d_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac1853a992_4001_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4ac59ac59a1_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 4ac697a42ec_4001_TNK-CR2.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4ac2399eb29_4002_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac5d18cb27_4002_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4ac6837f294_4002_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4ac995abcf_4002_TNK-CR2.fcs    Treated  T Cell Panel</span></span>
-<span><span class="co">## 4ac3090c1f4_4003_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac585b9d93_4003_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac4b4ebae3_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 4ac54d13c36_4003_TNK-CR2.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 5514addbaf8_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 5515076d9df_4000_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 551121afc59_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 55155ade716_4000_TNK-CR2.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 55140a79397_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 5515f6e0477_4001_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5513c35b233_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 5517e4429b1_4001_TNK-CR2.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 5511b09d307_4002_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 5516f8223e3_4002_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 55144ac4604_4002_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 55172ea89f5_4002_TNK-CR2.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 551358b76b7_4003_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 551ff579bd_4003_BDC-CR2.fcs  Untreated Myeloid Panel</span></span>
+<span><span class="co">## 551333f05d4_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 5512f56c035_4003_TNK-CR2.fcs Untreated  T Cell Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4ac8f91d8c_4000_BDC-CR1.fcs   4ac8f91d8c_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac74e3f7f9_4000_BDC-CR2.fcs 4ac74e3f7f9_4000_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac25e9df4a_4000_TNK-CR1.fcs 4ac25e9df4a_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac5479f825_4000_TNK-CR2.fcs 4ac5479f825_4000_TNK-CR2.fcs</span></span>
-<span><span class="co">## 4ac44c16e9d_4001_BDC-CR1.fcs 4ac44c16e9d_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac1853a992_4001_BDC-CR2.fcs 4ac1853a992_4001_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac59ac59a1_4001_TNK-CR1.fcs 4ac59ac59a1_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac697a42ec_4001_TNK-CR2.fcs 4ac697a42ec_4001_TNK-CR2.fcs</span></span>
-<span><span class="co">## 4ac2399eb29_4002_BDC-CR1.fcs 4ac2399eb29_4002_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac5d18cb27_4002_BDC-CR2.fcs 4ac5d18cb27_4002_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac6837f294_4002_TNK-CR1.fcs 4ac6837f294_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac995abcf_4002_TNK-CR2.fcs   4ac995abcf_4002_TNK-CR2.fcs</span></span>
-<span><span class="co">## 4ac3090c1f4_4003_BDC-CR1.fcs 4ac3090c1f4_4003_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac585b9d93_4003_BDC-CR2.fcs 4ac585b9d93_4003_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac4b4ebae3_4003_TNK-CR1.fcs 4ac4b4ebae3_4003_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4ac54d13c36_4003_TNK-CR2.fcs 4ac54d13c36_4003_TNK-CR2.fcs</span></span></code></pre>
+<span><span class="co">## 5514addbaf8_4000_BDC-CR1.fcs 5514addbaf8_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5515076d9df_4000_BDC-CR2.fcs 5515076d9df_4000_BDC-CR2.fcs</span></span>
+<span><span class="co">## 551121afc59_4000_TNK-CR1.fcs 551121afc59_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 55155ade716_4000_TNK-CR2.fcs 55155ade716_4000_TNK-CR2.fcs</span></span>
+<span><span class="co">## 55140a79397_4001_BDC-CR1.fcs 55140a79397_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5515f6e0477_4001_BDC-CR2.fcs 5515f6e0477_4001_BDC-CR2.fcs</span></span>
+<span><span class="co">## 5513c35b233_4001_TNK-CR1.fcs 5513c35b233_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5517e4429b1_4001_TNK-CR2.fcs 5517e4429b1_4001_TNK-CR2.fcs</span></span>
+<span><span class="co">## 5511b09d307_4002_BDC-CR1.fcs 5511b09d307_4002_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5516f8223e3_4002_BDC-CR2.fcs 5516f8223e3_4002_BDC-CR2.fcs</span></span>
+<span><span class="co">## 55144ac4604_4002_TNK-CR1.fcs 55144ac4604_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 55172ea89f5_4002_TNK-CR2.fcs 55172ea89f5_4002_TNK-CR2.fcs</span></span>
+<span><span class="co">## 551358b76b7_4003_BDC-CR1.fcs 551358b76b7_4003_BDC-CR1.fcs</span></span>
+<span><span class="co">## 551ff579bd_4003_BDC-CR2.fcs   551ff579bd_4003_BDC-CR2.fcs</span></span>
+<span><span class="co">## 551333f05d4_4003_TNK-CR1.fcs 551333f05d4_4003_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5512f56c035_4003_TNK-CR2.fcs 5512f56c035_4003_TNK-CR2.fcs</span></span></code></pre>
 <p>The benefit having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner. <em>Note: Many of
 the sub-setting operation for <code>flowFrame</code> is also applicable
@@ -559,23 +559,23 @@ files.</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4ac8f91d8c_4000_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac74e3f7f9_4000_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4ac44c16e9d_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac1853a992_4001_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4ac2399eb29_4002_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac5d18cb27_4002_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4ac3090c1f4_4003_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4ac585b9d93_4003_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5514addbaf8_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 5515076d9df_4000_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 55140a79397_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 5515f6e0477_4001_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5511b09d307_4002_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 5516f8223e3_4002_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 551358b76b7_4003_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 551ff579bd_4003_BDC-CR2.fcs  Untreated Myeloid Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4ac8f91d8c_4000_BDC-CR1.fcs   4ac8f91d8c_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac74e3f7f9_4000_BDC-CR2.fcs 4ac74e3f7f9_4000_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac44c16e9d_4001_BDC-CR1.fcs 4ac44c16e9d_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac1853a992_4001_BDC-CR2.fcs 4ac1853a992_4001_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac2399eb29_4002_BDC-CR1.fcs 4ac2399eb29_4002_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac5d18cb27_4002_BDC-CR2.fcs 4ac5d18cb27_4002_BDC-CR2.fcs</span></span>
-<span><span class="co">## 4ac3090c1f4_4003_BDC-CR1.fcs 4ac3090c1f4_4003_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4ac585b9d93_4003_BDC-CR2.fcs 4ac585b9d93_4003_BDC-CR2.fcs</span></span></code></pre>
+<span><span class="co">## 5514addbaf8_4000_BDC-CR1.fcs 5514addbaf8_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5515076d9df_4000_BDC-CR2.fcs 5515076d9df_4000_BDC-CR2.fcs</span></span>
+<span><span class="co">## 55140a79397_4001_BDC-CR1.fcs 55140a79397_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5515f6e0477_4001_BDC-CR2.fcs 5515f6e0477_4001_BDC-CR2.fcs</span></span>
+<span><span class="co">## 5511b09d307_4002_BDC-CR1.fcs 5511b09d307_4002_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5516f8223e3_4002_BDC-CR2.fcs 5516f8223e3_4002_BDC-CR2.fcs</span></span>
+<span><span class="co">## 551358b76b7_4003_BDC-CR1.fcs 551358b76b7_4003_BDC-CR1.fcs</span></span>
+<span><span class="co">## 551ff579bd_4003_BDC-CR2.fcs   551ff579bd_4003_BDC-CR2.fcs</span></span></code></pre>
 <p>Example of <code>cytoset</code> sub-setting</p>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># demonstrate how cs point to the same underlying data</span></span>
