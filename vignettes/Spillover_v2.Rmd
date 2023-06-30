@@ -1,9 +1,7 @@
 ---
 title: "Spillover, compensation, Transformations, and Visualization"
-vignette: >
-  %\VignetteIndexEntry{Spillover, compensation, Transformations, and Visualization}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+vignette: "%\\VignetteIndexEntry{Spillover, compensation, Transformations, and Visualization}
+  %\\VignetteEngine{knitr::rmarkdown} %\\VignetteEncoding{UTF-8}"
 ---
 
 ```{r,include=FALSE, echo=FALSE,eval=TRUE}
@@ -149,13 +147,10 @@ Generally, there ought to be the same number of single colour controls as the nu
 
 The dataset that we are primarily working with (i.e. [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932)) did not come with a set of control files to generate the spillover matrix. So for demonstration purposes, we will use single colour controls from a different dataset [FR-FCM-ZZ36](https://flowrepository.org/id/FR-FCM-ZZ36). The data was published in this [manuscript](10.1002/cyto.a.22278).
 
-```{r generating_spillover_with_controls, echo=TRUE, eval =TRUE, message=FALSE, fig.height=10}
+```{r generating_spillover_with_controls, echo=TRUE, eval =TRUE, message=FALSE, fig.width = 10, fig.height=10}
 library(dplyr)
 
 data_files <- get_workshop_data("FlowRepository_FR-FCM-ZZ36_files/")
-
-# load sample fcs files
-#ff <- read.FCS("data/FlowRepository_FR-FCM-ZZ36_files/pbmc_luca.fcs")
 
 # load csv identifying the mapping of control files
 control_files <- dplyr::filter(data_files, 
@@ -184,16 +179,16 @@ comp_fs <- as(comp_frames,"flowSet")
 
 
 # quick visualization of what the control files contain
-all_control_af488 <- ggcyto::as.ggplot(ggcyto(comp_fs,
-                                      aes(x = "FSC-A", y = "Alexa Fluor 488-A"))+
+all_control_percp <- ggcyto::as.ggplot(ggcyto(comp_fs,
+                                      aes(x = "FSC-A", y = "PerCP-Cy5-5-A"))+
                                       geom_hex(bins = 256)+
                                       theme_bw()+
                                       scale_y_flowCore_fasinh(b = 1/150)+
-                                      labs(title = "Detection of Alexa Fluor 488 in all control samples "))
-all_control_af488
+                                      labs(title = "Detection of PerCP-Cy5-5 in all control samples "))
+all_control_percp
 ```
 
-Notice that the signal for Alexa Fluor 488 is highest in Alexa Fluor 488-A (correct channel) while its almost at the background levels for most. Exception is PE-A where some Alexa Fluor 488 signal is being spilled over.
+Notice that the signal recieved in the channel PerCP-Cy5-5-A is highest for PerCP Cy5.5. At the same time, other fluorophores are also spilling over into this channel, for instance PE.
 
 Now, we calculate the spillover matrix using the set of controls. We will use `spillover` function from `flowStats` package within the `cytoverse`.
 
@@ -208,7 +203,6 @@ spill <- flowStats::spillover(comp_fs,
                    stain_match = "regexpr",
                    useNormFilt = TRUE)
 ```
-
 
 Now, let's visualize the spill matrix that we calculated.
 
@@ -268,11 +262,11 @@ gridExtra::grid.arrange(pre_compensation,
 
 ## Transformation and visualization
 
-Cytometry data tends to have a very high dynamic range. For example: the range of values in PE-Cy5-5-A channel in the FCS we have been working with is `r range(ff)[,"PE-Cy5-5-A", drop = FALSE]`. The difference between cells that do not express a marker of interest and a cell that expresses variable level of marker could be order of magnitude difference. In such a scenario, transformation of the data can aid in better visualization and representation of the biological phenomenan.
+Cytometry data tends to have a very high dynamic range. For example: the range of values in `PE-Cy5-5-A` channel in the FCS we have been working with is `-111 2621543`. The difference between cells that do not express a marker of interest and a cell that expresses variable level of marker could be order of magnitude difference. In such a scenario, transformation of the data can aid in better visualization and representation of the biological phenomena.
 
 There are multiple approaches to transform the data in `cytoverse`. We will identify a few common ones as well as demonstrate how to create new transformations.
 
-First, let's visualize why transformation is necessary.
+First, let's visualize why transformation is necessary. We go back to working with data from [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932).
 
 ```{r demo_transformations, echo=FALSE, eval=T, fig.width=10, fig.height=10}
 # read fcs
@@ -448,4 +442,3 @@ cs <- compensate(cs, spill)
 # transform: this will transform the underlying data 
 transform(cs,my_trans_list)
 ```
-
