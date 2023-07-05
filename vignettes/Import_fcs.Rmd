@@ -24,7 +24,7 @@ BiocManager::install("flowStats")
 ```
 
 
-```{r load_library_download_cache, eval=TRUE, echo=TRUE, message = FALSe}
+```{r load_library_download_cache, eval=TRUE, echo=TRUE, message = FALSE}
 library("flowCore")
 library(CytoverseBioc2023)
 cache_workshop_data()
