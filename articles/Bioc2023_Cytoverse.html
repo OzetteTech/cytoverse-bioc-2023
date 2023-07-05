@@ -50,28 +50,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Bioc2023_Cytoverse.html">Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse</a>
+      <a href="../articles/Import_fcs.html">Importing and Basics of working with FCS files</a>
+    </li>
+    <li>
+      <a href="../articles/Spillover_v2.html">Spillover, Transformation, and Visualization</a>
     </li>
     <li>
       <a href="../articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
     </li>
     <li>
-      <a href="../articles/HOWTO_BUILD_WORKSHOP.html">How To Build A Workshop Package</a>
+      <a href="../articles/ggcyto_1-5.html">Visualizations (1.5)</a>
     </li>
     <li>
-      <a href="../articles/Import_fcs.html">Importing and Basics of working with FCS files</a>
-    </li>
-    <li>
-      <a href="../articles/Reporting_1.html">Reporting: Counts, Frequency, etc</a>
-    </li>
-    <li>
-      <a href="../articles/Spillover_v2.html">Spillover, compensation, Transformations, and Visualization</a>
-    </li>
-    <li>
-      <a href="../articles/ggcyto_1-5.html">Visualization (1.5)</a>
-    </li>
-    <li>
-      <a href="../articles/workshop_example.html">An Example Workshop</a>
+      <a href="../articles/Reporting_1.html">Reporting: Counts, Frequency, etc.</a>
     </li>
   </ul>
 </li>
@@ -110,21 +101,21 @@ cytometry experiments with the cytoverse</h1>
 <div class="section level2">
 <h2 id="the-cytoverse">The Cytoverse!<a class="anchor" aria-label="anchor" href="#the-cytoverse"></a>
 </h2>
-<p>The <code>cytoverse</code> is a collection of opensource R based
+<p>The <code>cytoverse</code> is a collection of open source R based
 tools developed by the founders of <strong>Ozette Technologies</strong>
 which facilitate programmatic analysis of flow cytometry data.</p>
 <p>A number of packages make up the <code>cytoverse</code>. <a href="https://bioconductor.org/packages/release/bioc/html/flowCore.html" class="external-link">flowCore</a>,
 <a href="https://www.bioconductor.org/packages/release/bioc/html/flowWorkspace.html" class="external-link">flowWorkspace</a>,
 <a href="https://bioconductor.org/packages/release/bioc/html/openCyto.html" class="external-link">openCyto</a>,
 and <a href="https://www.bioconductor.org/packages/release/bioc/html/ggcyto.html" class="external-link">ggcyto</a>
-make up the core of the Cytoverse. These packages are, by and large,
-powerful and sufficient to create robost and reproducible analysis
-workflows for flow cytometry data. Additional available packages such as
-<code>flowClust</code>, <code>flowStats</code>, <code>CytoQC</code>, or
-<code>CytoML</code> can further utilized for niche applications
-including, model based clustering of flow cytometry data, QC and
-standardization of set of FCS files, parsing of workspaces from FlowJo
-or cytobank.</p>
+make up the core of the <code>cytoverse</code>. These packages are, by
+and large, powerful and sufficient to create robust and reproducible
+analysis workflows for flow cytometry data. Additional available
+packages such as <code>flowClust</code>, <code>flowStats</code>,
+<code>CytoQC</code>, or <code>CytoML</code> can be further utilized for
+niche applications including, model based clustering of flow cytometry
+data, QC and standardization of set of FCS files, even parsing of
+workspaces from FlowJo or cytobank.</p>
 </div>
 <div class="section level2">
 <h2 id="workshop-outlines">Workshop outlines<a class="anchor" aria-label="anchor" href="#workshop-outlines"></a>
@@ -136,29 +127,31 @@ or cytobank.</p>
 analysts towards reproducible and programmatic analysis.</p>
 <p>By the end of this workshop, the attendees will be able to</p>
 <ul>
-<li>import flow cytometry data,</li>
-<li>understand the difference between uncompensated, compensated, and
-transformed data,</li>
-<li>identify and generate important plots to assess data quality,</li>
-<li>identify subpopulations by manually or semi-automated gating of
+<li>Import flow cytometry data,</li>
+<li>Understand the difference between <strong>uncompensated</strong>,
+<strong>compensated</strong>, and <strong>transformed</strong>
+data,</li>
+<li>Identify and generate important plots to assess the
+<strong>data</strong> and <strong>quality</strong>,</li>
+<li>Identify sub-populations by manual or semi-automated gating of
 markers,</li>
-<li>generate plots summarizing the expression of markers and abundance
-of various subpopulations</li>
+<li>Generate plots summarizing the expression of markers and abundance
+of various sub-populations</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="prerequisitesassumptions">Prerequisites/assumptions<a class="anchor" aria-label="anchor" href="#prerequisitesassumptions"></a>
 </h3>
 <ul>
-<li><p>Some R knowledge</p></li>
-<li><p>Basic flow cytometry knowledge</p></li>
-<li><p>Willingness to ask questions and lean</p></li>
+<li>Some R knowledge,</li>
+<li>Basic flow cytometry knowledge,</li>
+<li>Willingness to ask questions and learn</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h3>
-<p>For this workshop, we will use subset of a public dataset: <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">FR-FCM-Z5PC</a>
+<p>For this workshop, we will use subset of a public data set: <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">FR-FCM-Z5PC</a>
 that can be found in <strong>flowrepository.org</strong>. The dataset
 was published in the following <a href="https://doi.org/10.1038/s41467-022-34638-2" class="external-link">paper</a>.</p>
 </div>
@@ -180,7 +173,8 @@ was published in the following <a href="https://doi.org/10.1038/s41467-022-34638
 <td>15 minutes</td>
 </tr>
 <tr class="odd">
-<td>Gating Cells in the cytoverse</td>
+<td>Gating Cells in the <code>cytoverse</code>
+</td>
 <td>40 minutes</td>
 </tr>
 <tr class="even">
@@ -191,45 +185,18 @@ was published in the following <a href="https://doi.org/10.1038/s41467-022-34638
 <td>Reporting</td>
 <td>10 minutes</td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="workshop-schedule-1">Workshop schedule<a class="anchor" aria-label="anchor" href="#workshop-schedule-1"></a>
-</h3>
-<table class="table">
-<thead><tr class="header">
-<th>Activity</th>
-<th>Time</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Basics of working with FCS files</td>
-<td>15 minutes</td>
-</tr>
 <tr class="even">
-<td>Spillover, Transformation, and Visualization (1)</td>
-<td>15 minutes</td>
-</tr>
-<tr class="odd">
-<td>Gating Cells in the cytoverse</td>
-<td>40 minutes</td>
-</tr>
-<tr class="even">
-<td>Visualization (2)</td>
 <td>10 minutes</td>
-</tr>
-<tr class="odd">
-<td>Reporting</td>
-<td>10 minutes</td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="section level2">
-<h2 id="journey-into-the-cytoverse">Journey into the Cytoverse!<a class="anchor" aria-label="anchor" href="#journey-into-the-cytoverse"></a>
+<h2 id="journey-into-the-cytoverse">Journey into the <code>cytoverse</code>!<a class="anchor" aria-label="anchor" href="#journey-into-the-cytoverse"></a>
 </h2>
+<p>Let’s begin!</p>
 </div>
   </div>
 
