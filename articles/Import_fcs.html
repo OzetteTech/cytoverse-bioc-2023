@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CytoverseBioc2023</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9006</span>
       </span>
     </div>
 
@@ -427,14 +427,14 @@ Additionally, <code>cytoset</code> is built upon a collection of
 <span><span class="co"># convert to flowSet</span></span>
 <span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">fcs_list</span>,<span class="st">"flowSet"</span><span class="op">)</span></span>
 <span><span class="va">fs</span></span></code></pre></div>
-<pre><code><span><span class="co">## A flowSet with 16 experiments.</span></span>
+<pre><code><span><span class="co">## A flowSet with 6 experiments.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## column names(33): FSC-A FSC-H ... remove_from_FS_FM Time</span></span></code></pre>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># option 2 (preferred)</span></span>
 <span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/read.flowSet.html" class="external-link">read.flowSet</a></span><span class="op">(</span>files <span class="op">=</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data/fcs_data/"</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span><span class="op">)</span> <span class="co"># read in directly as a flowSet</span></span>
 <span><span class="va">fs</span></span></code></pre></div>
-<pre><code><span><span class="co">## A flowSet with 16 experiments.</span></span>
+<pre><code><span><span class="co">## A flowSet with 6 experiments.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## column names(33): FSC-A FSC-H ... remove_from_FS_FM Time</span></span></code></pre>
 <p>Options to create a <code>cytoset</code></p>
@@ -446,7 +446,7 @@ Additionally, <code>cytoset</code> is built upon a collection of
 <span><span class="co"># option 2 (convert flowSet to cytoset)</span></span>
 <span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/convert.html" class="external-link">flowSet_to_cytoset</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span>
 <span><span class="va">cs</span></span></code></pre></div>
-<pre><code><span><span class="co">## A cytoset with 16 samples.</span></span>
+<pre><code><span><span class="co">## A cytoset with 6 samples.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##   column names:</span></span>
 <span><span class="co">##     FSC-A, FSC-H, SSC-A, B515-A, B610-A, B660-A, B710-A, B780-A, G575-A, G610-A, G660-A, G710-A, G780-A, R670-A, R730-A, R780-A, U390-A, U450-A, U500-A, U570-A, U660-A, U740-A, U785-A, V450-A, V510-A, V570-A, V605-A, V655-A, V710-A, V750-A, V785-A, remove_from_FS_FM, Time</span></span></code></pre>
@@ -465,61 +465,31 @@ dataframe should match the <code>sampleNames</code> of the
 <span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 5a168c3b966_4000_BDC-CR1.fcs 5a168c3b966_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a1154c6782_4000_BDC-CR2.fcs 5a1154c6782_4000_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a143687335_4000_TNK-CR1.fcs 5a143687335_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a138d01445_4000_TNK-CR2.fcs 5a138d01445_4000_TNK-CR2.fcs</span></span>
-<span><span class="co">## 5a13e18fe8_4001_BDC-CR1.fcs   5a13e18fe8_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a16c0ae266_4001_BDC-CR2.fcs 5a16c0ae266_4001_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a1f68561c_4001_TNK-CR1.fcs   5a1f68561c_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a17e564e76_4001_TNK-CR2.fcs 5a17e564e76_4001_TNK-CR2.fcs</span></span>
-<span><span class="co">## 5a1374cf0ba_4002_BDC-CR1.fcs 5a1374cf0ba_4002_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a164709311_4002_BDC-CR2.fcs 5a164709311_4002_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a161a31fb2_4002_TNK-CR1.fcs 5a161a31fb2_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a146e59019_4002_TNK-CR2.fcs 5a146e59019_4002_TNK-CR2.fcs</span></span>
-<span><span class="co">## 5a12851aa3a_4003_BDC-CR1.fcs 5a12851aa3a_4003_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a15fb9a523_4003_BDC-CR2.fcs 5a15fb9a523_4003_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a1613f687b_4003_TNK-CR1.fcs 5a1613f687b_4003_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a1663c261c_4003_TNK-CR2.fcs 5a1663c261c_4003_TNK-CR2.fcs</span></span></code></pre>
+<span><span class="co">## 4ed4ff144fe_4000_BDC-CR1.fcs 4ed4ff144fe_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ed165ced5_4000_TNK-CR1.fcs   4ed165ced5_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ed5b13ad_4001_BDC-CR1.fcs     4ed5b13ad_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ed6cb73651_4001_TNK-CR1.fcs 4ed6cb73651_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ed491d0791_4002_TNK-CR1.fcs 4ed491d0791_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ed1e241c6e_4003_TNK-CR1.fcs 4ed1e241c6e_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add metadata </span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5a168c3b966_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a1154c6782_4000_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a143687335_4000_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 5a138d01445_4000_TNK-CR2.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5a13e18fe8_4001_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5a16c0ae266_4001_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a1f68561c_4001_TNK-CR1.fcs    Treated  T Cell Panel</span></span>
-<span><span class="co">## 5a17e564e76_4001_TNK-CR2.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5a1374cf0ba_4002_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5a164709311_4002_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5a161a31fb2_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 5a146e59019_4002_TNK-CR2.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 5a12851aa3a_4003_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a15fb9a523_4003_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a1613f687b_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5a1663c261c_4003_TNK-CR2.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 4ed4ff144fe_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4ed165ced5_4000_TNK-CR1.fcs    Treated  T Cell Panel</span></span>
+<span><span class="co">## 4ed5b13ad_4001_BDC-CR1.fcs   Untreated Myeloid Panel</span></span>
+<span><span class="co">## 4ed6cb73651_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 4ed491d0791_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4ed1e241c6e_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 5a168c3b966_4000_BDC-CR1.fcs 5a168c3b966_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a1154c6782_4000_BDC-CR2.fcs 5a1154c6782_4000_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a143687335_4000_TNK-CR1.fcs 5a143687335_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a138d01445_4000_TNK-CR2.fcs 5a138d01445_4000_TNK-CR2.fcs</span></span>
-<span><span class="co">## 5a13e18fe8_4001_BDC-CR1.fcs   5a13e18fe8_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a16c0ae266_4001_BDC-CR2.fcs 5a16c0ae266_4001_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a1f68561c_4001_TNK-CR1.fcs   5a1f68561c_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a17e564e76_4001_TNK-CR2.fcs 5a17e564e76_4001_TNK-CR2.fcs</span></span>
-<span><span class="co">## 5a1374cf0ba_4002_BDC-CR1.fcs 5a1374cf0ba_4002_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a164709311_4002_BDC-CR2.fcs 5a164709311_4002_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a161a31fb2_4002_TNK-CR1.fcs 5a161a31fb2_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a146e59019_4002_TNK-CR2.fcs 5a146e59019_4002_TNK-CR2.fcs</span></span>
-<span><span class="co">## 5a12851aa3a_4003_BDC-CR1.fcs 5a12851aa3a_4003_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a15fb9a523_4003_BDC-CR2.fcs 5a15fb9a523_4003_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a1613f687b_4003_TNK-CR1.fcs 5a1613f687b_4003_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5a1663c261c_4003_TNK-CR2.fcs 5a1663c261c_4003_TNK-CR2.fcs</span></span></code></pre>
+<span><span class="co">## 4ed4ff144fe_4000_BDC-CR1.fcs 4ed4ff144fe_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ed165ced5_4000_TNK-CR1.fcs   4ed165ced5_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ed5b13ad_4001_BDC-CR1.fcs     4ed5b13ad_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ed6cb73651_4001_TNK-CR1.fcs 4ed6cb73651_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ed491d0791_4002_TNK-CR1.fcs 4ed491d0791_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ed1e241c6e_4003_TNK-CR1.fcs 4ed1e241c6e_4003_TNK-CR1.fcs</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p><em>Note</em>: Many of the sub-setting operation for
@@ -535,29 +505,17 @@ full set of files.</p>
 <span>                 ,<span class="op">]</span></span>
 <span></span>
 <span><span class="va">fs_myeloid</span></span></code></pre></div>
-<pre><code><span><span class="co">## A flowSet with 8 experiments.</span></span>
+<pre><code><span><span class="co">## A flowSet with 2 experiments.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## column names(33): FSC-A FSC-H ... remove_from_FS_FM Time</span></span></code></pre>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5a168c3b966_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a1154c6782_4000_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a13e18fe8_4001_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5a16c0ae266_4001_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a1374cf0ba_4002_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5a164709311_4002_BDC-CR2.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5a12851aa3a_4003_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5a15fb9a523_4003_BDC-CR2.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4ed4ff144fe_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4ed5b13ad_4001_BDC-CR1.fcs   Untreated Myeloid Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 5a168c3b966_4000_BDC-CR1.fcs 5a168c3b966_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a1154c6782_4000_BDC-CR2.fcs 5a1154c6782_4000_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a13e18fe8_4001_BDC-CR1.fcs   5a13e18fe8_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a16c0ae266_4001_BDC-CR2.fcs 5a16c0ae266_4001_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a1374cf0ba_4002_BDC-CR1.fcs 5a1374cf0ba_4002_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a164709311_4002_BDC-CR2.fcs 5a164709311_4002_BDC-CR2.fcs</span></span>
-<span><span class="co">## 5a12851aa3a_4003_BDC-CR1.fcs 5a12851aa3a_4003_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5a15fb9a523_4003_BDC-CR2.fcs 5a15fb9a523_4003_BDC-CR2.fcs</span></span></code></pre>
+<span><span class="co">## 4ed4ff144fe_4000_BDC-CR1.fcs 4ed4ff144fe_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ed5b13ad_4001_BDC-CR1.fcs     4ed5b13ad_4001_BDC-CR1.fcs</span></span></code></pre>
 <p>Below is an example of <code>cytoset</code> sub-setting which also
 highlights how the operations performed on <code>cytoset</code> affects
 the underlying data.</p>
@@ -591,12 +549,12 @@ To perform a <strong>deep copy</strong> we can use
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># look at underlying expression</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1]   -85.39705 14721.02832</span></span></code></pre>
+<pre><code><span><span class="co">## [1]   -15.63437 23545.83203</span></span></code></pre>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># subset and show prior to transformation</span></span>
 <span><span class="va">cs_small2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs_small2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1]   -85.39705 14721.02832</span></span></code></pre>
+<pre><code><span><span class="co">## [1]   -15.63437 23545.83203</span></span></code></pre>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a transformList</span></span>
 <span><span class="va">trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span><span class="st">"B515-A"</span>,<span class="va">asinh</span><span class="op">)</span></span>
@@ -605,11 +563,11 @@ To perform a <strong>deep copy</strong> we can use
 <span></span>
 <span><span class="co"># after transformation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs_small2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] -5.140493 10.290179</span></span></code></pre>
+<pre><code><span><span class="co">## [1] -3.44364 10.75985</span></span></code></pre>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># whole cs </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1]   -85.39705 14721.02832</span></span></code></pre>
+<pre><code><span><span class="co">## [1]   -15.63437 23545.83203</span></span></code></pre>
 <p>Notice that <code>cs</code> is left unchanged.</p>
 </div>
 <div class="section level2">
