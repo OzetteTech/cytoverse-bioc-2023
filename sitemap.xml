@@ -1,54 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/404.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/404.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/LICENSE-text.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/LICENSE.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Bioc2023_Cytoverse.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/Gating_1.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Gating_1.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/HOWTO_BUILD_WORKSHOP.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/HOWTO_BUILD_WORKSHOP.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/Import_fcs.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Import_fcs.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/Reporting_1.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Reporting_1.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/Spillover_v2.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/Spillover_v2.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/ggcyto_1-5.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/ggcyto_1-5.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/index.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/articles/workshop_example.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/articles/workshop_example.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/authors.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/authors.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/index.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/reference/cache_workshop_data.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/reference/cache_workshop_data.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ozettetech.github.io/cytoverse-bioc-2023/reference/make_transformed_gs.html</loc>
+    <loc>https://cdn.ozetteai.com/cytoverse-bioc-2023/reference/make_transformed_gs.html</loc>
   </url>
 </urlset>

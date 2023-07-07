@@ -127,7 +127,7 @@ install additional libraries that will be required for this course.</p>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"flowStats"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"flowCore"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ozettetech.github.io/cytoverse-bioc-2023/">CytoverseBioc2023</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/">CytoverseBioc2023</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: replacing previous import 'flowViz::contour' by 'graphics::contour'</span></span>
 <span><span class="co">## when loading 'flowStats'</span></span></code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -465,31 +465,31 @@ dataframe should match the <code>sampleNames</code> of the
 <span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb337b2e0d_4000_BDC-CR1.fcs 4eb337b2e0d_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb73203882_4000_TNK-CR1.fcs 4eb73203882_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb353d209_4001_BDC-CR1.fcs   4eb353d209_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb50188c30_4001_TNK-CR1.fcs 4eb50188c30_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb397668c0_4002_TNK-CR1.fcs 4eb397668c0_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb4a297572_4003_TNK-CR1.fcs 4eb4a297572_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 4eb153e67ba_4000_BDC-CR1.fcs 4eb153e67ba_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4eb75295f7a_4000_TNK-CR1.fcs 4eb75295f7a_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4eb236c4e9b_4001_BDC-CR1.fcs 4eb236c4e9b_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4eb548d9011_4001_TNK-CR1.fcs 4eb548d9011_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4eb55099a64_4002_TNK-CR1.fcs 4eb55099a64_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4eb15e4f9d0_4003_TNK-CR1.fcs 4eb15e4f9d0_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add metadata </span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4eb337b2e0d_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4eb73203882_4000_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 4eb353d209_4001_BDC-CR1.fcs    Treated Myeloid Panel</span></span>
-<span><span class="co">## 4eb50188c30_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 4eb397668c0_4002_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4eb4a297572_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 4eb153e67ba_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4eb75295f7a_4000_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4eb236c4e9b_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 4eb548d9011_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4eb55099a64_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4eb15e4f9d0_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb337b2e0d_4000_BDC-CR1.fcs 4eb337b2e0d_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb73203882_4000_TNK-CR1.fcs 4eb73203882_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb353d209_4001_BDC-CR1.fcs   4eb353d209_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb50188c30_4001_TNK-CR1.fcs 4eb50188c30_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb397668c0_4002_TNK-CR1.fcs 4eb397668c0_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb4a297572_4003_TNK-CR1.fcs 4eb4a297572_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 4eb153e67ba_4000_BDC-CR1.fcs 4eb153e67ba_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4eb75295f7a_4000_TNK-CR1.fcs 4eb75295f7a_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4eb236c4e9b_4001_BDC-CR1.fcs 4eb236c4e9b_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4eb548d9011_4001_TNK-CR1.fcs 4eb548d9011_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4eb55099a64_4002_TNK-CR1.fcs 4eb55099a64_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4eb15e4f9d0_4003_TNK-CR1.fcs 4eb15e4f9d0_4003_TNK-CR1.fcs</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p><em>Note</em>: Many of the sub-setting operation for
@@ -511,11 +511,11 @@ full set of files.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4eb337b2e0d_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4eb353d209_4001_BDC-CR1.fcs    Treated Myeloid Panel</span></span>
+<span><span class="co">## 4eb153e67ba_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4eb236c4e9b_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb337b2e0d_4000_BDC-CR1.fcs 4eb337b2e0d_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb353d209_4001_BDC-CR1.fcs   4eb353d209_4001_BDC-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 4eb153e67ba_4000_BDC-CR1.fcs 4eb153e67ba_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4eb236c4e9b_4001_BDC-CR1.fcs 4eb236c4e9b_4001_BDC-CR1.fcs</span></span></code></pre>
 <p>Below is an example of <code>cytoset</code> sub-setting which also
 highlights how the operations performed on <code>cytoset</code> affects
 the underlying data.</p>

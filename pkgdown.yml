@@ -2,7 +2,6 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
-  Bioc2023_Cytoverse: Bioc2023_Cytoverse.html
   Gating_1: Gating_1.html
   HOWTO_BUILD_WORKSHOP: HOWTO_BUILD_WORKSHOP.html
   Import_fcs: Import_fcs.html
@@ -10,8 +9,8 @@ articles:
   Spillover_v2: Spillover_v2.html
   ggcyto_1-5: ggcyto_1-5.html
   workshop_example: workshop_example.html
-last_built: 2023-07-07T18:14Z
+last_built: 2023-07-07T19:21Z
 urls:
-  reference: https://ozettetech.github.io/cytoverse-bioc-2023/reference
-  article: https://ozettetech.github.io/cytoverse-bioc-2023/articles
+  reference: https://cdn.ozetteai.com/cytoverse-bioc-2023/reference
+  article: https://cdn.ozetteai.com/cytoverse-bioc-2023/articles
 
