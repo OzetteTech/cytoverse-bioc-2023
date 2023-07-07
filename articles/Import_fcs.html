@@ -465,31 +465,31 @@ dataframe should match the <code>sampleNames</code> of the
 <span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb434e7f4a_4000_BDC-CR1.fcs 4eb434e7f4a_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb120a598d_4000_TNK-CR1.fcs 4eb120a598d_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb6423ad90_4001_BDC-CR1.fcs 4eb6423ad90_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb4897b299_4001_TNK-CR1.fcs 4eb4897b299_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb713c9763_4002_TNK-CR1.fcs 4eb713c9763_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb638500ad_4003_TNK-CR1.fcs 4eb638500ad_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 4ec6c07360a_4000_BDC-CR1.fcs 4ec6c07360a_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ec2d14c377_4000_TNK-CR1.fcs 4ec2d14c377_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ec1789b118_4001_BDC-CR1.fcs 4ec1789b118_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ec1fef8ae0_4001_TNK-CR1.fcs 4ec1fef8ae0_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ec5f649db8_4002_TNK-CR1.fcs 4ec5f649db8_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ecf437d1d_4003_TNK-CR1.fcs   4ecf437d1d_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add metadata </span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4eb434e7f4a_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4eb120a598d_4000_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 4eb6423ad90_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4eb4897b299_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 4eb713c9763_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 4eb638500ad_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4ec6c07360a_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4ec2d14c377_4000_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4ec1789b118_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4ec1fef8ae0_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4ec5f649db8_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 4ecf437d1d_4003_TNK-CR1.fcs  Untreated  T Cell Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb434e7f4a_4000_BDC-CR1.fcs 4eb434e7f4a_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb120a598d_4000_TNK-CR1.fcs 4eb120a598d_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb6423ad90_4001_BDC-CR1.fcs 4eb6423ad90_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb4897b299_4001_TNK-CR1.fcs 4eb4897b299_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb713c9763_4002_TNK-CR1.fcs 4eb713c9763_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb638500ad_4003_TNK-CR1.fcs 4eb638500ad_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 4ec6c07360a_4000_BDC-CR1.fcs 4ec6c07360a_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ec2d14c377_4000_TNK-CR1.fcs 4ec2d14c377_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ec1789b118_4001_BDC-CR1.fcs 4ec1789b118_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ec1fef8ae0_4001_TNK-CR1.fcs 4ec1fef8ae0_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ec5f649db8_4002_TNK-CR1.fcs 4ec5f649db8_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 4ecf437d1d_4003_TNK-CR1.fcs   4ecf437d1d_4003_TNK-CR1.fcs</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p><em>Note</em>: Many of the sub-setting operation for
@@ -511,11 +511,11 @@ full set of files.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4eb434e7f4a_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4eb6423ad90_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4ec6c07360a_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 4ec1789b118_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb434e7f4a_4000_BDC-CR1.fcs 4eb434e7f4a_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb6423ad90_4001_BDC-CR1.fcs 4eb6423ad90_4001_BDC-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 4ec6c07360a_4000_BDC-CR1.fcs 4ec6c07360a_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 4ec1789b118_4001_BDC-CR1.fcs 4ec1789b118_4001_BDC-CR1.fcs</span></span></code></pre>
 <p>Below is an example of <code>cytoset</code> sub-setting which also
 highlights how the operations performed on <code>cytoset</code> affects
 the underlying data.</p>
