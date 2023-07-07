@@ -7,3 +7,4 @@ _pkgdown.yml
 ^doc.*
 ^Meta.*
 ^docs.*
+push_pkgdown_site.sh
