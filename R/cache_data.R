@@ -13,7 +13,11 @@ zip_link = "http://cdn.ozetteai.com/cytoverse-data-5-july-2023.tar.xz"
 #' @import BiocFileCache
 cache_workshop_data = function(force = FALSE){
   bfc = .get_cache()
-  if(nrow(bfcquery(bfc, "fcs_data"))==0 || force){
+  if(force){
+    try(unlink(bfccache(bfc), recursive = TRUE))
+    bfc = .get_cache()
+  }
+  if(nrow(bfcquery(bfc, "fcs_data"))==0){
   withr::with_tempdir({
     options(timeout = max(3000, getOption("timeout")))
     utils::download.file(zip_link, "data.tar.xz")
