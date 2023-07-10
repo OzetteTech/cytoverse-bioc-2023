@@ -1,18 +1,28 @@
-url: https://ozettetech.github.io/cytoverse-bioc-2023
+url: https://cdn.ozetteai.com/cytoverse-bioc-2023/
 
 template:
   params:
     bootswatch: flatly
     #ganalytics: UA-99999999-9
 
-home:
-  title: "BuildABiocWorkshop"
-  type: inverse
-
-
 navbar:
   right:
    - icon: fa-github
      href: https://github.com/OzetteTech/cytoverse-bioc-2023
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: Importing and Basics of working with FCS files
+        href: articles/Import_fcs.html
+      - text: Spillover, Transformation, and Visualization
+        href: articles/Spillover_v2.html
+      - text: "Gating Cells in cytoverse: Part 1"
+        href: articles/Gating_1.html
+      - text: "Visualizations (1.5)"
+        href: articles/ggcyto_1-5.html
+      - text: "Reporting: Counts, Frequency, etc."
+        href: articles/Reporting_1.html 
+        
      
 
