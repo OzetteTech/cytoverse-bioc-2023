@@ -22,7 +22,7 @@ First, we will go over variety of native methods that exist in the `cytoverse` w
 
 Required libraries
 
-```{r load_library, message=FALSE, echo = TRUE, eval=TRUE}
+```{r load_library, message=FALSE, echo = TRUE, eval=TRUE, message=FALSE}
 library(flowWorkspace)
 library(ggcyto)
 # set ggcyto theme  
@@ -33,7 +33,7 @@ cache_workshop_data()
 
 First we create a `GatingSet`
 
-```{r intro_gatingset, eval = T, echo=TRUE}
+```{r intro_gatingset, eval = T, echo=TRUE, message = FALSE}
 # create a cytoset
 fcs_files <- get_workshop_data("fcs_data/")
 fcs_files_TNK <- dplyr::filter(fcs_files, grepl(pattern = "TNK-CR1",x = rname))
@@ -79,7 +79,7 @@ As well we can transform the `GatingSet`.
 For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
 
 
-```{r demo_transformation_gs, echo = TRUE, eval = TRUE}
+```{r demo_transformation_gs, echo = TRUE, eval = TRUE, message=FALSE}
 # transformation of GatingSet
 t.rds <- dplyr::filter(get_workshop_data("/fj_wsp"), # a previously defined transformation
                        grepl(pattern = "transform", 
@@ -102,7 +102,7 @@ Below, we demonstrate various types of gates that can be applied to the samples 
 
 Note that the gating process is reliant on **visualization** of the data. As such, we will make ample use of the `ggcyto` library, highlighting its usage.
 
-```{r singlet_gate_viz, echo = T, eval = T }
+```{r singlet_gate_viz, echo = T, eval = T, message = FALSE }
 # gates for data cleanup; start by visualizing 
 singlet_vis <- autoplot(gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) extracts the underlying data
                         x = "FSC-A",
@@ -116,7 +116,7 @@ singlet_vis
 
 Now, we add a gate that is used to filter out **singlets**. For this, we make use of the `flowStats` library from the `cytoverse`.
 
-```{r add_singlets_gate, echo = T, eval = T}
+```{r add_singlets_gate, echo = T, eval = T, message = FALSE}
 # calculate and add a singlet gate
 singlet_gate <- fsApply(gs_pop_get_data(gs),function(x){ # sample wise calculation using fsApply
                 flowStats::gate_singlet(x, 
@@ -137,7 +137,7 @@ singlet_vis +
 Once visualized, we can add the gates to its respective samples.
 *Note:* Singlets gate was estimated for each sample.
 
-```{r add_singlets_gate_2, eval=T, echo=TRUE}
+```{r add_singlets_gate_2, eval=T, echo=TRUE, message = FALSE}
 # add gate to the GatingSet 
 gs_pop_add(gs, singlet_gate, parent = "root") # add singlet_gate to the root node
 recompute(gs) # recompute updates the gs
@@ -153,7 +153,7 @@ The next few gates are done in a similar manner:
 
 Below we add a variety of additional gates to the samples.
 
-```{r additional_gate_examples, echo=TRUE, eval=TRUE}
+```{r additional_gate_examples, echo=TRUE, eval=TRUE, message=FALSE}
 # calculate a live gate 
 ## Example of a quantile gate
 live_gate <- fsApply(gs_pop_get_data(gs,"singlet"), # indicating that estimation should be done on filtered data: singlet
@@ -277,12 +277,10 @@ non_nkt <- lapply(gs,
 # visualize
 nkt_vis + geom_gate(non_nkt)
 ```
+It looks like we should edit the gate for sample *4002*.
 
-
-```{r broken-example, echo=TRUE, eval=FALSE}
-# sample 4002 looks like the gate wasn't set properly. Edit
-non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs` <- transform_gate(non_nkt$`1615fa39c8b_4002_TNK-CR1.fcs`,
-                                                         dx = 25) # small shift in x
+```{r edit_gate, echo=TRUE, eval=TRUE, message=FALSE}
+non_nkt[[3]] <- transform_gate(non_nkt[[3]],dx = 25) # small shift in x
 nkt_vis + geom_gate(non_nkt)
 
 # add non_nkt
@@ -482,8 +480,11 @@ A `gatingTemplate` is a csv file that describes the gating sequence and the gati
 
 Let's take a look at an example gatingTemplate
 
-```{r gatingTemplate_load, echo=FALSE, eval= FALSE, message = FALSE}
-knitr::kable(read.csv("gating_template/gating_template_TNK.csv"))
+```{r gatingTemplate_load, echo=TRUE, eval= TRUE, message = FALSE}
+# load gatingTemplate csv
+gt_file <- get_workshop_data("gating_template/")
+
+knitr::kable(read.csv(gt_file$rpath))
 ```
 
 There are 10 columns that are required in a gatingTemplate csv file:
@@ -501,12 +502,33 @@ There are 10 columns that are required in a gatingTemplate csv file:
 
 *Note:* * indicates that these fields must be completed. Other can be left blank.
 
-```{r gatingTemplate_show, echo=TRUE, eval = FALSE,message=FALSE}
+Let's parse this csv file into a `gatingTemplate` object
+
+```{r gatingTemplate_show, echo=TRUE, eval = TRUE,message=FALSE}
 # required library
 library(openCyto)
-# read in gatingTemplate
-gt <- openCyto::gatingTemplate("path/to/csv/file")
+
+# directly read in a csv
+gt <- openCyto::gatingTemplate(gt_file$rpath)
 ```
+
+Now that we have `gt` we should first visualize the hierarchy to confirm that it matches our expectations! To achieve this we use `plot`. Let's plot `gt` and compare it to the `GatingSet` we created earlier.
+
+```{r 2_plots, echo=FALSE, eval = TRUE, message=FALSE}
+# set for 2 plots
+par(mfrow = c(1,2))
+```
+
+
+```{r plot_gt, echo=TRUE, eval=TRUE, message=FALSE}
+# show gt
+plot(gt)
+
+# show gs
+plot(gs)
+```
+
+
 
 
 Since we have saved our `GatingSet` let's first remove all the nodes including and downstream of `singlet`.
