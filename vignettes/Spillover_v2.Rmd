@@ -17,21 +17,21 @@ theme_set(theme_bw())
 
 # Background
 
-In this section, we aim to clarify the concept of Spillover, and the use of spillover/compensation matrices to correct for this. The last part of this section will deal with various transformations of the underlying expression data.
+In this section, we aim to clarify the concept of Spillover, and the use of `spillover/compensation` matrices to correct for this. The last part of this section will deal with various transformations of the underlying expression data.
 
 ## Spillover
 
-[CLARIFY THIS FURTHER] Flow cytometers (optics based: spectral or non-spectral) collect fluorescent signal from a cell as result of a laser excitation. Briefly, cell type C has been labelled with a marker M that is conjugated to a fluorophore (F). F has the property that it is excitation maxima at certain wavelength (W) resulting in fluoroscence. While the fluoresence has a emmision maxima, the emission profile of F can span many nanometers. The cytometer has a dedicated detector (channel) A to detect peak emission of F. However, due to the spread of the emission of F, some signal from F is also "spilled" onto detector B, a detector for a different fluorophore.
+Flow cytometers (optics based: spectral or non-spectral) collect fluorescent signal from a cell as result of a laser excitation. Briefly, cell type **C** has been labelled with a marker **M** that is conjugated to a fluorophore (**F**). **F** has excitation maxima at certain wavelength (**W**) resulting in fluorescence. While the fluorescence has a emission maxima, the emission profile of **F** can span many nanometers. The cytometer has a dedicated detector (channel) **A** to detect peak emission of **F**. However, due to the spread of the emission of **F**, some signal from **F** is also "spilled" onto detector **B**, a detector for a different fluorophore.
 
 The image below provides a concrete example.
 
 ![Excitation/Emission spectra for FITC. Taken from Bio-Rad. A is the dedicated detector for FITC. B is a secondary detector where FITC signal spills over.](https://static.bio-rad-antibodies.com/2016/flow-cytometry/fig-9-spectral-profiles.png)
 
-The "spillover" of signal onto secondary detector(s) is additive and can be easily recovered (more on this below).
+The "spillover" of signal onto secondary detector(s) is **additive** and can be easily recovered (more on this below).
 
-Raw Signal in B = Signal from FITC (spillover) + Signal for a dedicated fluorophore.
+Raw Signal in $B = \text{Signal from FITC (spillover)} + \text{Signal for a dedicated fluorophore}.$
 
-Signal recovery (Compensation) requires a set of controls be present to calculate the spillover. These controls are called **Single Colour Controls** and are often acquired prior to sample acquisition. The purpose of the single colour control is to estimate the amount of spillover of emission from fluorophore F onto non-primary detectors (detector B in the image above).
+Signal recovery (compensation) requires a set of controls be present to calculate the spillover. These controls are called **Single Colour Controls** and are acquired prior to sample acquisition. The purpose of the single colour control is to estimate the amount of spillover of emission from fluorophore **F** onto non-primary detectors (detector **B** in the image above).
 
 [TO ADD INFORMATION ABOUT SPECTRAL] Note: ABOUT Spectral instruments are set up slightly differently...
 
@@ -74,11 +74,6 @@ gridExtra::grid.arrange(uncompensated,
                         nrow = 1, 
                         top = "1. Difficulty resolving the correct populations")
 
-```
-
-Another example:
-
-```{r uncompensated_data_issue,echo=FALSE,eval=TRUE, fig.width=10}
 
 uncompensated <- as.ggplot(ggcyto(ff_trans, 
                                   aes(x = "SSC-A", y = "Live"))+
@@ -99,24 +94,27 @@ gridExtra::grid.arrange(uncompensated,
 
 ```
 
-In example 1,the plot first plot shows the uncompensated data. In this example, the 2 fluorophores: PE-Cy5 and PE-Cy5.5 are spilling onto each other, making the data not resolvable. However, after correcting for spillover, we see that the data can be resolved (2nd plot).
+In example 1, the 2 fluorophores: PE-Cy5 and PE-Cy5.5 are spilling onto each other, making the data not resolvable. However, after correcting for spillover, we see that the data can be resolved (2nd plot).
 
-In example 2, we see a population of events that are positive of marker: Live Dead UV Blue. Generally, these events are discarded as this marker is used to identify dead cells. However, in correctly compensated data, we see that this population does not exist!
+In example 2, we see a population of events that are positive of marker: **Live Dead UV Blue**. Generally, these events are discarded as this marker is used to identify dead cells. However, in correctly compensated data, we see that this population does not exist!
 
-## Where to find your spillover matrix?
+*Note:* The above conclusion is only regarding the data we are working with.
 
-In many cases, the spillover matrix (which is used to correct the spillover) is attached to the FCS files within `$SPILLOVER`,`SPILL`,or `SPILL` keywords. In `cytoverse`, we can check for the presence of by using the function `spillover(ff)`.
+## Where to find the spillover matrix?
 
-Example:
+In many cases, the spillover matrix (which is used to correct the spillover) is attached to the **.fcs** files within `$SPILLOVER`,`SPILL`,or `SPILL` keywords. In `cytoverse`, we can check for the presence of by using the function `spillover(ff)`.
 
 ```{r show_spill, echo=T, message=TRUE}
 # show spillover
 spillover(ff)
 ```
 
-We notice a few important details. - `spillover(ff)` returns all 3 keywords, even if some do not contain a matrix - It is not necessary that all 3 keywords have a matrix - spillover matrix is square. This is because the user will run 1 single colour control for each channel/marker they intend to acquire. In this example its 28 x 28
+We notice a few important details. 
+  - `spillover(ff)` returns all 3 keywords, even if some do not contain a matrix 
+  - It is not necessary that all 3 keywords have a matrix 
+  - spillover matrix is square. This is because the user will run 1 single colour control for each channel/marker they intend to acquire. In this example its 28 x 28
 
-The columns of the spillover matrix are the detectors while the rows are contribution from each fluorophore. Visualizing it as a heatmap is sometimes more helpful
+The columns of the spillover matrix are the **detectors** while the rows are contribution from each **fluorophore**. Visualizing it as a heatmap is sometimes more helpful
 
 ```{r explain_spillover, echo=FALSE, eval=TRUE, fig.height=10, fig.width=10}
 # extract spillover
@@ -221,7 +219,7 @@ pheatmap::pheatmap(mat = spill,
 
 *Note: "Close or related fluorophores will have some degree of overlap"*
 
-Lastly, we check the effect of *compensating* the files.
+Lastly, we check the effect of *compensating* these files.
 
 [NOTE: COMPENSATION MATRIX IS NOT CORRECT. THIS IS BECAUSE `spillover` in `flowStats` NORMALIZES TO MAX OF ROW INSTEAD OF MAX OF CHANNEL]
 
@@ -429,7 +427,7 @@ fs_trans <- as.ggplot(autoplot(fs_transformed,
 gridExtra::grid.arrange(fs_raw, fs_trans, nrow = 1)
 ```
 
-Similarly, we also transform a `cytoset`
+Similarly, we also transform a `cytoset`.
 
 ```{r trans_cytoset, echo=TRUE, eval=TRUE}
 # load a cytoset from fcs files
@@ -442,3 +440,8 @@ cs <- compensate(cs, spill)
 # transform: this will transform the underlying data 
 transform(cs,my_trans_list)
 ```
+
+## Conclusion
+
+In this section we have described the concept of **spillover** and how to use the `spillover` matrix to correct for this phenomenon. As well, we described an approach to generate the `spillover` matrix when it is has not be pre-populated in the **.fcs** files. 
+We also highlighted several built-in transformations in `cytoverse` as well as approaches to generate new user defined transformations. Data transformation is topic that can require several workshops in itself. As such, we encourage users/analyst to follow best and appropriate practices. A highly informative reading is the following: [An updated guide for the perplexed: cytometry in the high-dimensional era](https://pubmed.ncbi.nlm.nih.gov/34489590/).
