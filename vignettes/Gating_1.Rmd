@@ -98,12 +98,16 @@ gs <- flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
 
 Now that we have created a `GatingSet` we should start adding various gates that identifies cells of interest. Each sample within a `GatingSet` is associated with a `GatingHierarchy` that stores information regarding various gates that we would have created and applied to the samples.
 
-Below, we demonstrate various types of gates that can be applied to the samples within a `GatingSet` to build a hierachy.
+Below, we demonstrate various types of gates that could be estimated **automatically** or defined **manually** that can be applied to the samples within a `GatingSet` to build a hierarchy.
 
-Note that the gating process is reliant on **visualization** of the data. As such, we will make ample use of the `ggcyto` library, highlighting its usage.
+*Note:* This process is informed by **visualization** of the data. As such, we will make ample use of the `ggcyto` library.
+
+### Singlets gate
+
+Singlets gate is mostly used for data clean up.
 
 ```{r singlet_gate_viz, echo = T, eval = T, message = FALSE }
-# gates for data cleanup; start by visualizing 
+# visualization
 singlet_vis <- autoplot(gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) extracts the underlying data
                         x = "FSC-A",
                         y = "FSC-H",
@@ -114,10 +118,10 @@ singlet_vis <- autoplot(gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) 
 singlet_vis
 ```
 
-Now, we add a gate that is used to filter out **singlets**. For this, we make use of the `flowStats` library from the `cytoverse`.
+Now, we estimate a gate that will be used to filter out **singlets**. For this, we make use of the `flowStats` library from the `cytoverse`.
 
-```{r add_singlets_gate, echo = T, eval = T, message = FALSE}
-# calculate and add a singlet gate
+```{r estimate_singlets_gate, echo = T, eval = T, message = FALSE}
+# estimate
 singlet_gate <- fsApply(gs_pop_get_data(gs),function(x){ # sample wise calculation using fsApply
                 flowStats::gate_singlet(x, 
                                         filterId = "singlet", # name for the gate
@@ -143,19 +147,22 @@ gs_pop_add(gs, singlet_gate, parent = "root") # add singlet_gate to the root nod
 recompute(gs) # recompute updates the gs
 ```
 
-The next few gates are done in a similar manner:
+### Estimating cutpoint using `gate_quantile`
 
--   visualize marker(s)
-
--   use `openCyto` or `flowStats` to define gates
-
--   add to `GatingSet`
-
-Below we add a variety of additional gates to the samples.
+`gate_quantile` can be used to estimate a cut point at a given quantile allowing the gating of data to the left or the right of the cut point.
 
 ```{r additional_gate_examples, echo=TRUE, eval=TRUE, message=FALSE}
 # calculate a live gate 
 ## Example of a quantile gate
+
+## visualize
+live_viz <- ggcyto(gs,
+                   subset = "singlet",
+                   aes(x = "Live"))+
+            geom_histogram(bins = 128)+
+            facet_wrap(~name)
+live_viz
+  
 live_gate <- fsApply(gs_pop_get_data(gs,"singlet"), # indicating that estimation should be done on filtered data: singlet
                      function(x){
                        gate <- openCyto::gate_quantile(fr = x, channel = "U450-A", 
@@ -169,12 +176,33 @@ live_gate <- fsApply(gs_pop_get_data(gs,"singlet"), # indicating that estimation
                        return(gate)
                      })
 
+# visualize gate
+live_viz+
+  geom_gate(live_gate)
+
 # add live gate
 gs_pop_add(gs, parent = "singlet",gate = live_gate)
 recompute(gs)
+```
 
+### Ellipsoid gate
+
+Here, we are using `gate_flowclust_2d` from the `openCyto` library to estimate the location of **lymphocytes**. The output is an `Ellipsoid gate`.
+
+```{r flowclust_2d_lymphocyte, echo=TRUE, eval=T, message=FALSE}
 # calculate lymphocyte gate
 ## Example of using flowClust
+
+## visualize
+lymph_viz <- ggcyto(gs,
+                   subset = "live",
+                   aes(x = "FSC-A",
+                       y = "SSC-A"))+
+            geom_hex(bins = 128)
+
+lymph_viz
+
+# define
 lymphocyte_gate <- fsApply(gs_pop_get_data(gs,"live"),
                            function(x){
                              openCyto::gate_flowclust_2d(fr = x,
@@ -183,6 +211,8 @@ lymphocyte_gate <- fsApply(gs_pop_get_data(gs,"live"),
                                                          filterId = "lymphocytes",
                                                          K = 1,target = c(1E5,0.5E3))
                            })
+
+
 # call it lymphocytes
 lymphocyte_gate <- lapply(lymphocyte_gate,
                           function(x){
@@ -190,10 +220,20 @@ lymphocyte_gate <- lapply(lymphocyte_gate,
                             x
                           })
 
+# visualize
+lymph_viz+
+  geom_gate(lymphocyte_gate)
+
 # add lymphocyte gate
 gs_pop_add(gs, parent = "live", gate = lymphocyte_gate)
 recompute(gs)
+```
 
+### Rectangular gate
+
+As the name suggests, we can explicitly define a `rectangular gate` by by defining a `matrix` where the columns are the ranges for markers in `x-axis` and `y-axis`.  
+
+```{r, echo = TRUE, eval=TRUE, message=FALSE}
 # add T cells gate
 ## Example of rectangleGate
 cd3_vis <- ggcyto(
@@ -218,7 +258,13 @@ cd3_vis+geom_gate(cd3_rectangle_gate)
 # add gate
 gs_pop_add(gs, gate = cd3_rectangle_gate, parent = "lymphocytes")
 recompute(gs)
+```
 
+### Polygon gate
+
+Similar to `Rectangular gate` we can define a `Polygon gate` by generating a `matrix` of **vertices**. Each row of the matrix is the coordinate for a vertex and the columns are the axes.
+
+```{r echo=TRUE,eval=TRUE,message=FALSE}
 # add NKT cell gate
 ## Example of polygonGate
 nkt_vis <- ggcyto(gs, subset = "CD3+ T cells",
@@ -258,7 +304,14 @@ nkt_vis + geom_gate(nkt_poly_gate)
 # add to gs
 gs_pop_add(gs,nkt_poly_gate, parent = "CD3+ T cells")
 recompute(gs)
+```
 
+### Estimating 1D region using `rangeGate`
+
+Previously we used `gate_quantile` to generate a cut point by providing a specific `quantile`. Another approach to do the same when clear **positive**
+and **negative** populations exist is to use `rangeGate` from the `flowStats` package. 
+
+```{r echo=TRUE,eval=TRUE,message=FALSE}
 # Add non-NKT cells
 ## Example rangeGate
 
@@ -277,6 +330,7 @@ non_nkt <- lapply(gs,
 # visualize
 nkt_vis + geom_gate(non_nkt)
 ```
+
 It looks like we should edit the gate for sample *4002*.
 
 ```{r edit_gate, echo=TRUE, eval=TRUE, message=FALSE}
@@ -286,13 +340,21 @@ nkt_vis + geom_gate(non_nkt)
 # add non_nkt
 gs_pop_add(gs, non_nkt,parent = "CD3+ T cells")
 recompute(gs)
+```
 
+### Estimating a 2D Rectangular gate 
+
+Below we show an approach to generate a `Rectangular gate` by using sampled data to estimate cut points and then defining a rectangular region using those cut points. 
+
+```{r echo=TRUE,eval=TRUE,message=TRUE}
 # identify conventional T cells
 t_cell_vis <- ggcyto(
   gs, subset = "non-NKT Cells",
   aes(x = "Vg9", y = "Vd1")
 )+geom_hex(bins = 256)+
   facet_wrap(~name)
+
+t_cell_vis
 
 # Example use multiple gating tools and piping
 ## Estimate gate by sampling the data within the entire GatingSet
@@ -342,16 +404,26 @@ conv_t_cell_gate <- flowCore::transform_gate(conv_t_cell_gate,
                                              dy = 11 # change y
                                              )
 
+# visualize
+t_cell_vis+ggcyto:::geom_gate(conv_t_cell_gate)+facet_wrap(~name)
+
 # add  the calculated rectangleGate
 gs_pop_add(gs, conv_t_cell_gate,parent = "non-NKT Cells")
 recompute(gs)
+```
 
+### Estimating a Ellipsoid gate for a rare population
+
+Previously we used `gate_flowclust_2d` to estimate a gate which we called `lymphocytes`. Below, we use the same gating tool to estimate a *rare* population of T cells called MAIT Cells in a semi-supervised manner.
+
+```{r echo=TRUE, eval=TRUE,message=FALSE}
 # identify MAIT cells
 mait_vis <- ggcyto(gs, subset = "conv_Tcells",
                    aes(x  = "TCR Va7_2", y = "CD161"))+
   geom_hex(bins = 256)+
   facet_wrap(~name)
 
+mait_vis
 
 # add MAIT cells
 ## Example of estimation using collapsed data
@@ -379,6 +451,13 @@ mait_gate_all <- scale_gate(mait_gate_all, scale = 2)
 # add gate
 gs_pop_add(gs,gate = mait_gate_all, parent = "conv_Tcells")
 recompute(gs)
+```
+
+### Boolean filtering
+
+We can use `booleanFilter` to simply **negate** a gated population! The resulting filter does not have a geometric representation.
+
+```{r echo=TRUE, eval=TRUE, message=FALSE}
 
 # add not MAIT gate
 ## Example of booleanFilter
@@ -388,6 +467,40 @@ not_mait <- booleanFilter(`!MAIT Cells`, filterId = "not_MAIT")
 gs_pop_add(gs, not_mait, parent = "conv_Tcells")
 recompute(gs)
 
+# visualize
+mait_vis+
+  geom_overlay(
+    gs_pop_get_data(gs, y = "not_MAIT"),
+    size = 0.5, 
+    colour = "red"
+  )
+```
+
+*Note:* We are also able to combine multiple gates to generate a `booleanFilter`. 
+
+Let's create one for innate like T Cells (NKT cells and MAIT Cells).
+
+```{r}
+# using an OR ('|') operator
+innate_like_t <- booleanFilter(`NKT cells | MAIT Cells`,
+                               filterId = "Innate Like T Cells")
+# add population
+gs_pop_add(gs, innate_like_t, parent = "CD3+ T cells")
+recompute(gs)
+
+# visualize results
+ggcyto(gs,
+       subset = "Innate Like T Cells",
+       aes(x = "CD1d",
+            y = "CD161"))+
+  geom_hex(bins = 128)
+```
+
+### Define a Polygon gate using the results of booleanFilter
+
+Below, we show an approach to generate a `Polygon gate` from the results of `booleanFilter`.
+
+```{r echo=TRUE, eval=TRUE, message=FALSE}
 # Example of how to use booleanFilter to create a polygon gate
 not_mait_gate <- lapply(seq(1,length(
   gs_pop_get_gate(gs,"MAIT Cells")),1),
@@ -409,10 +522,21 @@ not_mait_gate <- lapply(seq(1,length(
   }
 );names(not_mait_gate) <- sampleNames(gs)
 
+
+# visualize
+mait_vis+
+  geom_gate(not_mait_gate)
+
 # add gate
 gs_pop_add(gs,not_mait_gate,parent = "conv_Tcells")
 recompute(gs)
+```
 
+### Quad gate
+
+Another useful gate when cells are located (generally) in all 4 quadrants that make up the bi-axial plot. One approach to generate this gate is to use `gate_quad_tmix` from the `openCyto` library.
+
+```{r echo=TRUE, eval=TRUE,message=FALSE}
 # visualize CD4 vs CD8
 cd4_cd8 <- ggcyto(gs,subset = "not_MAIT",
                   aes(x = "CD4", y = "CD8"))+
@@ -451,22 +575,26 @@ cd4_cd8+
 # add gate
 gs_pop_add(gs, cd4_cd8_quad_gate,parent = "not_MAIT_Polygon")
 recompute(gs)
+```
 
-# T cell subsets
-cd4_t_subset <- ggcyto(gs, subset = "CD4+CD8a-",
-                   aes(x = "CD45RA", y = "CCR7"))+
-  geom_hex(bins = 256)+
-  facet_wrap(~name)
+## Visualizing the Gating Hierachy
 
+A useful way to visualize all the gates and their relationship is by plotting the Gating Hierachy as a tree. This gives us the summary of what notes are present in the `GatingSet`.
+
+```{r echo=TRUE,eval=TRUE,message=FALSE}
 # plot the gating tree
 plot(gs, bool = TRUE)
+```
 
+Another useful approach is to visualize the gated data, with gates that we have generated.
+
+```{r, echo=TRUE, eval=TRUE,message=FALSE}
 # visualize the full gating hierarchy
-final_plot <- autoplot(gs[[1]],bins = 256, bool = TRUE)+
+autoplot(gs[[1]],bins = 256, bool = TRUE)+
   ggcyto_par_set(limits = "data") # set data range to be determined by data
 ```
 
-Best to save the `GatingSet` now. 
+Finally, we save the `GatingSet`. 
 
 ```{r save_gs, echo=TRUE, eval=FALSE}
 # save your work
@@ -478,7 +606,7 @@ save_gs(gs, path = "path/to/a/folder")
 
 A `gatingTemplate` is a csv file that describes the gating sequence and the gating methods. In the `gatingTemplate` csv file, we can leverage the various automated gating methods that we have previously  seen, without explicitly requiring to script it in **R**.
 
-Let's take a look at an example gatingTemplate
+Let's take a look at an example `gatingTemplate`
 
 ```{r gatingTemplate_load, echo=TRUE, eval= TRUE, message = FALSE}
 # load gatingTemplate csv
@@ -490,7 +618,7 @@ knitr::kable(read.csv(gt_file$rpath))
 There are 10 columns that are required in a gatingTemplate csv file:
 
   - **alias* **: name (alias) of the gate
-  - **pop* **: + or -, or a combination such as: --, -+, ++, +-, or [ADD]
+  - **pop* **: + or -, or a combination such as: --, -+, ++, +-
   - **parent* **: parent population
   - **dims* **: channels or markernames
   - **gating_method* **: gating method to be used. example: *mindensity*
@@ -514,12 +642,6 @@ gt <- openCyto::gatingTemplate(gt_file$rpath)
 
 Now that we have `gt` we should first visualize the hierarchy to confirm that it matches our expectations! To achieve this we use `plot`. Let's plot `gt` and compare it to the `GatingSet` we created earlier.
 
-```{r 2_plots, echo=FALSE, eval = TRUE, message=FALSE}
-# set for 2 plots
-par(mfrow = c(1,2))
-```
-
-
 ```{r plot_gt, echo=TRUE, eval=TRUE, message=FALSE}
 # show gt
 plot(gt)
@@ -527,9 +649,6 @@ plot(gt)
 # show gs
 plot(gs)
 ```
-
-
-
 
 Since we have saved our `GatingSet` let's first remove all the nodes including and downstream of `singlet`.
 
@@ -542,9 +661,19 @@ recompute(gs)
 gt_gating(gt, gs) # simply provide the parsed gatingTemplate and the GatingSet
 recompute(gs)
 
-# visualize
+# visualize Gating Hierarchy
 plot(gs, bool = TRUE)
 
-autoplot(gs[[1]], bool = TRUE, bins = 128)
+# hide helper gates
+gt_toggle_helpergates(gt,gs)
+
+# surface MAIT Cells
+gs_pop_set_visibility(gs,
+                      c("MAIT Cells"),
+                      TRUE)
+
+# visualize the full gated data
+autoplot(gs[[2]], bool = TRUE, bins = 128)+
+  ggcyto_par_set(limits = "data")
 ```
 
