@@ -1,6 +1,6 @@
 Package: CytoverseBioc2023
 Title: Reproducible and programmatic analysis of flow cytometry experiments with the cytoverse
-Version: 0.0.0.9005
+Version: 0.0.0.9006
 Authors@R: 
     c(person(given = "Andrew",
            family = "McDavid",
@@ -40,7 +40,7 @@ Suggests:
     rmarkdown,
     pkgdown,
     testthat (>= 3.0.0)
-URL: https://ozettetech.github.io/cytoverse-bioc-2023/
+URL: https://cdn.ozetteai.com/cytoverse-bioc-2023/
 BugReports: https://github.com/OzetteTech/cytoverse-bioc-2023/issues/new/choose
 VignetteBuilder: knitr
 DockerImage: ghcr.io/ozettetech/cytoverse-bioc-2023:latest

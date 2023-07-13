@@ -1,4 +1,4 @@
-zip_link = "https://figshare.com/ndownloader/files/41233761?private_link=5d52dfbf8481d1cfffc8"
+zip_link = "http://cdn.ozetteai.com/cytoverse-data-5-july-2023.tar.xz"
 
 .get_cache = function()
   {
@@ -13,11 +13,15 @@ zip_link = "https://figshare.com/ndownloader/files/41233761?private_link=5d52dfb
 #' @import BiocFileCache
 cache_workshop_data = function(force = FALSE){
   bfc = .get_cache()
-  if(nrow(bfcquery(bfc, "fcs_data"))==0 || force){
+  if(force){
+    try(unlink(bfccache(bfc), recursive = TRUE))
+    bfc = .get_cache()
+  }
+  if(nrow(bfcquery(bfc, "fcs_data"))==0){
   withr::with_tempdir({
     options(timeout = max(3000, getOption("timeout")))
-    utils::download.file(zip_link, "data.zip")
-    utils::unzip("data.zip")
+    utils::download.file(zip_link, "data.tar.xz")
+    utils::untar("data.tar.xz")
     data_files = list.files("data", recursive = TRUE, full.names = TRUE)
     for(f in data_files){
       bfcadd(bfc, f)
