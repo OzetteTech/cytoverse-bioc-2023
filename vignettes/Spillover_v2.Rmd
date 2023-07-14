@@ -104,6 +104,8 @@ In example 2, we see a population of events that are positive of marker: **Live 
 
 ## Where to find the spillover matrix?
 
+### Embedded with the **.fcs** file
+
 In many cases, the spillover matrix (which is used to correct the spillover) is attached to the **.fcs** files within `$SPILLOVER`,`SPILL`,or `SPILL` keywords. In `cytoverse`, we can check for the presence of by using the function `spillover(ff)`.
 
 ```{r show_spill, echo=T, message=TRUE}
@@ -111,10 +113,13 @@ In many cases, the spillover matrix (which is used to correct the spillover) is 
 spillover(ff)
 ```
 
-We notice a few important details. 
-  - `spillover(ff)` returns all 3 keywords, even if some do not contain a matrix 
-  - It is not necessary that all 3 keywords have a matrix 
-  - spillover matrix is square. This is because the user will run 1 single colour control for each channel/marker they intend to acquire. In this example its 28 x 28
+We notice a few important details.
+
+-   `spillover(ff)` returns all 3 keywords, even if some do not contain a matrix
+
+-   It is not necessary that all 3 keywords have a matrix
+
+-   The spillover matrix is **square**. This is because the user will run 1 single colour control for each channel/marker they intend to acquire. In this example its 28 x 28
 
 The columns of the spillover matrix are the **detectors** while the rows are contribution from each **fluorophore**. Visualizing it as a heatmap is sometimes more helpful
 
@@ -219,7 +224,7 @@ pheatmap::pheatmap(mat = spill,
                    number_format = "%.3f")
 ```
 
-*Note: "Close or related fluorophores will have some degree of overlap"*
+*Note: Close or related fluorophores will have some degree of overlap.*
 
 Lastly, we check the effect of *compensating* these files.
 
@@ -443,7 +448,6 @@ cs <- compensate(cs, spill)
 transform(cs,my_trans_list)
 ```
 
-## Conclusion
+# Conclusion
 
-In this section we have described the concept of **spillover** and how to use the `spillover` matrix to correct for this phenomenon. As well, we described an approach to generate the `spillover` matrix when it is has not be pre-populated in the **.fcs** files. 
-We also highlighted several built-in transformations in `cytoverse` as well as approaches to generate new user defined transformations. Data transformation is topic that can require several workshops in itself. As such, we encourage users/analyst to follow best and appropriate practices. A highly informative reading is the following: [An updated guide for the perplexed: cytometry in the high-dimensional era](https://pubmed.ncbi.nlm.nih.gov/34489590/).
+In this section we have described the concept of **spillover** and how to use the `spillover` matrix to correct for this phenomenon. As well, we described an approach to generate the `spillover` matrix when it is has not be pre-populated in the **.fcs** files. We also highlighted several built-in transformations in `cytoverse` as well as approaches to generate new user defined transformations. Data transformation is topic that can require several workshops in itself. As such, we encourage users/analyst to follow best and appropriate practices. A highly informative reading is the following: [An updated guide for the perplexed: cytometry in the high-dimensional era](https://pubmed.ncbi.nlm.nih.gov/34489590/).

@@ -415,7 +415,7 @@ recompute(gs)
 
 Previously we used `gate_flowclust_2d` to estimate a gate which we called `lymphocytes`. Below, we use the same gating tool to estimate a *rare* population of T cells called MAIT Cells in a semi-supervised manner.
 
-```{r example_flowclust,echo=TRUE, eval=TRUE,message=FALSE}
+```{r example_flowclust,echo=TRUE, eval=TRUE,message=FALSE, warning = FALSE}
 # identify MAIT cells
 mait_vis <- ggcyto(gs, subset = "conv_Tcells",
                    aes(x  = "TCR Va7_2", y = "CD161"))+
@@ -426,6 +426,7 @@ mait_vis
 
 # add MAIT cells
 ## Example of estimation using collapsed data
+set.seed(2023)
 mait_gate_all <- openCyto::gate_flowclust_2d(fr =  flowFrame(fsApply(gs_pop_get_data(gs,"conv_Tcells"),
                                                             function(y){
                                                               sample_n = min(nrow(y), 1E4)
@@ -434,8 +435,10 @@ mait_gate_all <- openCyto::gate_flowclust_2d(fr =  flowFrame(fsApply(gs_pop_get_
                                                             )
                                          ),
                                                   xChannel = "V710-A",
-                                                  yChannel = "G660-A",target = c(175,175),
-                                                  K = 14,filterId = "MAIT Cells" # K indicates number of clusters to estimate
+                                                  yChannel = "G660-A",
+                                                  target = c(175,175), # give an approximate center
+                                                  K = 20, # K indicates number of clusters to estimate
+                                                  filterId = "MAIT Cells" 
                                                   
                                          )
 # fix filterId
@@ -593,9 +596,9 @@ autoplot(gs[[1]],bins = 256, bool = TRUE)+
   ggcyto_par_set(limits = "data") # set data range to be determined by data
 ```
 
-## Saving our work
+## Saving your work
 
-Finally, we save our `GatingSet`. The `GatingSet` can be loaded back into R using `load_gs("path/to/a/folder")`.
+Finally, we save your `GatingSet`. The `GatingSet` can be loaded back into R using `load_gs("path/to/a/folder")`.
 
 ```{r save_gs, echo=TRUE, eval=FALSE}
 # save your work
