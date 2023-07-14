@@ -14,6 +14,18 @@ A `gatingTemplate` is a csv file that describes the gating sequence and the gati
 
 Let's take a look at an example `gatingTemplate`
 
+```{r load_libraries, echo=FALSE, eval=TRUE, message=FALSE,warning=FALSE}
+library(flowCore)
+library(flowWorkspace)
+library(openCyto)
+library(CytoverseBioc2023)
+cache_workshop_data()
+
+# make gs available
+gs <- make_transformed_gs()
+```
+
+
 ```{r gatingTemplate_load, echo=TRUE, eval= TRUE, message = FALSE}
 # load gatingTemplate csv
 gt_file <- get_workshop_data("gating_template/")
@@ -38,11 +50,11 @@ There are 10 columns that are required in a gatingTemplate csv file:
 
 *Note:* # indicates that these fields must be completed. Others can be left blank.
 
-### Writing a `gatingTemplate` csv file
+### Understandin a `gatingTemplate` csv file
 
 Above, It should be apparent that the each row of the `gatingTemplate` csv file is akin to the function call to a specific type of gate. 
 
-Let's take a look at a simple example of the node `singlet`:
+Let's take a look at a *simple* example of the node `singlet`:
 
   - `alias`: singlet *name of the gate*
   - `pop`: + *indicating that we want events inside the gate*
@@ -56,9 +68,24 @@ Let's take a look at a simple example of the node `singlet`:
   - `preprocessing_args`: NA *indicating that no preprocessing argument is specified*
 
 
+The row for the `CD4+ T Cells` we note:
+  - `gating_method`: refGate
+  - `gating_args`: CD4_ref:CD8_ref
+  
+A `refGate` (reference gate) allows us to build gates by providing *references* to a previously constructed gates. In this instance, we first constructed 1D gates `CD4_ref` and `CD8_ref`, and leveraged them to generate our `CD4+ T Cells` gate.
+
+Also note:
+  - `pop`:+-
+  - `dims`: CD4,CD8
+
+Here we indicated that `CD4+ T Cells` are **CD4+** and **CD8-**.
+
+*A word of caution: We did not specify channels, rather we left `openCyto` to match the `dims` argument with markernames of the `GatingSet`. If there are similarly named markers (`CD3` and `CD33`) and we provide `dims: CD3`, the process will not complete successfully!*
 
 
-Let's parse this csv file into a `gatingTemplate` object
+## Visualizing the `gatingTemplate` tree
+
+Let us now parse this csv file into a `gatingTemplate` object
 
 ```{r gatingTemplate_show, echo=TRUE, eval = TRUE,message=FALSE}
 # required library
@@ -68,34 +95,82 @@ library(openCyto)
 gt <- openCyto::gatingTemplate(gt_file$rpath)
 ```
 
-Now that we have `gt` we should first visualize the hierarchy to confirm that it matches our expectations! To achieve this we use `plot`. Let's plot `gt` and compare it to the `GatingSet` we created earlier.
+Now that we have `gt` we should first visualize the hierarchy to **confirm** that it matches our expectations! To achieve this we use `plot`.
+As well, we will compare it to the `GatingSet` we created earlier.
 
 ```{r plot_gt, echo=TRUE, eval=TRUE, message=FALSE}
 # show gt
 plot(gt)
+```
 
+The tree diagram summarizes the gating path as well as the gating methods used.
+Also note that the `grey` colored arrows identify **helper gates**. These are gates which constructed in to *help* construct a final gate. Above, the gate for `MAIT Cells` is to be created by first constructing 2, 1D gates `TCR Va7_2+` and `CD161+`.
+
+```{r plot_gs, echo=TRUE, eval=TRUE, message=FALSE}
 # show gs
 plot(gs)
 ```
 
+Beside the names, most nodes look the same!
+
+## Adding a new population
+
+Let's append a 1 more population to this scheme:
+  - `Non Naive` defined as `CCR7+CD45RA-` or `CCR7-CD45RA-` or `CCR7-CD45RA+`
+
+To do this, we first create a `Naive` node and then negate it!
+
+```{r append_gt, echo=TRUE, eval=TRUE, message=FALSE}
+# Naive
+additional_rows <- data.frame(
+  alias = c("Naive", "Non Naive"),
+  pop = c("++","+"),
+  parent = c("CD4+ T Cells","CD4+ T Cells"),
+  dims = c("CCR7,CD45RA","CCR7,CD45RA"),
+  gating_method = c("mindensity", "boolGate"),
+  gating_args = c("","!Naive"),
+  collapseDataForGating = c("",""),
+  groupBy = c("",""),
+  preprocessing_method = c("",""),
+  preprocessing_args = c("","")
+)
+
+gt <- read.csv(gt_file$rpath) |>
+  rbind(additional_rows)|> data.table::as.data.table()|>
+  gatingTemplate() 
+
+# visualize
+plot(gt)
+```
+## Running and attaching the nodes to the `GatingSet`
+
 Since we have saved our `GatingSet` let's first remove all the nodes including and downstream of `singlet`.
 
-```{r gatingTemplate_run, echo = TRUE, eval = FALSE, message = FALSE}
+```{r gatingTemplate_run, echo = TRUE, eval = FALSE, message = FALSE, fig.height=10, fig.width=10}
 # clean gs
 gs_pop_remove(gs, "singlet") # removes singlet and all children nodes
 recompute(gs)
+```
 
+We now use `gt_gating(gt,gs)` to estimate and attach gates to the `GatingSet` in a single call.
+
+```{r compute_with_gating_template, echo=TRUE, eval=TRUE,message=FALSe}
 # add gates defined in gatingTemplate
 gt_gating(gt, gs) # simply provide the parsed gatingTemplate and the GatingSet
 recompute(gs)
 
 # visualize Gating Hierarchy
 plot(gs, bool = TRUE)
+```
 
-# hide helper gates
+We see that all the helper gates are also visualized. We can't remove them as it would affect downstream nodes! However we can hide them.
+
+```{r hide_nodes_gt, echo=TRUE, eval=TRUE, message=FALSE}
+# Too many nodes being shown, let's hide helper gates
 gt_toggle_helpergates(gt,gs)
 
 # surface MAIT Cells
+## labelled as helper since not_MAIT_Cells was created using reference for MAIT Cells
 gs_pop_set_visibility(gs,
                       c("MAIT Cells"),
                       TRUE)
@@ -105,3 +180,8 @@ autoplot(gs[[2]], bool = TRUE, bins = 128)+
   ggcyto_par_set(limits = "data")
 ```
 
+## Conclusion
+
+In this section we took a brief look at how to use a `gatingTemplate` csv file to compose and rapidly gate cells within a `GatingSet`. The portability of the `gatingTemplate` csv ensures that all users utilizing this template file will result in the exact same `GatingHierarchy` and gates. 
+
+There are additional functionalities in the `openCyto` library, which we did not go over due to time constraints. We encourage participants to explore the examples outlined [here](https://cytoverse.org/examples/index.html) as well as read through the [vignette](http://www.bioconductor.org/packages/devel/bioc/vignettes/openCyto/inst/doc/openCytoVignette.html).
