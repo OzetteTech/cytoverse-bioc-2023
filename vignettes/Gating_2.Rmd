@@ -50,7 +50,7 @@ There are 10 columns that are required in a gatingTemplate csv file:
 
 *Note:* # indicates that these fields must be completed. Others can be left blank.
 
-### Understandin a `gatingTemplate` csv file
+### Understanding the structure of a `gatingTemplate` csv file
 
 Above, It should be apparent that the each row of the `gatingTemplate` csv file is akin to the function call to a specific type of gate. 
 
@@ -121,7 +121,7 @@ Let's append a 1 more population to this scheme:
 To do this, we first create a `Naive` node and then negate it!
 
 ```{r append_gt, echo=TRUE, eval=TRUE, message=FALSE}
-# Naive
+# Non Naive
 additional_rows <- data.frame(
   alias = c("Naive", "Non Naive"),
   pop = c("++","+"),
@@ -146,7 +146,7 @@ plot(gt)
 
 Since we have saved our `GatingSet` let's first remove all the nodes including and downstream of `singlet`.
 
-```{r gatingTemplate_run, echo = TRUE, eval = FALSE, message = FALSE, fig.height=10, fig.width=10}
+```{r gatingTemplate_run, echo = TRUE, eval = TRUE, message = FALSE, fig.height=10, fig.width=10}
 # clean gs
 gs_pop_remove(gs, "singlet") # removes singlet and all children nodes
 recompute(gs)
@@ -154,7 +154,7 @@ recompute(gs)
 
 We now use `gt_gating(gt,gs)` to estimate and attach gates to the `GatingSet` in a single call.
 
-```{r compute_with_gating_template, echo=TRUE, eval=TRUE,message=FALSe}
+```{r compute_with_gating_template, echo=TRUE, eval=TRUE,message=FALSE,warning=FALSE}
 # add gates defined in gatingTemplate
 gt_gating(gt, gs) # simply provide the parsed gatingTemplate and the GatingSet
 recompute(gs)
