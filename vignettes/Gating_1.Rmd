@@ -233,7 +233,7 @@ recompute(gs)
 
 As the name suggests, we can explicitly define a `rectangular gate` by by defining a `matrix` where the columns are the ranges for markers in `x-axis` and `y-axis`.
 
-```{r, echo = TRUE, eval=TRUE, message=FALSE}
+```{r example_manual_rect, echo = TRUE, eval=TRUE, message=FALSE}
 # add T cells gate
 ## Example of rectangleGate
 cd3_vis <- ggcyto(
@@ -264,7 +264,7 @@ recompute(gs)
 
 Similar to `Rectangular gate` we can define a `Polygon gate` by generating a `matrix` of **vertices**. Each row of the matrix is the coordinate for a vertex and the columns are the axes.
 
-```{r echo=TRUE,eval=TRUE,message=FALSE}
+```{r example_manual_poly, echo=TRUE,eval=TRUE,message=FALSE}
 # add NKT cell gate
 ## Example of polygonGate
 nkt_vis <- ggcyto(gs, subset = "CD3+ T cells",
@@ -310,7 +310,7 @@ recompute(gs)
 
 Previously we used `gate_quantile` to generate a cut point by providing a specific `quantile`. Another approach to do the same when clear **positive** and **negative** populations exist is to use `rangeGate` from the `flowStats` package.
 
-```{r echo=TRUE,eval=TRUE,message=FALSE}
+```{r example_range_gate, echo=TRUE,eval=TRUE,message=FALSE}
 # Add non-NKT cells
 ## Example rangeGate
 
@@ -345,7 +345,7 @@ recompute(gs)
 
 Below we show an approach to generate a `Rectangular gate` by using sampled data to estimate cut points and then defining a rectangular region using those cut points.
 
-```{r echo=TRUE,eval=TRUE,message=TRUE}
+```{r example_rect_gate, echo=TRUE,eval=TRUE,message=TRUE}
 # identify conventional T cells
 t_cell_vis <- ggcyto(
   gs, subset = "non-NKT Cells",
@@ -415,7 +415,7 @@ recompute(gs)
 
 Previously we used `gate_flowclust_2d` to estimate a gate which we called `lymphocytes`. Below, we use the same gating tool to estimate a *rare* population of T cells called MAIT Cells in a semi-supervised manner.
 
-```{r echo=TRUE, eval=TRUE,message=FALSE}
+```{r example_flowclust,echo=TRUE, eval=TRUE,message=FALSE}
 # identify MAIT cells
 mait_vis <- ggcyto(gs, subset = "conv_Tcells",
                    aes(x  = "TCR Va7_2", y = "CD161"))+
@@ -456,7 +456,7 @@ recompute(gs)
 
 We can use `booleanFilter` to simply **negate** a gated population! The resulting filter does not have a geometric representation.
 
-```{r echo=TRUE, eval=TRUE, message=FALSE}
+```{r example_bool_filter, echo=TRUE, eval=TRUE, message=FALSE}
 
 # add not MAIT gate
 ## Example of booleanFilter
@@ -479,7 +479,7 @@ mait_vis+
 
 Let's create one for innate like T Cells (NKT cells and MAIT Cells).
 
-```{r}
+```{r example_or_filter, echo=TRUE, eval=TRUE, message=FALSE}
 # using an OR ('|') operator
 innate_like_t <- booleanFilter(`NKT cells | MAIT Cells`,
                                filterId = "Innate Like T Cells")
@@ -499,7 +499,7 @@ ggcyto(gs,
 
 Below, we show an approach to generate a `Polygon gate` from the results of `booleanFilter`.
 
-```{r echo=TRUE, eval=TRUE, message=FALSE}
+```{r example_bool_2_poly, echo=TRUE, eval=TRUE, message=FALSE}
 # Example of how to use booleanFilter to create a polygon gate
 not_mait_gate <- lapply(seq(1,length(
   gs_pop_get_gate(gs,"MAIT Cells")),1),
@@ -535,7 +535,7 @@ recompute(gs)
 
 Another useful gate when cells are located (generally) in all 4 quadrants that make up the bi-axial plot. One approach to generate this gate is to use `gate_quad_tmix` from the `openCyto` library.
 
-```{r echo=TRUE, eval=TRUE,message=FALSE}
+```{r viz_cd4_cd8,echo=TRUE, eval=TRUE,message=FALSE}
 # visualize CD4 vs CD8
 cd4_cd8 <- ggcyto(gs,subset = "not_MAIT",
                   aes(x = "CD4", y = "CD8"))+
@@ -580,14 +580,14 @@ recompute(gs)
 
 We have been creating and adding many gates to our `GatingSet`. A useful way to visualize all the gates and their relationship is by plotting the gating Hierarchy as a tree. This gives us an immediate summary of what nodes are present in our `GatingSet`.
 
-```{r echo=TRUE,eval=TRUE,message=FALSE}
+```{r plot_gs_tree,echo=TRUE,eval=TRUE,message=FALSE}
 # plot the gating tree
 plot(gs, bool = TRUE)
 ```
 
 Another useful approach is to visualize the gated data, with gates that we have generated.
 
-```{r, echo=TRUE, eval=TRUE,message=FALSE}
+```{r viz_gs, echo=TRUE, eval=TRUE,message=FALSE}
 # visualize the full gating hierarchy
 autoplot(gs[[1]],bins = 256, bool = TRUE)+
   ggcyto_par_set(limits = "data") # set data range to be determined by data
