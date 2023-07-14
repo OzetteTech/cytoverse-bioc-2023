@@ -1,7 +1,9 @@
 ---
-title: "Spillover, compensation, Transformations, and Visualization"
-vignette: "%\\VignetteIndexEntry{Spillover, compensation, Transformations, and Visualization}
-  %\\VignetteEngine{knitr::rmarkdown} %\\VignetteEncoding{UTF-8}"
+title: "Spillover, compensation, and Transformations"
+vignette: >
+  %\\VignetteIndexEntry{Spillover, compensation, Transformations}
+  %\\VignetteEngine{knitr::rmarkdown} 
+  %\\VignetteEncoding{UTF-8}
 ---
 
 ```{r,include=FALSE, echo=FALSE,eval=TRUE}
