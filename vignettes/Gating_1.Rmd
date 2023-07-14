@@ -8,17 +8,19 @@ vignette: >
 
 # Background
 
-The purpose of flow cytometry is to make inferences regarding some cell type(s) of interest. Often this involves establishing/drawing a gating heirachy to sequentially filter down to the cell type(s) of interest. This process is very often done manually, and can be very labour intensive. Importantly, manual approach implies large variation when one person does it vs. the next, or even if the same person does it multiple times. The `cytoverse` offers a suite of tools to tackle this problem in a reproducible and programmatic manner.
+The purpose of flow cytometry is to make inferences regarding some cell type(s) of interest. Often this involves establishing/drawing a gating hierachy to sequentially filter down to the cell type(s) of interest. This process is very often done manually, and can be very labour intensive. Importantly, manual approach implies **large variation** when one person does it vs. the next, or even if the same person does it multiple times. The `cytoverse` offers a suite of tools to tackle this problem in a reproducible and programmatic manner.
 
 ## GatingSet and GatingHeirarchy
 
-In the previous sections, we have seen (and worked with) `flowFrame`, `flowSet`, `cytoframe`, and `cytoset`. These objects hold the underlying FCS data, allow us to visualize it, manipulate it etc.
+In the previous sections, we have seen (and worked with) `flowFrame`, `flowSet`, `cytoframe`, and `cytoset`. These objects hold the underlying data, allowing us to visualize it, manipulate it, etc.
 
-In this section we work with `GatingSet` and `GatingHierarchy`. These objects, like the name suggests, store information regarding various gates and filters that we will generate. Importantly, we can save the `GatingSet` which will completely package the analysis as well as the FCS files in an opensource format that can be shared, allowing reproducibility.
+In this section we work with `GatingSet` and `GatingHierarchy`. These objects, like the name suggests, store information regarding various gates and filters that we will generate. Importantly, we can save the `GatingSet` which will completely package the analysis as well as the **.fcs** files in an opensource format that can be shared, allowing reproducibility.
 
-First, we will go over variety of native methods that exist in the `cytoverse` which analysts can utilize to gate their cells of interest. Next, we will demonstrate how analysts can automate this process by utilizing a `gatingTemplate` (a csv file that can be used to define and build the hierarchy).
+In **part 1** of this section, we will go over variety of native methods that exist in the `cytoverse` which analysts can utilize to gate their cells of interest.
 
-## Building the gating tree
+In **part 2**, we will demonstrate how analysts can automate this process by utilizing a `gatingTemplate` (a csv file that can be used to define and build the hierarchy).
+
+## Building the gating tree: manual and semi-supervised
 
 Required libraries
 
@@ -31,7 +33,7 @@ library(CytoverseBioc2023)
 cache_workshop_data()
 ```
 
-First we create a `GatingSet`
+First we create a `GatingSet`.
 
 ```{r intro_gatingset, eval = T, echo=TRUE, message = FALSE}
 # create a cytoset
@@ -54,7 +56,7 @@ gs <- flowWorkspace::GatingSet(cs)
 gs
 ```
 
-We have now created a `GatingSet` called **gs**. Also note that we have associated some (albeit mock) metadata to the `GatingSet`. We are able to leverage the metadata to help construct gates (if need be). 
+We have now created a `GatingSet` called **gs**. Also note that we have associated some (albeit mock) metadata to the `GatingSet`. We are able to leverage the metadata to help construct gates (if need be).
 
 First, we revisit some of the concepts that we have seen previously: **compensation** and **transformation**.
 
@@ -75,9 +77,9 @@ gs_spill <- gs_get_compensations(gs[[1]])
 slot(gs_spill[[1]],"spillover")[1:4, 1:4]
 ```
 
-As well we can transform the `GatingSet`. 
-For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
+As well we can transform the `GatingSet`.
 
+For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
 
 ```{r demo_transformation_gs, echo = TRUE, eval = TRUE, message=FALSE}
 # transformation of GatingSet
@@ -92,7 +94,6 @@ my_trans_list <- flowWorkspace::transformerList(from = names(my_trans),
 
 gs <- flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
 ```
-
 
 ## Adding gates and building a hierarchy
 
@@ -138,8 +139,7 @@ singlet_vis +
 
 ```
 
-Once visualized, we can add the gates to its respective samples.
-*Note:* Singlets gate was estimated for each sample.
+Once visualized, we can add the gates to its respective samples. *Note:* Singlets gate was estimated for each sample.
 
 ```{r add_singlets_gate_2, eval=T, echo=TRUE, message = FALSE}
 # add gate to the GatingSet 
@@ -231,7 +231,7 @@ recompute(gs)
 
 ### Rectangular gate
 
-As the name suggests, we can explicitly define a `rectangular gate` by by defining a `matrix` where the columns are the ranges for markers in `x-axis` and `y-axis`.  
+As the name suggests, we can explicitly define a `rectangular gate` by by defining a `matrix` where the columns are the ranges for markers in `x-axis` and `y-axis`.
 
 ```{r, echo = TRUE, eval=TRUE, message=FALSE}
 # add T cells gate
@@ -308,8 +308,7 @@ recompute(gs)
 
 ### Estimating 1D region using `rangeGate`
 
-Previously we used `gate_quantile` to generate a cut point by providing a specific `quantile`. Another approach to do the same when clear **positive**
-and **negative** populations exist is to use `rangeGate` from the `flowStats` package. 
+Previously we used `gate_quantile` to generate a cut point by providing a specific `quantile`. Another approach to do the same when clear **positive** and **negative** populations exist is to use `rangeGate` from the `flowStats` package.
 
 ```{r echo=TRUE,eval=TRUE,message=FALSE}
 # Add non-NKT cells
@@ -342,9 +341,9 @@ gs_pop_add(gs, non_nkt,parent = "CD3+ T cells")
 recompute(gs)
 ```
 
-### Estimating a 2D Rectangular gate 
+### Estimating a 2D Rectangular gate
 
-Below we show an approach to generate a `Rectangular gate` by using sampled data to estimate cut points and then defining a rectangular region using those cut points. 
+Below we show an approach to generate a `Rectangular gate` by using sampled data to estimate cut points and then defining a rectangular region using those cut points.
 
 ```{r echo=TRUE,eval=TRUE,message=TRUE}
 # identify conventional T cells
@@ -476,7 +475,7 @@ mait_vis+
   )
 ```
 
-*Note:* We are also able to combine multiple gates to generate a `booleanFilter`. 
+*Note:* We are also able to combine multiple gates to generate a `booleanFilter`.
 
 Let's create one for innate like T Cells (NKT cells and MAIT Cells).
 
@@ -579,7 +578,7 @@ recompute(gs)
 
 ## Visualizing the Gating Hierachy
 
-A useful way to visualize all the gates and their relationship is by plotting the Gating Hierachy as a tree. This gives us the summary of what notes are present in the `GatingSet`.
+We have been creating and adding many gates to our `GatingSet`. A useful way to visualize all the gates and their relationship is by plotting the gating Hierarchy as a tree. This gives us an immediate summary of what nodes are present in our `GatingSet`.
 
 ```{r echo=TRUE,eval=TRUE,message=FALSE}
 # plot the gating tree
@@ -594,86 +593,19 @@ autoplot(gs[[1]],bins = 256, bool = TRUE)+
   ggcyto_par_set(limits = "data") # set data range to be determined by data
 ```
 
-Finally, we save the `GatingSet`. 
+## Saving our work
+
+Finally, we save our `GatingSet`. The `GatingSet` can be loaded back into R using `load_gs("path/to/a/folder")`.
 
 ```{r save_gs, echo=TRUE, eval=FALSE}
 # save your work
 save_gs(gs, path = "path/to/a/folder")
 ```
 
+## Conclusion
 
-## Using openCyto gatingTemplate 
+In this section, we spent some time identifying various types of gates that are available in `cytoverse`. As well, we demonstrated how to programmatically create such gates, either manually (i.e. by defining ranges or vertices) or in a semi-automated and data driven manner.
 
-A `gatingTemplate` is a csv file that describes the gating sequence and the gating methods. In the `gatingTemplate` csv file, we can leverage the various automated gating methods that we have previously  seen, without explicitly requiring to script it in **R**.
+In [**Part 2**](Gating_2.Rmd) we will take a look at how users can leverage a `gatingTemplate` generate gates as we have done here, but with minimal scripting. It is worth noting that while the use `gatingTemplate` minimizes scripting, it does not compromise on reproducibility!
 
-Let's take a look at an example `gatingTemplate`
-
-```{r gatingTemplate_load, echo=TRUE, eval= TRUE, message = FALSE}
-# load gatingTemplate csv
-gt_file <- get_workshop_data("gating_template/")
-
-knitr::kable(read.csv(gt_file$rpath))
-```
-
-There are 10 columns that are required in a gatingTemplate csv file:
-
-  - **alias* **: name (alias) of the gate
-  - **pop* **: + or -, or a combination such as: --, -+, ++, +-
-  - **parent* **: parent population
-  - **dims* **: channels or markernames
-  - **gating_method* **: gating method to be used. example: *mindensity*
-  - **gating_args**: additional arguments that can be passed to **gating_methods**
-  - **collapseDataForGating**: **logical** indicating if the data is to be collapsed onto a single `flowFrame` before estimation
-  - **groupBy**: string indicating the grouping variable (within `pData` slot of the `GatingSet`)
-  - **preprocessing_method**: preprocessing method to be used
-  - **preprocessing_args**: additional arguments that can be passed to **preprocessing_method**
-
-*Note:* * indicates that these fields must be completed. Other can be left blank.
-
-Let's parse this csv file into a `gatingTemplate` object
-
-```{r gatingTemplate_show, echo=TRUE, eval = TRUE,message=FALSE}
-# required library
-library(openCyto)
-
-# directly read in a csv
-gt <- openCyto::gatingTemplate(gt_file$rpath)
-```
-
-Now that we have `gt` we should first visualize the hierarchy to confirm that it matches our expectations! To achieve this we use `plot`. Let's plot `gt` and compare it to the `GatingSet` we created earlier.
-
-```{r plot_gt, echo=TRUE, eval=TRUE, message=FALSE}
-# show gt
-plot(gt)
-
-# show gs
-plot(gs)
-```
-
-Since we have saved our `GatingSet` let's first remove all the nodes including and downstream of `singlet`.
-
-```{r gatingTemplate_run, echo = TRUE, eval = FALSE, message = FALSE}
-# clean gs
-gs_pop_remove(gs, "singlet") # removes singlet and all children nodes
-recompute(gs)
-
-# add gates defined in gatingTemplate
-gt_gating(gt, gs) # simply provide the parsed gatingTemplate and the GatingSet
-recompute(gs)
-
-# visualize Gating Hierarchy
-plot(gs, bool = TRUE)
-
-# hide helper gates
-gt_toggle_helpergates(gt,gs)
-
-# surface MAIT Cells
-gs_pop_set_visibility(gs,
-                      c("MAIT Cells"),
-                      TRUE)
-
-# visualize the full gated data
-autoplot(gs[[2]], bool = TRUE, bins = 128)+
-  ggcyto_par_set(limits = "data")
-```
-
+Lastly, we also made ample use of the `ggcyto` library in order to generate visualizations that helped in QC'ing the data and the gates that we generated. We will go over `ggcyto` in more detail in [**Visualizations**](ggcyto_1-5.Rmd).
