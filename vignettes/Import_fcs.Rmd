@@ -8,7 +8,7 @@ vignette: >
 ---
 ## Introduction
 
-Flow cytometry data (regardless of the type of instrument used) is generally saved as a **.fcs** file. This file is populated the raw data, fluoresence intensity (for optics based technologies) and abundance (for mass cytrometry), as well as various parameters including: user id, instrument id, dynamic range of instrument, etc. It is important to be able to interact with and manipulate the **.fcs** file as it gives the users/analysts fine grain control!
+Flow cytometry data (regardless of the type of instrument used) is generally saved as a **.fcs** file. This file is populated with raw data, fluoresence intensity (for optics based technologies) and abundance (for mass cytrometry), as well as various parameters including: *user id*, *instrument id*, *dynamic range of instrument*, etc. It is important to be able to interact with and manipulate the **.fcs** file as it gives the users/analysts fine grain control!
 
 ## Installing/loading required libraries 
 
@@ -61,18 +61,18 @@ The `flowFrame` object has 3 slots where various data is stored.
 
 - `@exprs` stores the expression matrix (i.e. the collected data). Can be accessed via `exprs(ff)`,
 - `@parameters` stores information pertaining to channels: channel name, marker description,and data ranges as AnnotatedDataFrame. Can be accessed via `parameters(ff)`,
-- `@description` stores additional information extracted from the **.fcs** file header. Can be accessed via `description(ff)`. The file header follow ISAC guidelines. Visit [here](https://isac-net.org/page/Data-Standards) for more information. 
+- `@description` stores additional information extracted from the **.fcs** file header. Can be accessed via `keyword(ff)`. The file header follow ISAC guidelines. Visit [here](https://isac-net.org/page/Data-Standards) for more information. 
 
 ## Working with `flowFrame`
 
-Working with a `flowFrame` object is going to be very similar to working with a `dataframe` in R. 
+Working with a `flowFrame` object is very similar to working with a `dataframe` in R. 
 
 A few useful definitions that help us get oriented with the underlying data in the `flowFrame` object.
 
-**Channels**: Instrument derived labels of various parameters that were measured. Channels are the column names of the `flowFrame`. Any data generated from the same instrument will have the same (similar) Channel names.
-**Markers**: User provided labels for various parameters that were measured. 
+  - **Channels**: Instrument derived labels of various parameters that were measured. Channels are the column names of the `flowFrame`. Any data generated from the same instrument will have the same (similar) Channel names.
+  - **Markers**: User provided labels for various parameters that were measured. 
 For example: Channel name: B710-A, Marker name: CD3 (in `ff`). Marker names are set by the users and may not be unique across experiments/users. 
-**Expression**: Measured values. A matrix where every row is an event (frequently a cell) and every column is a channel.
+  - **Expression**: Measured values. A matrix where every row is an event (frequently a cell) and every column is a channel.
 
 ### Examples
 
@@ -310,6 +310,22 @@ cs_small
 cs_add_cytoframe(cs = cs_small, sn = "Sample Name", cf = cs[[3]]) # cs[[3]] results in a cytoframe
 cs_small
 ```
+
+## Saving your data
+
+Saving your data is easy.
+
+```{r save_fcs,echo=TRUE, eval=FALSE,message=FALSE}
+# save flowFrame
+write.FCS(ff,"mynewfile.fcs")
+
+# save flowSet
+write.flowSet(fs,outdir = "my/data/goes/here",filename = "myflowset")
+
+# save cytoset
+save_cytoset(cs, path = "my/data/goes/here")
+```
+
 
 ## Conclusion
 

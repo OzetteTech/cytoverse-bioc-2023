@@ -10,7 +10,7 @@ vignette: >
 
 The final step in the analysis of flow cytometry data is **Reporting**. Below, we show how we can quickly extract counts, frequencies, and expression values for their population(s) of interest.
 
-```{r libraries, echo=T, eval=T, message=FALSE}
+```{r libraries, echo=T, eval=T, message=FALSE, warning=FALSE}
 library(flowCore)
 library(flowWorkspace)
 library(ggcyto)
@@ -57,16 +57,17 @@ Let's consider the scenario here: you would like to calculate the frequency of *
 
 We can easily achieve this by using `gs_pop_get_stats` and indicating which node(s) we want
 
-```{r grand_parent_populations, echo=TRUE, eval=FALSE, message=FALSE}
+```{r grand_parent_populations, echo=TRUE, eval=TRUE, message=FALSE}
+library(magrittr)
 # get count for specified nodes and make wider 
 pop_counts <- gs_pop_get_stats(gs,
-                                    node = c("CD3+ T Cells","MAIT Cells", "NKT Cells"),
+                                    node = c("CD3+ T cells","MAIT Cells", "NKT cells"),
                                     type = "count"
                                     ) %>% # output is a long column
   tidyr::pivot_wider(names_from = pop, 
                      values_from = count,names_prefix = "count_") %>% # convert to wide
-  mutate(MAIT_freq = `count_MAIT Cells`/`count_CD3+ Cells`,
-         NKT_freq = `count_True_NKT Cells`/`count_CD3+ Cells`)
+  dplyr::mutate(MAIT_freq = `count_MAIT Cells`/`count_CD3+ T cells`,
+         NKT_freq = `count_NKT cells`/`count_CD3+ T cells`)
 
 
 knitr::kable(pop_counts,caption = "Frequency of MAIT and NKT Cells (relative to CD3+ T Cells)")
@@ -74,7 +75,7 @@ knitr::kable(pop_counts,caption = "Frequency of MAIT and NKT Cells (relative to 
 
 Another common statistic that is reported if MFI (median fluorescence intensity). To extract MFI, we can again make use of `gs_pop_get_stat`. It is important to realize that MFI is often reported in *raw/linear scale*. 
 
-```{r get_MFI, eval=FALSE, echo=TRUE, message=FALSE}
+```{r get_MFI, eval=TRUE, echo=TRUE, message=FALSE}
 mfi_dataframe <- gs_pop_get_stats(gs,
                  nodes = c("CD3+ T cells", "MAIT Cells", "CD4+CD8a-", "CD4-CD8a+"),
                  type = pop.MFI,
@@ -82,6 +83,7 @@ mfi_dataframe <- gs_pop_get_stats(gs,
 
 mfi_dataframe[1:5, 1:5]
 ```
+
 For convenience, MFI are extracted for all markers for each of the specified population. 
 
 ## A simple report
@@ -90,11 +92,9 @@ In the table above, we noticed that expression of **PD1** is higher in MAIT Cell
 
 ### Boxplot
 
-```{r dotplot_pd1, eval=FALSE, echo=TRUE, message=FALSE}
-library(dplyr)
-
+```{r dotplot_pd1, eval=TRUE, echo=TRUE, message=FALSE}
 # plot some data
-pd1_mfi_plot <- left_join(pData(gs),mfi_dataframe, 
+pd1_mfi_plot <- dplyr::left_join(pData(gs),mfi_dataframe, 
           by = c("name" = "sample")) %>% 
   ggplot(aes(x = mock_treatment, y = `PD1 BB660`, fill = pop))+
   geom_boxplot()+
@@ -106,11 +106,13 @@ pd1_mfi_plot <- left_join(pData(gs),mfi_dataframe,
                     )+
   theme(aspect.ratio = 1, 
         legend.position = "right")
+
+pd1_mfi_plot
 ```
 
 ### Overlaid histogram
 
-```{r histogram_overlay, eval = FALSE, echo = TRUE}
+```{r histogram_overlay, eval = TRUE, echo = TRUE}
 pd1_overlay <- ggcyto(gs,
        subset = "MAIT Cells",
        aes(x = "PD1"))+
@@ -133,7 +135,7 @@ pd1_overlay <- as.ggplot(pd1_overlay)
 
 ### Final Figure
 
-```{r final_figure, eval = FALSE, echo=TRUE, message=FALSE}
+```{r final_figure, eval = TRUE, echo=TRUE, message=FALSE}
 gridExtra::grid.arrange(
  pd1_mfi_plot,
  pd1_overlay,
@@ -149,7 +151,7 @@ It is now clear that the expression of PD1 indeed tends to be higher on MAIT Cel
 
 It is also possible to calculate additional statistics for the population of interest. For instance, if you were interested in nth percentile expression of a specific marker you could define a function and use it in `gs_pop_get_stats` like so:
 
-```{r user_stats_function, eval=FALSE, echo=TRUE, message=TRUE}
+```{r user_stats_function, eval=TRUE, echo=TRUE, message=TRUE}
 # define a function
 my_quantile <- function(fr,percentile,chnl){
   matched_chnl <- flowCore::getChannelMarker(fr,chnl) # match channel name
@@ -159,14 +161,19 @@ my_quantile <- function(fr,percentile,chnl){
 }
 
 # get stats
-gs_pop_get_stats(gs,
+median_cd4 <- gs_pop_get_stats(gs,
                  c("lymphocytes","CD3+ T cells","CD4+CD8a-","CD4-CD8a+"), 
                  type = my_quantile,
-                 #inverse.transform = TRUE,
+                 inverse.transform = TRUE,
                  stats.fun.arg = list(percentile = .5,
                                       chnl = "cd4")) 
+knitr::kable(median_cd4,caption = "Median expression of CD4 extracted using user defined function")
 
 ```
 
 As we see, we were able to extract median expression of the marker **CD4** on 4 different populations. As expected, expression is highest on **CD4+ T Cells** and lowest on **CD8+ T Cells**.
 
+# Conclusion
+
+In this section, we show how to easily generate reports and visualizations from the `GatingSet` object which we created earlier. We demonstrated some approaches to easily extract counts, frequencies, MFI, or a user defined metric from the `GatingSet` object easily. 
+Also, as noted in the section [Visualizations](articles/ggcyto_1-5.html), the `ggcyto` makes use of the `ggplot2` framework providing a familiar user interface. Importantly, this allows users to prepare intricate figures for events within the `GatingSet`.

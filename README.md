@@ -36,9 +36,9 @@ For this workshop, we will use subset of a public data set: [FR-FCM-Z5PC](https:
 |--------------------------------------------------|------------|
 | Introduction and use of docker container         | 5 minutes  |
 | Basics of working with FCS files                 | 15 minutes |
-| Spillover, Transformation, and Visualization (1) | 15 minutes |
+| Spillover, Transformation                        | 15 minutes |
 | Gating Cells in the `cytoverse`                  | 40 minutes |
-| Visualization (2)                                | 10 minutes |
+| Visualization using `ggcyto`                     | 10 minutes |
 | Reporting                                        | 10 minutes |
 | Wrap-up                                          | 10 minutes |
 # Journey into the `cytoverse`!
@@ -46,6 +46,7 @@ For this workshop, we will use subset of a public data set: [FR-FCM-Z5PC](https:
 Let's begin!    
 
 
+# Notes on using the docker image
 # Notes on using the docker image
 
 ```sh

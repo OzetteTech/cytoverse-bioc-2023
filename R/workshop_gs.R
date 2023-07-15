@@ -247,6 +247,7 @@ make_transformed_gs = function() {
   # identify MAIT cells
   # add MAIT cells
   ## Example of estimation using collapsed data
+  set.seed(2023)
   mait_gate_all <-
     openCyto::gate_flowclust_2d(
       fr =  flowFrame(fsApply(gs_pop_get_data(gs, "conv_Tcells"),
@@ -257,7 +258,7 @@ make_transformed_gs = function() {
       xChannel = "V710-A",
       yChannel = "G660-A",
       target = c(175, 175),
-      K = 14,
+      K = 20,
       filterId = "MAIT Cells" # K indicates number of clusters to estimate
       
     )
