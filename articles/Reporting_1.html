@@ -56,10 +56,13 @@
       <a href="../articles/Spillover_v2.html">Spillover, Transformation, and Visualization</a>
     </li>
     <li>
-      <a href="../articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
+      <a href="../articles/Gating_1.html">Gating Cells in the cytoverse: Part 1</a>
     </li>
     <li>
-      <a href="../articles/ggcyto_1-5.html">Visualizations (1.5)</a>
+      <a href="../articles/Gating_2.html">Gating Cells in the cytoverse: Part 2</a>
+    </li>
+    <li>
+      <a href="../articles/ggcyto_1-5.html">Visualizations using ggcyto</a>
     </li>
     <li>
       <a href="../articles/Reporting_1.html">Reporting: Counts, Frequency, etc.</a>
@@ -108,11 +111,8 @@ interest.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">flowCore</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">flowWorkspace</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RGLab/ggcyto/issues" class="external-link">ggcyto</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/">CytoverseBioc2023</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: replacing previous import 'flowViz::contour' by 'graphics::contour'</span></span>
-<span><span class="co">## when loading 'flowStats'</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/">CytoverseBioc2023</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/cache_workshop_data.html">cache_workshop_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -121,7 +121,7 @@ interest.</p>
 </h3>
 <p>We can easily extract Counts and Frequencies of the gated cell
 population from the <code>GatingSet</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get count for all</span></span>
 <span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_count_fast.html" class="external-link">gs_pop_get_count_fast</a></span><span class="op">(</span><span class="va">gs</span>,  <span class="co"># indicate which GatingSet to use</span></span>
 <span>                                statistic <span class="op">=</span> <span class="st">"count"</span>, <span class="co"># indicate what statistic is requested</span></span>
@@ -199,26 +199,26 @@ Cells/conv_Tcells</td>
 <tr class="even">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/MAIT Cells</td>
-<td align="right">476</td>
-<td align="right">742</td>
-<td align="right">1674</td>
-<td align="right">656</td>
+<td align="right">460</td>
+<td align="right">733</td>
+<td align="right">1649</td>
+<td align="right">643</td>
 </tr>
 <tr class="odd">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT</td>
-<td align="right">61535</td>
-<td align="right">51238</td>
-<td align="right">226914</td>
-<td align="right">78119</td>
+<td align="right">61551</td>
+<td align="right">51247</td>
+<td align="right">226939</td>
+<td align="right">78132</td>
 </tr>
 <tr class="even">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon</td>
 <td align="right">61593</td>
-<td align="right">51221</td>
-<td align="right">226869</td>
-<td align="right">78082</td>
+<td align="right">51247</td>
+<td align="right">226798</td>
+<td align="right">78138</td>
 </tr>
 <tr class="odd">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
@@ -232,24 +232,24 @@ Cells/conv_Tcells/not_MAIT_Polygon/CD4+CD8a+</td>
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon/CD4+CD8a-</td>
 <td align="right">39901</td>
-<td align="right">35753</td>
-<td align="right">138014</td>
-<td align="right">56786</td>
+<td align="right">35763</td>
+<td align="right">137985</td>
+<td align="right">56805</td>
 </tr>
 <tr class="odd">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon/CD4-CD8a+</td>
 <td align="right">20279</td>
-<td align="right">14650</td>
-<td align="right">85317</td>
-<td align="right">20721</td>
+<td align="right">14663</td>
+<td align="right">85274</td>
+<td align="right">20758</td>
 </tr>
 <tr class="even">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon/CD4-CD8a-</td>
 <td align="right">1080</td>
-<td align="right">739</td>
-<td align="right">3195</td>
+<td align="right">742</td>
+<td align="right">3196</td>
 <td align="right">476</td>
 </tr>
 <tr class="odd">
@@ -263,7 +263,7 @@ Cells/conv_Tcells/not_MAIT_Polygon/CD4-CD8a-</td>
 </table>
 <p>Changing <code>statistic</code> to <code>freq</code> return frequency
 of the gated population with respect to the parent population.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_count_fast.html" class="external-link">gs_pop_get_count_fast</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>                              statistic <span class="op">=</span> <span class="st">"freq"</span>,</span>
 <span>                              format <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></span>
@@ -339,58 +339,58 @@ Cells/conv_Tcells</td>
 <tr class="even">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/MAIT Cells</td>
-<td align="right">0.0076761</td>
-<td align="right">0.0142747</td>
-<td align="right">0.0073232</td>
-<td align="right">0.0083275</td>
+<td align="right">0.0074180</td>
+<td align="right">0.0141016</td>
+<td align="right">0.0072139</td>
+<td align="right">0.0081625</td>
 </tr>
 <tr class="odd">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT</td>
-<td align="right">0.9923239</td>
-<td align="right">0.9857253</td>
-<td align="right">0.9926768</td>
-<td align="right">0.9916725</td>
+<td align="right">0.9925820</td>
+<td align="right">0.9858984</td>
+<td align="right">0.9927861</td>
+<td align="right">0.9918375</td>
 </tr>
 <tr class="even">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon</td>
 <td align="right">0.9932593</td>
-<td align="right">0.9853982</td>
-<td align="right">0.9924799</td>
-<td align="right">0.9912028</td>
+<td align="right">0.9858984</td>
+<td align="right">0.9921693</td>
+<td align="right">0.9919137</td>
 </tr>
 <tr class="odd">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon/CD4+CD8a+</td>
 <td align="right">0.0054065</td>
-<td align="right">0.0015423</td>
-<td align="right">0.0015119</td>
-<td align="right">0.0012679</td>
+<td align="right">0.0015416</td>
+<td align="right">0.0015124</td>
+<td align="right">0.0012670</td>
 </tr>
 <tr class="even">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon/CD4+CD8a-</td>
 <td align="right">0.6478171</td>
-<td align="right">0.6980145</td>
-<td align="right">0.6083423</td>
-<td align="right">0.7272611</td>
+<td align="right">0.6978555</td>
+<td align="right">0.6084048</td>
+<td align="right">0.7269830</td>
 </tr>
 <tr class="odd">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon/CD4-CD8a+</td>
 <td align="right">0.3292420</td>
-<td align="right">0.2860155</td>
-<td align="right">0.3760628</td>
-<td align="right">0.2653749</td>
+<td align="right">0.2861241</td>
+<td align="right">0.3759910</td>
+<td align="right">0.2656582</td>
 </tr>
 <tr class="even">
 <td align="left">/singlet/live/lymphocytes/CD3+ T cells/non-NKT
 Cells/conv_Tcells/not_MAIT_Polygon/CD4-CD8a-</td>
 <td align="right">0.0175345</td>
-<td align="right">0.0144277</td>
-<td align="right">0.0140830</td>
-<td align="right">0.0060962</td>
+<td align="right">0.0144789</td>
+<td align="right">0.0140918</td>
+<td align="right">0.0060918</td>
 </tr>
 <tr class="odd">
 <td align="left">root</td>
@@ -403,7 +403,7 @@ Cells/conv_Tcells/not_MAIT_Polygon/CD4-CD8a-</td>
 </table>
 <p>What if one wants to report frequencies relative to a different
 population?</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gs</span>, bool <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Reporting_1_files/figure-html/plot_gating_hierarchy-1.png" width="700"></p>
 <p>Let’s consider the scenario here: you would like to calculate the
@@ -411,30 +411,91 @@ frequency of <strong>MAIT Cells</strong>, and <strong>True_NKT
 Cells</strong> relative to total <strong>CD3+ Cells</strong>.</p>
 <p>We can easily achieve this by using <code>gs_pop_get_stats</code> and
 indicating which node(s) we want</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># get count for specified nodes and make wider </span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
+<span><span class="co"># get count for specified nodes and make wider </span></span>
 <span><span class="va">pop_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_stats.html" class="external-link">gs_pop_get_stats</a></span><span class="op">(</span><span class="va">gs</span>,</span>
-<span>                                    node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3+ T Cells"</span>,<span class="st">"MAIT Cells"</span>, <span class="st">"NKT Cells"</span><span class="op">)</span>,</span>
+<span>                                    node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3+ T cells"</span>,<span class="st">"MAIT Cells"</span>, <span class="st">"NKT cells"</span><span class="op">)</span>,</span>
 <span>                                    type <span class="op">=</span> <span class="st">"count"</span></span>
-<span>                                    <span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># output is a long column</span></span>
+<span>                                    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># output is a long column</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">pop</span>, </span>
-<span>                     values_from <span class="op">=</span> <span class="va">count</span>,names_prefix <span class="op">=</span> <span class="st">"count_"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># convert to wide</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>MAIT_freq <span class="op">=</span> <span class="va">`count_MAIT Cells`</span><span class="op">/</span><span class="va">`count_CD3+ Cells`</span>,</span>
-<span>         NKT_freq <span class="op">=</span> <span class="va">`count_True_NKT Cells`</span><span class="op">/</span><span class="va">`count_CD3+ Cells`</span><span class="op">)</span></span>
+<span>                     values_from <span class="op">=</span> <span class="va">count</span>,names_prefix <span class="op">=</span> <span class="st">"count_"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># convert to wide</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>MAIT_freq <span class="op">=</span> <span class="va">`count_MAIT Cells`</span><span class="op">/</span><span class="va">`count_CD3+ T cells`</span>,</span>
+<span>         NKT_freq <span class="op">=</span> <span class="va">`count_NKT cells`</span><span class="op">/</span><span class="va">`count_CD3+ T cells`</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">pop_counts</span>,caption <span class="op">=</span> <span class="st">"Frequency of MAIT and NKT Cells (relative to CD3+ T Cells)"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Frequency of MAIT and NKT Cells (relative to CD3+ T
+Cells)</caption>
+<colgroup>
+<col width="15%">
+<col width="22%">
+<col width="20%">
+<col width="18%">
+<col width="11%">
+<col width="11%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">sample</th>
+<th align="right">count_CD3+ T cells</th>
+<th align="right">count_MAIT Cells</th>
+<th align="right">count_NKT cells</th>
+<th align="right">MAIT_freq</th>
+<th align="right">NKT_freq</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">4000_TNK-CR1</td>
+<td align="right">67516</td>
+<td align="right">460</td>
+<td align="right">5</td>
+<td align="right">0.0068132</td>
+<td align="right">0.0000741</td>
+</tr>
+<tr class="even">
+<td align="left">4001_TNK-CR1</td>
+<td align="right">57817</td>
+<td align="right">733</td>
+<td align="right">112</td>
+<td align="right">0.0126779</td>
+<td align="right">0.0019371</td>
+</tr>
+<tr class="odd">
+<td align="left">4002_TNK-CR1</td>
+<td align="right">241097</td>
+<td align="right">1649</td>
+<td align="right">477</td>
+<td align="right">0.0068396</td>
+<td align="right">0.0019785</td>
+</tr>
+<tr class="even">
+<td align="left">4003_TNK-CR1</td>
+<td align="right">80699</td>
+<td align="right">643</td>
+<td align="right">75</td>
+<td align="right">0.0079679</td>
+<td align="right">0.0009294</td>
+</tr>
+</tbody>
+</table>
 <p>Another common statistic that is reported if MFI (median fluorescence
 intensity). To extract MFI, we can again make use of
 <code>gs_pop_get_stat</code>. It is important to realize that MFI is
 often reported in <em>raw/linear scale</em>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mfi_dataframe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_stats.html" class="external-link">gs_pop_get_stats</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>                 nodes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3+ T cells"</span>, <span class="st">"MAIT Cells"</span>, <span class="st">"CD4+CD8a-"</span>, <span class="st">"CD4-CD8a+"</span><span class="op">)</span>,</span>
 <span>                 type <span class="op">=</span> <span class="va">pop.MFI</span>,</span>
 <span>                 inverse.transform <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mfi_dataframe</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##          sample          pop TCR Vd1 FITC CD127 BB630 PD1 BB660</span></span>
+<span><span class="co">## 1: 4000_TNK-CR1 CD3+ T cells     255.0247   1072.3553  142.1941</span></span>
+<span><span class="co">## 2: 4000_TNK-CR1   MAIT Cells     273.5387   2158.9515  557.0804</span></span>
+<span><span class="co">## 3: 4000_TNK-CR1    CD4+CD8a-     243.3766   1254.4020  139.9854</span></span>
+<span><span class="co">## 4: 4000_TNK-CR1    CD4-CD8a+     266.7055    856.6061  121.3093</span></span>
+<span><span class="co">## 5: 4001_TNK-CR1 CD3+ T cells     227.1683    626.4293  133.4854</span></span></code></pre>
 <p>For convenience, MFI are extracted for all markers for each of the
 specified population.</p>
 </div>
@@ -448,11 +509,9 @@ to help drive this point (if this is of interest). We will make use of
 <div class="section level4">
 <h4 id="boxplot">Boxplot<a class="anchor" aria-label="anchor" href="#boxplot"></a>
 </h4>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># plot some data</span></span>
-<span><span class="va">pd1_mfi_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span>,<span class="va">mfi_dataframe</span>, </span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># plot some data</span></span>
+<span><span class="va">pd1_mfi_plot</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span>,<span class="va">mfi_dataframe</span>, </span>
 <span>          by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name"</span> <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mock_treatment</span>, y <span class="op">=</span> <span class="va">`PD1 BB660`</span>, fill <span class="op">=</span> <span class="va">pop</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
@@ -463,12 +522,15 @@ to help drive this point (if this is of interest). We will make use of
 <span>                               <span class="st">"CD4-CD8a+"</span> <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span>,</span>
 <span>                    <span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio <span class="op">=</span> <span class="fl">1</span>, </span>
-<span>        legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></code></pre></div>
+<span>        legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pd1_mfi_plot</span></span></code></pre></div>
+<p><img src="Reporting_1_files/figure-html/dotplot_pd1-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="overlaid-histogram">Overlaid histogram<a class="anchor" aria-label="anchor" href="#overlaid-histogram"></a>
 </h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pd1_overlay</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>       subset <span class="op">=</span> <span class="st">"MAIT Cells"</span>,</span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"PD1"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -491,13 +553,14 @@ to help drive this point (if this is of interest). We will make use of
 <div class="section level4">
 <h4 id="final-figure">Final Figure<a class="anchor" aria-label="anchor" href="#final-figure"></a>
 </h4>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span></span>
 <span> <span class="va">pd1_mfi_plot</span>,</span>
 <span> <span class="va">pd1_overlay</span>,</span>
 <span> nrow <span class="op">=</span> <span class="fl">2</span>,</span>
 <span> left <span class="op">=</span> <span class="st">"PD1 expression in T cell subsets"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p><img src="Reporting_1_files/figure-html/final_figure-1.png" width="700"></p>
 <p>It is now clear that the expression of PD1 indeed tends to be higher
 on MAIT Cells compared to non-MAIT T Cells.</p>
 </div>
@@ -509,7 +572,7 @@ on MAIT Cells compared to non-MAIT T Cells.</p>
 population of interest. For instance, if you were interested in nth
 percentile expression of a specific marker you could define a function
 and use it in <code>gs_pop_get_stats</code> like so:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define a function</span></span>
 <span><span class="va">my_quantile</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fr</span>,<span class="va">percentile</span>,<span class="va">chnl</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">matched_chnl</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/getChannelMarker.html" class="external-link">getChannelMarker</a></span><span class="op">(</span><span class="va">fr</span>,<span class="va">chnl</span><span class="op">)</span> <span class="co"># match channel name</span></span>
@@ -519,17 +582,122 @@ and use it in <code>gs_pop_get_stats</code> like so:</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># get stats</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_stats.html" class="external-link">gs_pop_get_stats</a></span><span class="op">(</span><span class="va">gs</span>,</span>
+<span><span class="va">median_cd4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_stats.html" class="external-link">gs_pop_get_stats</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>                 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lymphocytes"</span>,<span class="st">"CD3+ T cells"</span>,<span class="st">"CD4+CD8a-"</span>,<span class="st">"CD4-CD8a+"</span><span class="op">)</span>, </span>
 <span>                 type <span class="op">=</span> <span class="va">my_quantile</span>,</span>
-<span>                 <span class="co">#inverse.transform = TRUE,</span></span>
+<span>                 inverse.transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                 stats.fun.arg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>percentile <span class="op">=</span> <span class="fl">.5</span>,</span>
-<span>                                      chnl <span class="op">=</span> <span class="st">"cd4"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<span>                                      chnl <span class="op">=</span> <span class="st">"cd4"</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">median_cd4</span>,caption <span class="op">=</span> <span class="st">"Median expression of CD4 extracted using user defined function"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Median expression of CD4 extracted using user defined
+function</caption>
+<thead><tr class="header">
+<th align="left">sample</th>
+<th align="left">pop</th>
+<th align="right">CD4 BUV805</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">4000_TNK-CR1</td>
+<td align="left">lymphocytes</td>
+<td align="right">1043.138595</td>
+</tr>
+<tr class="even">
+<td align="left">4000_TNK-CR1</td>
+<td align="left">CD3+ T cells</td>
+<td align="right">1393.095908</td>
+</tr>
+<tr class="odd">
+<td align="left">4000_TNK-CR1</td>
+<td align="left">CD4+CD8a-</td>
+<td align="right">1866.771369</td>
+</tr>
+<tr class="even">
+<td align="left">4000_TNK-CR1</td>
+<td align="left">CD4-CD8a+</td>
+<td align="right">3.228636</td>
+</tr>
+<tr class="odd">
+<td align="left">4001_TNK-CR1</td>
+<td align="left">lymphocytes</td>
+<td align="right">873.221985</td>
+</tr>
+<tr class="even">
+<td align="left">4001_TNK-CR1</td>
+<td align="left">CD3+ T cells</td>
+<td align="right">1366.680764</td>
+</tr>
+<tr class="odd">
+<td align="left">4001_TNK-CR1</td>
+<td align="left">CD4+CD8a-</td>
+<td align="right">1805.948269</td>
+</tr>
+<tr class="even">
+<td align="left">4001_TNK-CR1</td>
+<td align="left">CD4-CD8a+</td>
+<td align="right">4.134938</td>
+</tr>
+<tr class="odd">
+<td align="left">4002_TNK-CR1</td>
+<td align="left">lymphocytes</td>
+<td align="right">328.186676</td>
+</tr>
+<tr class="even">
+<td align="left">4002_TNK-CR1</td>
+<td align="left">CD3+ T cells</td>
+<td align="right">959.079466</td>
+</tr>
+<tr class="odd">
+<td align="left">4002_TNK-CR1</td>
+<td align="left">CD4+CD8a-</td>
+<td align="right">1401.938876</td>
+</tr>
+<tr class="even">
+<td align="left">4002_TNK-CR1</td>
+<td align="left">CD4-CD8a+</td>
+<td align="right">-8.649204</td>
+</tr>
+<tr class="odd">
+<td align="left">4003_TNK-CR1</td>
+<td align="left">lymphocytes</td>
+<td align="right">785.155278</td>
+</tr>
+<tr class="even">
+<td align="left">4003_TNK-CR1</td>
+<td align="left">CD3+ T cells</td>
+<td align="right">1486.741756</td>
+</tr>
+<tr class="odd">
+<td align="left">4003_TNK-CR1</td>
+<td align="left">CD4+CD8a-</td>
+<td align="right">1758.952208</td>
+</tr>
+<tr class="even">
+<td align="left">4003_TNK-CR1</td>
+<td align="left">CD4-CD8a+</td>
+<td align="right">-9.229321</td>
+</tr>
+</tbody>
+</table>
 <p>As we see, we were able to extract median expression of the marker
 <strong>CD4</strong> on 4 different populations. As expected, expression
 is highest on <strong>CD4+ T Cells</strong> and lowest on <strong>CD8+ T
 Cells</strong>.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h2>
+<p>In this section, we show how to easily generate reports and
+visualizations from the <code>GatingSet</code> object which we created
+earlier. We demonstrated some approaches to easily extract counts,
+frequencies, MFI, or a user defined metric from the
+<code>GatingSet</code> object easily. Also, as noted in the section <a href="articles/ggcyto_1-5.html">Visualizations</a>, the
+<code>ggcyto</code> makes use of the <code>ggplot2</code> framework
+providing a familiar user interface. Importantly, this allows users to
+prepare intricate figures for events within the
+<code>GatingSet</code>.</p>
 </div>
   </div>
 

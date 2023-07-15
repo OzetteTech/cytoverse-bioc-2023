@@ -3,13 +3,14 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   Gating_1: Gating_1.html
+  Gating_2: Gating_2.html
   HOWTO_BUILD_WORKSHOP: HOWTO_BUILD_WORKSHOP.html
   Import_fcs: Import_fcs.html
   Reporting_1: Reporting_1.html
   Spillover_v2: Spillover_v2.html
   ggcyto_1-5: ggcyto_1-5.html
   workshop_example: workshop_example.html
-last_built: 2023-07-07T19:27Z
+last_built: 2023-07-15T00:00Z
 urls:
   reference: https://cdn.ozetteai.com/cytoverse-bioc-2023/reference
   article: https://cdn.ozetteai.com/cytoverse-bioc-2023/articles

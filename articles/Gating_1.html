@@ -56,10 +56,13 @@
       <a href="../articles/Spillover_v2.html">Spillover, Transformation, and Visualization</a>
     </li>
     <li>
-      <a href="../articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
+      <a href="../articles/Gating_1.html">Gating Cells in the cytoverse: Part 1</a>
     </li>
     <li>
-      <a href="../articles/ggcyto_1-5.html">Visualizations (1.5)</a>
+      <a href="../articles/Gating_2.html">Gating Cells in the cytoverse: Part 2</a>
+    </li>
+    <li>
+      <a href="../articles/ggcyto_1-5.html">Visualizations using ggcyto</a>
     </li>
     <li>
       <a href="../articles/Reporting_1.html">Reporting: Counts, Frequency, etc.</a>
@@ -102,33 +105,36 @@
 </h2>
 <p>The purpose of flow cytometry is to make inferences regarding some
 cell type(s) of interest. Often this involves establishing/drawing a
-gating heirachy to sequentially filter down to the cell type(s) of
+gating hierachy to sequentially filter down to the cell type(s) of
 interest. This process is very often done manually, and can be very
-labour intensive. Importantly, manual approach implies large variation
-when one person does it vs. the next, or even if the same person does it
-multiple times. The <code>cytoverse</code> offers a suite of tools to
-tackle this problem in a reproducible and programmatic manner.</p>
+labour intensive. Importantly, manual approach implies <strong>large
+variation</strong> when one person does it vs. the next, or even if the
+same person does it multiple times. The <code>cytoverse</code> offers a
+suite of tools to tackle this problem in a reproducible and programmatic
+manner.</p>
 <div class="section level3">
 <h3 id="gatingset-and-gatingheirarchy">GatingSet and GatingHeirarchy<a class="anchor" aria-label="anchor" href="#gatingset-and-gatingheirarchy"></a>
 </h3>
 <p>In the previous sections, we have seen (and worked with)
 <code>flowFrame</code>, <code>flowSet</code>, <code>cytoframe</code>,
-and <code>cytoset</code>. These objects hold the underlying FCS data,
-allow us to visualize it, manipulate it etc.</p>
+and <code>cytoset</code>. These objects hold the underlying data,
+allowing us to visualize it, manipulate it, etc.</p>
 <p>In this section we work with <code>GatingSet</code> and
 <code>GatingHierarchy</code>. These objects, like the name suggests,
 store information regarding various gates and filters that we will
 generate. Importantly, we can save the <code>GatingSet</code> which will
-completely package the analysis as well as the FCS files in an
-opensource format that can be shared, allowing reproducibility.</p>
-<p>First, we will go over variety of native methods that exist in the
-<code>cytoverse</code> which analysts can utilize to gate their cells of
-interest. Next, we will demonstrate how analysts can automate this
-process by utilizing a <code>gatingTemplate</code> (a csv file that can
-be used to define and build the hierarchy).</p>
+completely package the analysis as well as the <strong>.fcs</strong>
+files in an opensource format that can be shared, allowing
+reproducibility.</p>
+<p>In <strong>part 1</strong> of this section, we will go over variety
+of native methods that exist in the <code>cytoverse</code> which
+analysts can utilize to gate their cells of interest.</p>
+<p>In <strong>part 2</strong>, we will demonstrate how analysts can
+automate this process by utilizing a <code>gatingTemplate</code> (a csv
+file that can be used to define and build the hierarchy).</p>
 </div>
 <div class="section level3">
-<h3 id="building-the-gating-tree">Building the gating tree<a class="anchor" aria-label="anchor" href="#building-the-gating-tree"></a>
+<h3 id="building-the-gating-tree-manual-and-semi-supervised">Building the gating tree: manual and semi-supervised<a class="anchor" aria-label="anchor" href="#building-the-gating-tree-manual-and-semi-supervised"></a>
 </h3>
 <p>Required libraries</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -141,7 +147,7 @@ be used to define and build the hierarchy).</p>
 <span><span class="co">## when loading 'flowStats'</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cache_workshop_data.html">cache_workshop_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>First we create a <code>GatingSet</code></p>
+<p>First we create a <code>GatingSet</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a cytoset</span></span>
 <span><span class="va">fcs_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"fcs_data/"</span><span class="op">)</span></span>
@@ -187,10 +193,11 @@ the metadata to help construct gates (if need be).</p>
 <span><span class="co">## B610-A 0.009777704 1.00000000 0.78589800 0.074328487</span></span>
 <span><span class="co">## B660-A 0.005482375 0.03108691 1.00000000 0.112570733</span></span>
 <span><span class="co">## B710-A 0.024698965 0.12699130 0.90643808 1.000000000</span></span></code></pre>
-<p>As well we can transform the <code>GatingSet</code>. For convenience,
-we are using a previously defined <strong>transformerList</strong>
-object. The <strong>transformerList</strong> object was extracted from
-the workspace file created by the authors of <a href="https://doi.org/10.1038/s41467-022-34638-2" class="external-link">this</a> study and can
+<p>As well we can transform the <code>GatingSet</code>.</p>
+<p>For convenience, we are using a previously defined
+<strong>transformerList</strong> object. The
+<strong>transformerList</strong> object was extracted from the workspace
+file created by the authors of <a href="https://doi.org/10.1038/s41467-022-34638-2" class="external-link">this</a> study and can
 be found <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># transformation of GatingSet</span></span>
@@ -213,13 +220,19 @@ adding various gates that identifies cells of interest. Each sample
 within a <code>GatingSet</code> is associated with a
 <code>GatingHierarchy</code> that stores information regarding various
 gates that we would have created and applied to the samples.</p>
-<p>Below, we demonstrate various types of gates that can be applied to
-the samples within a <code>GatingSet</code> to build a hierachy.</p>
-<p>Note that the gating process is reliant on
+<p>Below, we demonstrate various types of gates that could be estimated
+<strong>automatically</strong> or defined <strong>manually</strong> that
+can be applied to the samples within a <code>GatingSet</code> to build a
+hierarchy.</p>
+<p><em>Note:</em> This process is informed by
 <strong>visualization</strong> of the data. As such, we will make ample
-use of the <code>ggcyto</code> library, highlighting its usage.</p>
+use of the <code>ggcyto</code> library.</p>
+<div class="section level4">
+<h4 id="singlets-gate">Singlets gate<a class="anchor" aria-label="anchor" href="#singlets-gate"></a>
+</h4>
+<p>Singlets gate is mostly used for data clean up.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># gates for data cleanup; start by visualizing </span></span>
+<code class="sourceCode R"><span><span class="co"># visualization</span></span>
 <span><span class="va">singlet_vis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"root"</span><span class="op">)</span>, <span class="co"># gs_pop_get_data(gs, node) extracts the underlying data</span></span>
 <span>                        x <span class="op">=</span> <span class="st">"FSC-A"</span>,</span>
 <span>                        y <span class="op">=</span> <span class="st">"FSC-H"</span>,</span>
@@ -229,11 +242,11 @@ use of the <code>ggcyto</code> library, highlighting its usage.</p>
 <span></span>
 <span><span class="va">singlet_vis</span></span></code></pre></div>
 <p><img src="Gating_1_files/figure-html/singlet_gate_viz-1.png" width="700"></p>
-<p>Now, we add a gate that is used to filter out
+<p>Now, we estimate a gate that will be used to filter out
 <strong>singlets</strong>. For this, we make use of the
 <code>flowStats</code> library from the <code>cytoverse</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># calculate and add a singlet gate</span></span>
+<code class="sourceCode R"><span><span class="co"># estimate</span></span>
 <span><span class="va">singlet_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span> <span class="co"># sample wise calculation using fsApply</span></span>
 <span>                <span class="fu">flowStats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowStats/man/gate_singlet.html" class="external-link">gate_singlet</a></span><span class="op">(</span><span class="va">x</span>, </span>
 <span>                                        filterId <span class="op">=</span> <span class="st">"singlet"</span>, <span class="co"># name for the gate</span></span>
@@ -247,7 +260,7 @@ use of the <code>ggcyto</code> library, highlighting its usage.</p>
 <span><span class="va">singlet_vis</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">singlet_gate</span><span class="op">)</span><span class="op">+</span> <span class="co"># geom_gate takes a single gate or a list of gates as an argument. list should have the same name as sampleNames(gs)</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gating_1_files/figure-html/add_singlets_gate-1.png" width="700"></p>
+<p><img src="Gating_1_files/figure-html/estimate_singlets_gate-1.png" width="700"></p>
 <p>Once visualized, we can add the gates to its respective samples.
 <em>Note:</em> Singlets gate was estimated for each sample.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -256,19 +269,27 @@ use of the <code>ggcyto</code> library, highlighting its usage.</p>
 <pre><code><span><span class="co">## [1] 2</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span> <span class="co"># recompute updates the gs</span></span></code></pre></div>
-<pre><code><span><span class="co">## done!</span></span></code></pre>
-<p>The next few gates are done in a similar manner:</p>
-<ul>
-<li><p>visualize marker(s)</p></li>
-<li><p>use <code>openCyto</code> or <code>flowStats</code> to define
-gates</p></li>
-<li><p>add to <code>GatingSet</code></p></li>
-</ul>
-<p>Below we add a variety of additional gates to the samples.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+</div>
+<div class="section level4">
+<h4 id="estimating-cutpoint-using-gate_quantile">Estimating cutpoint using <code>gate_quantile</code><a class="anchor" aria-label="anchor" href="#estimating-cutpoint-using-gate_quantile"></a>
+</h4>
+<p><code>gate_quantile</code> can be used to estimate a cut point at a
+given quantile allowing the gating of data to the left or the right of
+the cut point.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># calculate a live gate </span></span>
 <span><span class="co">## Example of a quantile gate</span></span>
-<span><span class="va">live_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"singlet"</span><span class="op">)</span>, <span class="co"># indicating that estimation should be done on filtered data: singlet</span></span>
+<span></span>
+<span><span class="co">## visualize</span></span>
+<span><span class="va">live_viz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
+<span>                   subset <span class="op">=</span> <span class="st">"singlet"</span>,</span>
+<span>                   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Live"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">128</span><span class="op">)</span><span class="op">+</span></span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
+<span><span class="va">live_viz</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/additional_gate_examples-1.png" width="700"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">live_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"singlet"</span><span class="op">)</span>, <span class="co"># indicating that estimation should be done on filtered data: singlet</span></span>
 <span>                     <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
 <span>                       <span class="va">gate</span> <span class="op">&lt;-</span> <span class="fu">openCyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gate_quantile.html" class="external-link">gate_quantile</a></span><span class="op">(</span>fr <span class="op">=</span> <span class="va">x</span>, channel <span class="op">=</span> <span class="st">"U450-A"</span>, </span>
 <span>                                                      probs <span class="op">=</span> <span class="fl">0.95</span>,</span>
@@ -281,15 +302,39 @@ gates</p></li>
 <span>                       <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">gate</span><span class="op">)</span></span>
 <span>                     <span class="op">}</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># add live gate</span></span>
+<span><span class="co"># visualize gate</span></span>
+<span><span class="va">live_viz</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">live_gate</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/additional_gate_examples-2.png" width="700"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add live gate</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, parent <span class="op">=</span> <span class="st">"singlet"</span>,gate <span class="op">=</span> <span class="va">live_gate</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 3</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## done!</span></span></code></pre>
+</div>
+<div class="section level4">
+<h4 id="ellipsoid-gate">Ellipsoid gate<a class="anchor" aria-label="anchor" href="#ellipsoid-gate"></a>
+</h4>
+<p>Here, we are using <code>gate_flowclust_2d</code> from the
+<code>openCyto</code> library to estimate the location of
+<strong>lymphocytes</strong>. The output is an
+<code>Ellipsoid gate</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># calculate lymphocyte gate</span></span>
 <span><span class="co">## Example of using flowClust</span></span>
+<span></span>
+<span><span class="co">## visualize</span></span>
+<span><span class="va">lymph_viz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
+<span>                   subset <span class="op">=</span> <span class="st">"live"</span>,</span>
+<span>                   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"FSC-A"</span>,</span>
+<span>                       y <span class="op">=</span> <span class="st">"SSC-A"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html" class="external-link">geom_hex</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lymph_viz</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/flowclust_2d_lymphocyte-1.png" width="700"></p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># define</span></span>
 <span><span class="va">lymphocyte_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"live"</span><span class="op">)</span>,</span>
 <span>                           <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
 <span>                             <span class="fu">openCyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gate_flowclust_2d.html" class="external-link">gate_flowclust_2d</a></span><span class="op">(</span>fr <span class="op">=</span> <span class="va">x</span>,</span>
@@ -297,30 +342,35 @@ gates</p></li>
 <span>                                                         yChannel <span class="op">=</span> <span class="st">"SSC-A"</span>,</span>
 <span>                                                         filterId <span class="op">=</span> <span class="st">"lymphocytes"</span>,</span>
 <span>                                                         K <span class="op">=</span> <span class="fl">1</span>,target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1E5</span>,<span class="fl">0.5E3</span><span class="op">)</span><span class="op">)</span></span>
-<span>                           <span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## The prior specification has no effect when usePrior=no</span></span></code></pre>
-<pre><code><span><span class="co">## Using the serial version of flowClust</span></span></code></pre>
-<pre><code><span><span class="co">## The prior specification has no effect when usePrior=no</span></span></code></pre>
-<pre><code><span><span class="co">## Using the serial version of flowClust</span></span></code></pre>
-<pre><code><span><span class="co">## The prior specification has no effect when usePrior=no</span></span></code></pre>
-<pre><code><span><span class="co">## Using the serial version of flowClust</span></span></code></pre>
-<pre><code><span><span class="co">## The prior specification has no effect when usePrior=no</span></span></code></pre>
-<pre><code><span><span class="co">## Using the serial version of flowClust</span></span></code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># call it lymphocytes</span></span>
+<span>                           <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># call it lymphocytes</span></span>
 <span><span class="va">lymphocyte_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">lymphocyte_gate</span>,</span>
 <span>                          <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
 <span>                            <span class="va">x</span><span class="op">@</span><span class="va">filterId</span> <span class="op">&lt;-</span> <span class="st">"lymphocytes"</span></span>
 <span>                            <span class="va">x</span></span>
 <span>                          <span class="op">}</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># add lymphocyte gate</span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="va">lymph_viz</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">lymphocyte_gate</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/flowclust_2d_lymphocyte-2.png" width="700"></p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add lymphocyte gate</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, parent <span class="op">=</span> <span class="st">"live"</span>, gate <span class="op">=</span> <span class="va">lymphocyte_gate</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 4</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## done!</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+</div>
+<div class="section level4">
+<h4 id="rectangular-gate">Rectangular gate<a class="anchor" aria-label="anchor" href="#rectangular-gate"></a>
+</h4>
+<p>As the name suggests, we can explicitly define a
+<code>rectangular gate</code> by by defining a <code>matrix</code> where
+the columns are the ranges for markers in <code>x-axis</code> and
+<code>y-axis</code>.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add T cells gate</span></span>
 <span><span class="co">## Example of rectangleGate</span></span>
 <span><span class="va">cd3_vis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span></span>
@@ -333,8 +383,8 @@ gates</p></li>
 <span></span>
 <span><span class="co"># visualize</span></span>
 <span><span class="va">cd3_vis</span></span></code></pre></div>
-<p><img src="Gating_1_files/figure-html/additional_gate_examples-1.png" width="700"></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<p><img src="Gating_1_files/figure-html/example_manual_rect-1.png" width="700"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># using rectangle gate to add T cell gate</span></span>
 <span><span class="va">cd3_rectanlge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">205</span>, <span class="fl">0</span>, <span class="fl">200</span><span class="op">)</span>,</span>
 <span>                       nrow <span class="op">=</span> <span class="fl">2</span>,ncol <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -342,15 +392,22 @@ gates</p></li>
 <span>                       dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"V510-A"</span>,<span class="st">"U570-A"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># channel names</span></span>
 <span><span class="va">cd3_rectangle_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/rectangleGate-class.html" class="external-link">rectangleGate</a></span><span class="op">(</span>.gate <span class="op">=</span> <span class="va">cd3_rectanlge</span>,filterId <span class="op">=</span> <span class="st">"CD3+ T cells"</span><span class="op">)</span></span>
 <span><span class="va">cd3_vis</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">cd3_rectangle_gate</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gating_1_files/figure-html/additional_gate_examples-2.png" width="700"></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<p><img src="Gating_1_files/figure-html/example_manual_rect-2.png" width="700"></p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add gate</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, gate <span class="op">=</span> <span class="va">cd3_rectangle_gate</span>, parent <span class="op">=</span> <span class="st">"lymphocytes"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 5</span></span></code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## done!</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+</div>
+<div class="section level4">
+<h4 id="polygon-gate">Polygon gate<a class="anchor" aria-label="anchor" href="#polygon-gate"></a>
+</h4>
+<p>Similar to <code>Rectangular gate</code> we can define a
+<code>Polygon gate</code> by generating a <code>matrix</code> of
+<strong>vertices</strong>. Each row of the matrix is the coordinate for
+a vertex and the columns are the axes.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add NKT cell gate</span></span>
 <span><span class="co">## Example of polygonGate</span></span>
 <span><span class="va">nkt_vis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>, subset <span class="op">=</span> <span class="st">"CD3+ T cells"</span>,</span>
@@ -359,11 +416,11 @@ gates</p></li>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in getChannelMarker(frm, dim): CD1d is partially matched with</span></span>
 <span><span class="co">## R670-ACD1d:PBS57 tet APC</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># visualize</span></span>
 <span><span class="va">nkt_vis</span></span></code></pre></div>
-<p><img src="Gating_1_files/figure-html/additional_gate_examples-3.png" width="700"></p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<p><img src="Gating_1_files/figure-html/example_manual_poly-1.png" width="700"></p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define coordinates</span></span>
 <span><span class="va">nkt_poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="fl">115</span>,<span class="fl">140</span>,</span>
@@ -382,23 +439,31 @@ gates</p></li>
 <span>                             filterId <span class="op">=</span> <span class="st">"NKT cells"</span><span class="op">)</span></span>
 <span><span class="co"># visualize</span></span>
 <span><span class="va">nkt_vis</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">nkt_poly_gate</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gating_1_files/figure-html/additional_gate_examples-4.png" width="700"></p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<p><img src="Gating_1_files/figure-html/example_manual_poly-2.png" width="700"></p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># move gate and make smaller</span></span>
 <span><span class="va">nkt_poly_gate</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform_gate.html" class="external-link">transform_gate</a></span><span class="op">(</span><span class="va">nkt_poly_gate</span>,</span>
 <span>                                    dx <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                                    scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.05</span>,<span class="fl">1.05</span><span class="op">)</span></span>
 <span>                                    <span class="op">)</span></span>
 <span><span class="va">nkt_vis</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">nkt_poly_gate</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gating_1_files/figure-html/additional_gate_examples-5.png" width="700"></p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<p><img src="Gating_1_files/figure-html/example_manual_poly-3.png" width="700"></p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add to gs</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>,<span class="va">nkt_poly_gate</span>, parent <span class="op">=</span> <span class="st">"CD3+ T cells"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 6</span></span></code></pre>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## done!</span></span></code></pre>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+</div>
+<div class="section level4">
+<h4 id="estimating-1d-region-using-rangegate">Estimating 1D region using <code>rangeGate</code><a class="anchor" aria-label="anchor" href="#estimating-1d-region-using-rangegate"></a>
+</h4>
+<p>Previously we used <code>gate_quantile</code> to generate a cut point
+by providing a specific <code>quantile</code>. Another approach to do
+the same when clear <strong>positive</strong> and
+<strong>negative</strong> populations exist is to use
+<code>rangeGate</code> from the <code>flowStats</code> package.</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add non-NKT cells</span></span>
 <span><span class="co">## Example rangeGate</span></span>
 <span></span>
@@ -416,25 +481,37 @@ gates</p></li>
 <span></span>
 <span><span class="co"># visualize</span></span>
 <span><span class="va">nkt_vis</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">non_nkt</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gating_1_files/figure-html/additional_gate_examples-6.png" width="700"></p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># sample 4002 looks like the gate wasn't set properly. Edit</span></span>
-<span><span class="va">non_nkt</span><span class="op">$</span><span class="va">`1615fa39c8b_4002_TNK-CR1.fcs`</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform_gate.html" class="external-link">transform_gate</a></span><span class="op">(</span><span class="va">non_nkt</span><span class="op">$</span><span class="va">`1615fa39c8b_4002_TNK-CR1.fcs`</span>,</span>
-<span>                                                         dx <span class="op">=</span> <span class="fl">25</span><span class="op">)</span> <span class="co"># small shift in x</span></span>
-<span><span class="va">nkt_vis</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">non_nkt</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add non_nkt</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">non_nkt</span>,parent <span class="op">=</span> <span class="st">"CD3+ T cells"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># identify conventional T cells</span></span>
+<p><img src="Gating_1_files/figure-html/example_range_gate-1.png" width="700"></p>
+<p>It looks like we should edit the gate for sample <em>4002</em>.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">non_nkt</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform_gate.html" class="external-link">transform_gate</a></span><span class="op">(</span><span class="va">non_nkt</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>,dx <span class="op">=</span> <span class="fl">25</span><span class="op">)</span> <span class="co"># small shift in x</span></span>
+<span><span class="va">nkt_vis</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">non_nkt</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/edit_gate-1.png" width="700"></p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add non_nkt</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">non_nkt</span>,parent <span class="op">=</span> <span class="st">"CD3+ T cells"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 7</span></span></code></pre>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="estimating-a-2d-rectangular-gate">Estimating a 2D Rectangular gate<a class="anchor" aria-label="anchor" href="#estimating-a-2d-rectangular-gate"></a>
+</h4>
+<p>Below we show an approach to generate a <code>Rectangular gate</code>
+by using sampled data to estimate cut points and then defining a
+rectangular region using those cut points.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># identify conventional T cells</span></span>
 <span><span class="va">t_cell_vis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span></span>
 <span>  <span class="va">gs</span>, subset <span class="op">=</span> <span class="st">"non-NKT Cells"</span>,</span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Vg9"</span>, y <span class="op">=</span> <span class="st">"Vd1"</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html" class="external-link">geom_hex</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Example use multiple gating tools and piping</span></span>
+<span><span class="va">t_cell_vis</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/example_rect_gate-1.png" width="700"></p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example use multiple gating tools and piping</span></span>
 <span><span class="co">## Estimate gate by sampling the data within the entire GatingSet</span></span>
 <span><span class="va">conv_t_cell_gate</span> <span class="op">&lt;-</span> <span class="va">gs</span> <span class="op">|&gt;</span> </span>
 <span>                          <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"non-NKT Cells"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -474,27 +551,46 @@ gates</p></li>
 <span>  <span class="op">}</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span>
 <span> </span>
 <span><span class="co"># visualize</span></span>
-<span><span class="va">t_cell_vis</span><span class="op">+</span><span class="fu">ggcyto</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">conv_t_cell_gate</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># adjust gates</span></span>
+<span><span class="va">t_cell_vis</span><span class="op">+</span><span class="fu">ggcyto</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">conv_t_cell_gate</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/example_rect_gate-2.png" width="700"></p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># adjust gates</span></span>
 <span><span class="va">conv_t_cell_gate</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform_gate.html" class="external-link">transform_gate</a></span><span class="op">(</span><span class="va">conv_t_cell_gate</span>,</span>
 <span>                                             dx <span class="op">=</span> <span class="fl">11</span>, <span class="co"># change x</span></span>
 <span>                                             dy <span class="op">=</span> <span class="fl">11</span> <span class="co"># change y</span></span>
 <span>                                             <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># add  the calculated rectangleGate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">conv_t_cell_gate</span>,parent <span class="op">=</span> <span class="st">"non-NKT Cells"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># identify MAIT cells</span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="va">t_cell_vis</span><span class="op">+</span><span class="fu">ggcyto</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">conv_t_cell_gate</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/example_rect_gate-3.png" width="700"></p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add  the calculated rectangleGate</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">conv_t_cell_gate</span>,parent <span class="op">=</span> <span class="st">"non-NKT Cells"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 8</span></span></code></pre>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## done!</span></span></code></pre>
+</div>
+<div class="section level4">
+<h4 id="estimating-a-ellipsoid-gate-for-a-rare-population">Estimating a Ellipsoid gate for a rare population<a class="anchor" aria-label="anchor" href="#estimating-a-ellipsoid-gate-for-a-rare-population"></a>
+</h4>
+<p>Previously we used <code>gate_flowclust_2d</code> to estimate a gate
+which we called <code>lymphocytes</code>. Below, we use the same gating
+tool to estimate a <em>rare</em> population of T cells called MAIT Cells
+in a semi-supervised manner.</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># identify MAIT cells</span></span>
 <span><span class="va">mait_vis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>, subset <span class="op">=</span> <span class="st">"conv_Tcells"</span>,</span>
 <span>                   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x  <span class="op">=</span> <span class="st">"TCR Va7_2"</span>, y <span class="op">=</span> <span class="st">"CD161"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html" class="external-link">geom_hex</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
 <span></span>
-<span></span>
-<span><span class="co"># add MAIT cells</span></span>
+<span><span class="va">mait_vis</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/example_flowclust-1.png" width="700"></p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add MAIT cells</span></span>
 <span><span class="co">## Example of estimation using collapsed data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span><span class="va">mait_gate_all</span> <span class="op">&lt;-</span> <span class="fu">openCyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gate_flowclust_2d.html" class="external-link">gate_flowclust_2d</a></span><span class="op">(</span>fr <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">flowFrame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"conv_Tcells"</span><span class="op">)</span>,</span>
 <span>                                                            <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">{</span></span>
 <span>                                                              <span class="va">sample_n</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, <span class="fl">1E4</span><span class="op">)</span></span>
@@ -503,32 +599,84 @@ gates</p></li>
 <span>                                                            <span class="op">)</span></span>
 <span>                                         <span class="op">)</span>,</span>
 <span>                                                  xChannel <span class="op">=</span> <span class="st">"V710-A"</span>,</span>
-<span>                                                  yChannel <span class="op">=</span> <span class="st">"G660-A"</span>,target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">175</span>,<span class="fl">175</span><span class="op">)</span>,</span>
-<span>                                                  K <span class="op">=</span> <span class="fl">14</span>,filterId <span class="op">=</span> <span class="st">"MAIT Cells"</span> <span class="co"># K indicates number of clusters to estimate</span></span>
+<span>                                                  yChannel <span class="op">=</span> <span class="st">"G660-A"</span>,</span>
+<span>                                                  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">175</span>,<span class="fl">175</span><span class="op">)</span>, <span class="co"># give an approximate center</span></span>
+<span>                                                  K <span class="op">=</span> <span class="fl">20</span>, <span class="co"># K indicates number of clusters to estimate</span></span>
+<span>                                                  filterId <span class="op">=</span> <span class="st">"MAIT Cells"</span> </span>
 <span>                                                  </span>
 <span>                                         <span class="op">)</span></span>
 <span><span class="co"># fix filterId</span></span>
 <span><span class="va">mait_gate_all</span><span class="op">@</span><span class="va">filterId</span> <span class="op">&lt;-</span> <span class="st">"MAIT Cells"</span></span>
 <span></span>
 <span><span class="co"># visualize</span></span>
-<span><span class="va">mait_vis</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">mait_gate_all</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># scale gate</span></span>
+<span><span class="va">mait_vis</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">mait_gate_all</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/example_flowclust-2.png" width="700"></p>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># scale gate</span></span>
 <span><span class="va">mait_gate_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/scale_gate.html" class="external-link">scale_gate</a></span><span class="op">(</span><span class="va">mait_gate_all</span>, scale <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add gate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>,gate <span class="op">=</span> <span class="va">mait_gate_all</span>, parent <span class="op">=</span> <span class="st">"conv_Tcells"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add not MAIT gate</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>,gate <span class="op">=</span> <span class="va">mait_gate_all</span>, parent <span class="op">=</span> <span class="st">"conv_Tcells"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 9</span></span></code></pre>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="boolean-filtering">Boolean filtering<a class="anchor" aria-label="anchor" href="#boolean-filtering"></a>
+</h4>
+<p>We can use <code>booleanFilter</code> to simply
+<strong>negate</strong> a gated population! The resulting filter does
+not have a geometric representation.</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add not MAIT gate</span></span>
 <span><span class="co">## Example of booleanFilter</span></span>
 <span><span class="va">not_mait</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/booleanFilter-class.html" class="external-link">booleanFilter</a></span><span class="op">(</span><span class="va">`!MAIT Cells`</span>, filterId <span class="op">=</span> <span class="st">"not_MAIT"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add boolean gate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">not_mait</span>, parent <span class="op">=</span> <span class="st">"conv_Tcells"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">not_mait</span>, parent <span class="op">=</span> <span class="st">"conv_Tcells"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 10</span></span></code></pre>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Example of how to use booleanFilter to create a polygon gate</span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="va">mait_vis</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_overlay.html" class="external-link">geom_overlay</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span>, y <span class="op">=</span> <span class="st">"not_MAIT"</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span>    colour <span class="op">=</span> <span class="st">"red"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/example_bool_filter-1.png" width="700"></p>
+<p><em>Note:</em> We are also able to combine multiple gates to generate
+a <code>booleanFilter</code>.</p>
+<p>Let’s create one for innate like T Cells (NKT cells and MAIT
+Cells).</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># using an OR ('|') operator</span></span>
+<span><span class="va">innate_like_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/booleanFilter-class.html" class="external-link">booleanFilter</a></span><span class="op">(</span><span class="va">`NKT cells | MAIT Cells`</span>,</span>
+<span>                               filterId <span class="op">=</span> <span class="st">"Innate Like T Cells"</span><span class="op">)</span></span>
+<span><span class="co"># add population</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">innate_like_t</span>, parent <span class="op">=</span> <span class="st">"CD3+ T cells"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 11</span></span></code></pre>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
+<span>       subset <span class="op">=</span> <span class="st">"Innate Like T Cells"</span>,</span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"CD1d"</span>,</span>
+<span>            y <span class="op">=</span> <span class="st">"CD161"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html" class="external-link">geom_hex</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in getChannelMarker(frm, dim): CD1d is partially matched with</span></span>
+<span><span class="co">## R670-ACD1d:PBS57 tet APC</span></span></code></pre>
+<p><img src="Gating_1_files/figure-html/example_or_filter-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="define-a-polygon-gate-using-the-results-of-booleanfilter">Define a Polygon gate using the results of booleanFilter<a class="anchor" aria-label="anchor" href="#define-a-polygon-gate-using-the-results-of-booleanfilter"></a>
+</h4>
+<p>Below, we show an approach to generate a <code>Polygon gate</code>
+from the results of <code>booleanFilter</code>.</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example of how to use booleanFilter to create a polygon gate</span></span>
 <span><span class="va">not_mait_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_gate.html" class="external-link">gs_pop_get_gate</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"MAIT Cells"</span><span class="op">)</span><span class="op">)</span>,<span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
@@ -549,18 +697,38 @@ gates</p></li>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">not_mait_gate</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/featureNames.html" class="external-link">sampleNames</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># add gate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>,<span class="va">not_mait_gate</span>,parent <span class="op">=</span> <span class="st">"conv_Tcells"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># visualize CD4 vs CD8</span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="va">mait_vis</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">not_mait_gate</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/example_bool_2_poly-1.png" width="700"></p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add gate</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>,<span class="va">not_mait_gate</span>,parent <span class="op">=</span> <span class="st">"conv_Tcells"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 12</span></span></code></pre>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="quad-gate">Quad gate<a class="anchor" aria-label="anchor" href="#quad-gate"></a>
+</h4>
+<p>Another useful gate when cells are located (generally) in all 4
+quadrants that make up the bi-axial plot. One approach to generate this
+gate is to use <code>gate_quad_tmix</code> from the
+<code>openCyto</code> library.</p>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># visualize CD4 vs CD8</span></span>
 <span><span class="va">cd4_cd8</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,subset <span class="op">=</span> <span class="st">"not_MAIT"</span>,</span>
 <span>                  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"CD4"</span>, y <span class="op">=</span> <span class="st">"CD8"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html" class="external-link">geom_hex</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
-<span><span class="va">cd4_cd8</span></span>
-<span></span>
-<span><span class="co"># add a quad gate</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in getChannelMarker(frm, dim): CD8 is partially matched with V570-ACD8a</span></span>
+<span><span class="co">## BV570</span></span></code></pre>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cd4_cd8</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/viz_cd4_cd8-1.png" width="700"></p>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add a quad gate</span></span>
 <span><span class="va">cd4_cd8_quad_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gs_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"not_MAIT"</span><span class="op">)</span>,</span>
 <span>                            <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
 <span>                              <span class="va">qg</span> <span class="op">&lt;-</span> <span class="fu">openCyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gate_quad_tmix.html" class="external-link">gate_quad_tmix</a></span><span class="op">(</span><span class="va">x</span>, </span>
@@ -586,95 +754,63 @@ gates</p></li>
 <span><span class="co"># visualize</span></span>
 <span><span class="va">cd4_cd8</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/geom_gate.html" class="external-link">geom_gate</a></span><span class="op">(</span><span class="va">cd4_cd8_quad_gate</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add gate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">cd4_cd8_quad_gate</span>,parent <span class="op">=</span> <span class="st">"not_MAIT_Polygon"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># T cell subsets</span></span>
-<span><span class="va">cd4_t_subset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>, subset <span class="op">=</span> <span class="st">"CD4+CD8a-"</span>,</span>
-<span>                   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"CD45RA"</span>, y <span class="op">=</span> <span class="st">"CCR7"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html" class="external-link">geom_hex</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># plot the gating tree</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gs</span>, bool <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># visualize the full gating hierarchy</span></span>
-<span><span class="va">final_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,bins <span class="op">=</span> <span class="fl">256</span>, bool <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/viz_cd4_cd8-2.png" width="700"></p>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add gate</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_add</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">cd4_cd8_quad_gate</span>,parent <span class="op">=</span> <span class="st">"not_MAIT_Polygon"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 13 14 15 16</span></span></code></pre>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="visualizing-the-gating-hierachy">Visualizing the Gating Hierachy<a class="anchor" aria-label="anchor" href="#visualizing-the-gating-hierachy"></a>
+</h3>
+<p>We have been creating and adding many gates to our
+<code>GatingSet</code>. A useful way to visualize all the gates and
+their relationship is by plotting the gating Hierarchy as a tree. This
+gives us an immediate summary of what nodes are present in our
+<code>GatingSet</code>.</p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># plot the gating tree</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gs</span>, bool <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gating_1_files/figure-html/plot_gs_tree-1.png" width="700"></p>
+<p>Another useful approach is to visualize the gated data, with gates
+that we have generated.</p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># visualize the full gating hierarchy</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,bins <span class="op">=</span> <span class="fl">256</span>, bool <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto_par_set.html" class="external-link">ggcyto_par_set</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span> <span class="co"># set data range to be determined by data</span></span></code></pre></div>
-<p>Best to save the <code>GatingSet</code> now.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<p><img src="Gating_1_files/figure-html/viz_gs-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="saving-your-work">Saving your work<a class="anchor" aria-label="anchor" href="#saving-your-work"></a>
+</h3>
+<p>Finally, we save your <code>GatingSet</code>. The
+<code>GatingSet</code> can be loaded back into R using
+<code>load_gs("path/to/a/folder")</code>.</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save your work</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/save_gs.html" class="external-link">save_gs</a></span><span class="op">(</span><span class="va">gs</span>, path <span class="op">=</span> <span class="st">"path/to/a/folder"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="using-opencyto-gatingtemplate">Using openCyto gatingTemplate<a class="anchor" aria-label="anchor" href="#using-opencyto-gatingtemplate"></a>
+<h3 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h3>
-<p>A <code>gatingTemplate</code> is a csv file that describes the gating
-sequence and the gating methods. In the <code>gatingTemplate</code> csv
-file, we can leverage the various automated gating methods that we have
-previously seen, without explicitly requiring to script it in
-<strong>R</strong>.</p>
-<p>Let’s take a look at an example gatingTemplate</p>
-<p>There are 10 columns that are required in a gatingTemplate csv
-file:</p>
-<ul>
-<li>
-<strong>alias* </strong>: name (alias) of the gate</li>
-<li>
-<strong>pop* </strong>: + or -, or a combination such as: –, -+, ++,
-+-, or [ADD]</li>
-<li>
-<strong>parent* </strong>: parent population</li>
-<li>
-<strong>dims* </strong>: channels or markernames</li>
-<li>
-<strong>gating_method* </strong>: gating method to be used. example:
-<em>mindensity</em>
-</li>
-<li>
-<strong>gating_args</strong>: additional arguments that can be
-passed to <strong>gating_methods</strong>
-</li>
-<li>
-<strong>collapseDataForGating</strong>: <strong>logical</strong>
-indicating if the data is to be collapsed onto a single
-<code>flowFrame</code> before estimation</li>
-<li>
-<strong>groupBy</strong>: string indicating the grouping variable
-(within <code>pData</code> slot of the <code>GatingSet</code>)</li>
-<li>
-<strong>preprocessing_method</strong>: preprocessing method to be
-used</li>
-<li>
-<strong>preprocessing_args</strong>: additional arguments that can
-be passed to <strong>preprocessing_method</strong>
-</li>
-</ul>
-<p><em>Note:</em> * indicates that these fields must be completed. Other
-can be left blank.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># required library</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">openCyto</span><span class="op">)</span></span>
-<span><span class="co"># read in gatingTemplate</span></span>
-<span><span class="va">gt</span> <span class="op">&lt;-</span> <span class="fu">openCyto</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gatingTemplate-class.html" class="external-link">gatingTemplate</a></span><span class="op">(</span><span class="st">"path/to/csv/file"</span><span class="op">)</span></span></code></pre></div>
-<p>Since we have saved our <code>GatingSet</code> let’s first remove all
-the nodes including and downstream of <code>singlet</code>.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># clean gs</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_add.html" class="external-link">gs_pop_remove</a></span><span class="op">(</span><span class="va">gs</span>, <span class="st">"singlet"</span><span class="op">)</span> <span class="co"># removes singlet and all children nodes</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add gates defined in gatingTemplate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/openCyto/man/gt_gating.html" class="external-link">gt_gating</a></span><span class="op">(</span><span class="va">gt</span>, <span class="va">gs</span><span class="op">)</span> <span class="co"># simply provide the parsed gatingTemplate and the GatingSet</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/recompute.html" class="external-link">recompute</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># visualize</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gs</span>, bool <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, bool <span class="op">=</span> <span class="cn">TRUE</span>, bins <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span></code></pre></div>
+<p>In this section, we spent some time identifying various types of
+gates that are available in <code>cytoverse</code>. As well, we
+demonstrated how to programmatically create such gates, either manually
+(i.e. by defining ranges or vertices) or in a semi-automated and data
+driven manner.</p>
+<p>In <a href="Gating_2.Rmd"><strong>Part 2</strong></a> we will take a
+look at how users can leverage a <code>gatingTemplate</code> generate
+gates as we have done here, but with minimal scripting. It is worth
+noting that while the use <code>gatingTemplate</code> minimizes
+scripting, it does not compromise on reproducibility!</p>
+<p>Lastly, we also made ample use of the <code>ggcyto</code> library in
+order to generate visualizations that helped in QC’ing the data and the
+gates that we generated. We will go over <code>ggcyto</code> in more
+detail in <a href="ggcyto_1-5.Rmd"><strong>Visualizations</strong></a>.</p>
 </div>
 </div>
   </div>

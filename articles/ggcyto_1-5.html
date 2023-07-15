@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Visualization (1.5) • CytoverseBioc2023</title>
+<title>Visualizations using ggcyto • CytoverseBioc2023</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Visualization (1.5)">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Visualizations using ggcyto">
 <meta property="og:description" content="CytoverseBioc2023">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -56,10 +56,13 @@
       <a href="../articles/Spillover_v2.html">Spillover, Transformation, and Visualization</a>
     </li>
     <li>
-      <a href="../articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
+      <a href="../articles/Gating_1.html">Gating Cells in the cytoverse: Part 1</a>
     </li>
     <li>
-      <a href="../articles/ggcyto_1-5.html">Visualizations (1.5)</a>
+      <a href="../articles/Gating_2.html">Gating Cells in the cytoverse: Part 2</a>
+    </li>
+    <li>
+      <a href="../articles/ggcyto_1-5.html">Visualizations using ggcyto</a>
     </li>
     <li>
       <a href="../articles/Reporting_1.html">Reporting: Counts, Frequency, etc.</a>
@@ -87,7 +90,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Visualization (1.5)</h1>
+      <h1 data-toc-skip>Visualizations using ggcyto</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/OzetteTech/cytoverse-bioc-2023/blob/HEAD/vignettes/ggcyto_1-5.Rmd" class="external-link"><code>vignettes/ggcyto_1-5.Rmd</code></a></small>
@@ -97,6 +100,9 @@
 
     
     
+<div class="section level2">
+<h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
+</h2>
 <p>We have spent a bit of time going over import, manupulation,
 compensation, and transformation of flow cytometry data. Importantly, we
 have used visualizations to highlight the importance of various steps.
@@ -110,56 +116,16 @@ of <code>flowFrame</code>, <code>flowSet</code>, <code>cytoframe</code>,
 <code>cytoset</code>, <code>GatingSet</code>, and
 <code>GatingHierarchy</code> and allows the user to utilize various
 attributes of each of the object. For instance,
-<strong>metadata</strong> within <code>pData</code> slot in
-<code>flowSet</code>/<code>cytoset</code> and <code>GatingSet</code> to
-prepare insightful visualizations, rapidly.</p>
-<p>[THE GATINGSET BEING USED AS AN EXAMPLE SEEMS TO HAVE LOST
-INFORMATION REGARDING TRANSFORMATION. WILL PLOTclass]</p>
+<strong>metadata</strong> within a
+<code>flowSet</code>/<code>cytoset</code> and <code>GatingSet</code> can
+be used to prepare insightful visualizations, rapidly.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">flowCore</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RGLab/ggcyto/issues" class="external-link">ggcyto</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: ggplot2</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: ncdfFlow</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: BH</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: flowWorkspace</span></span></code></pre>
-<pre><code><span><span class="co">## As part of improvements to flowWorkspace, some behavior of</span></span>
-<span><span class="co">## GatingSet objects has changed. For details, please read the section</span></span>
-<span><span class="co">## titled "The cytoframe and cytoset classes" in the package vignette:</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##   vignette("flowWorkspace-Introduction", "flowWorkspace")</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># set theme</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RGLab/ggcyto/issues" class="external-link">ggcyto</a></span><span class="op">)</span></span>
+<span><span class="co"># set theme</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/">CytoverseBioc2023</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: Biobase</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: BiocGenerics</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'BiocGenerics'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:flowCore':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     normalize</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     IQR, mad, sd, var, xtabs</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,</span></span>
-<span><span class="co">##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,</span></span>
-<span><span class="co">##     get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,</span></span>
-<span><span class="co">##     match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,</span></span>
-<span><span class="co">##     Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,</span></span>
-<span><span class="co">##     table, tapply, union, unique, unsplit, which.max, which.min</span></span></code></pre>
-<pre><code><span><span class="co">## Welcome to Bioconductor</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     Vignettes contain introductory material; view with</span></span>
-<span><span class="co">##     'browseVignettes()'. To cite Bioconductor, see</span></span>
-<span><span class="co">##     'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: openCyto</span></span></code></pre>
-<pre><code><span><span class="co">## Warning: replacing previous import 'flowViz::contour' by 'graphics::contour'</span></span>
-<span><span class="co">## when loading 'flowStats'</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cache_workshop_data.html">cache_workshop_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: did not converge in 100 iterations</span></span></code></pre>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/">CytoverseBioc2023</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cache_workshop_data.html">cache_workshop_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="hit-the-ground-running-using-autoplot">Hit the ground running using <code>autoplot</code><a class="anchor" aria-label="anchor" href="#hit-the-ground-running-using-autoplot"></a>
 </h3>
@@ -168,7 +134,7 @@ of plots with minimal effort.</p>
 <ol style="list-style-type: decimal">
 <li>Bivariate plot</li>
 </ol>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># flowFrame: bivariate plot</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff</span>,</span>
 <span>         x <span class="op">=</span> <span class="st">"CD4"</span>, <span class="co"># markername in human readable format</span></span>
@@ -178,7 +144,7 @@ of plots with minimal effort.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Density plot</li>
 </ol>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># flowFrame: density plot</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff</span>,</span>
 <span>         x <span class="op">=</span> <span class="st">"CD4"</span><span class="op">)</span><span class="op">+</span> <span class="co"># y not results in a density plot</span></span>
@@ -188,7 +154,7 @@ of plots with minimal effort.</p>
 <li>Bivariate plot of the entire <code>GatingHeirarchy</code>
 </li>
 </ol>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GatingSet: full GatingHierachy</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="co"># single GatingHierachy will plot the entire gating path</span></span>
 <span>        bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span> <span class="co"># bins control resolution</span></span>
@@ -199,7 +165,7 @@ of plots with minimal effort.</p>
 <li>Specific node within a <code>GatingSet</code>
 </li>
 </ol>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GatingSet: single gate</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>         gate <span class="op">=</span> <span class="st">"CD3+ T cells"</span>, <span class="co"># plot a specific gate for all samples </span></span>
@@ -225,7 +191,7 @@ now start to make visualizations not afforded by
 <li>Bivariate plot for data within a specific node using markers other
 than those defined for a node</li>
 </ol>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>       subset <span class="op">=</span> <span class="st">"singlet"</span>, <span class="co"># extract data at specific node</span></span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"CD8a"</span>, y <span class="op">=</span> <span class="st">"CD4"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span> <span class="co"># any marker combination </span></span>
@@ -242,7 +208,7 @@ example, <code>subset = "singlet"</code>.</p>
 <code>subset</code> node</li>
 </ol>
 <p>During reporting, it is possible that users would want to see</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get a gate</span></span>
 <span><span class="va">cd4_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_gate.html" class="external-link">gs_pop_get_gate</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"CD4+CD8a-"</span><span class="op">)</span></span>
 <span></span>
@@ -263,7 +229,7 @@ to generate an informative report quickly. We now know that CD4+ cells
 <code>singlet</code> population that we had defined.</p>
 <p>In a similar manner, we can use a newly defined gate to interrogate
 the <code>GatingSet</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_gate</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/rectangleGate-class.html" class="external-link">rectangleGate</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"V570-A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">150</span>,<span class="fl">210</span><span class="op">)</span>,</span>
 <span>       <span class="st">"V510-A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>,<span class="fl">210</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -286,14 +252,15 @@ rapidly generate insight regarding CD8a+ CD3+ T cells from the
 <code>singlet</code> node. Moreover, we have leveraged the metadata from
 <code>pData</code> to generate additional insight regarding the
 data.</p>
-<div class="section level4">
-<h4 id="expression-using-histograms-and-densities">Expression using histograms and densities<a class="anchor" aria-label="anchor" href="#expression-using-histograms-and-densities"></a>
-</h4>
+</div>
+<div class="section level3">
+<h3 id="expression-using-histograms-and-densities">Expression using histograms and densities<a class="anchor" aria-label="anchor" href="#expression-using-histograms-and-densities"></a>
+</h3>
 <p>A common way to report or view specific population data is to ask
 whether there is a change in expression levels (fluoresence intensity)
 across samples or groups.</p>
 <p>Let’s take a look at PD1 expression in CD8+ T Cells</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cd8</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>       subset <span class="op">=</span> <span class="st">"CD4-CD8a+"</span>,</span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"PD1"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -304,7 +271,7 @@ across samples or groups.</p>
 <p><img src="ggcyto_1-5_files/figure-html/ggcyto_histogram-1.png" width="700"></p>
 <p>What if you would like to compare 2 different populations side by
 side?</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cd4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>              subset <span class="op">=</span> <span class="st">"CD4+CD8a-"</span>,</span>
 <span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"PD1"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -315,7 +282,7 @@ side?</p>
 <span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">cd4</span>,<span class="va">cd8</span>, ncol <span class="op">=</span><span class="fl">2</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="ggcyto_1-5_files/figure-html/ggcyto_gs_arrange-1.png" width="700"></p>
 <p>Or, if you would like to compare population on top of each other?</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">overlay</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>                  subset <span class="op">=</span> <span class="st">"CD4+CD8a-"</span>,</span>
 <span>                  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"PD1"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -333,7 +300,6 @@ side?</p>
 Cells! This may be an interesting observation that is worth following up
 on.</p>
 </div>
-</div>
 <div class="section level3">
 <h3 id="backgating-and-overlays">Backgating and overlays<a class="anchor" aria-label="anchor" href="#backgating-and-overlays"></a>
 </h3>
@@ -345,7 +311,7 @@ top of density of a different unrelated node.</p>
 <p>Below, we go through another example where we ask the question: what
 is the general expression level of CD4 and CD8a on MAIT cells compared
 to all CD3+ T cells?</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mait_expression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>                          subset <span class="op">=</span> <span class="st">"CD3+ T cells"</span>,</span>
 <span>                          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"CD4"</span>, y <span class="op">=</span> <span class="st">"CD8a"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -363,11 +329,13 @@ to all CD3+ T cells?</p>
 <p>Seems like there are a lot of MAIT Cells that are CD8a+ or negative
 for both CD8a and CD4 compared to CD4+.</p>
 </div>
+</div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
 <p><code>ggcyto</code> is an extremely flexible and powerful tool to
-explore and visualize flow cytometry data. [WRITE MORE!]</p>
+explore and visualize flow cytometry data. We encourage users to view
+additional examples and capabilities of this library <a href="https://cytoverse.org/examples/index.html" class="external-link">here</a>.</p>
 </div>
   </div>
 

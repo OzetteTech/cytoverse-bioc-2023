@@ -60,10 +60,13 @@
       <a href="articles/Spillover_v2.html">Spillover, Transformation, and Visualization</a>
     </li>
     <li>
-      <a href="articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
+      <a href="articles/Gating_1.html">Gating Cells in the cytoverse: Part 1</a>
     </li>
     <li>
-      <a href="articles/ggcyto_1-5.html">Visualizations (1.5)</a>
+      <a href="articles/Gating_2.html">Gating Cells in the cytoverse: Part 2</a>
+    </li>
+    <li>
+      <a href="articles/ggcyto_1-5.html">Visualizations using ggcyto</a>
     </li>
     <li>
       <a href="articles/Reporting_1.html">Reporting: Counts, Frequency, etc.</a>
@@ -147,7 +150,7 @@
 <td>15 minutes</td>
 </tr>
 <tr class="odd">
-<td>Spillover, Transformation, and Visualization (1)</td>
+<td>Spillover, Transformation</td>
 <td>15 minutes</td>
 </tr>
 <tr class="even">
@@ -156,7 +159,8 @@
 <td>40 minutes</td>
 </tr>
 <tr class="odd">
-<td>Visualization (2)</td>
+<td>Visualization using <code>ggcyto</code>
+</td>
 <td>10 minutes</td>
 </tr>
 <tr class="even">
@@ -178,6 +182,10 @@
 </div>
 <div class="section level1">
 <h1 id="notes-on-using-the-docker-image">Notes on using the docker image<a class="anchor" aria-label="anchor" href="#notes-on-using-the-docker-image"></a>
+</h1>
+</div>
+<div class="section level1">
+<h1 id="notes-on-using-the-docker-image-1">Notes on using the docker image<a class="anchor" aria-label="anchor" href="#notes-on-using-the-docker-image-1"></a>
 </h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-network</span><span class="op">=</span>host <span class="at">-e</span> PASSWORD=<span class="op">&lt;</span>choose_a_password_for_rstudio<span class="op">&gt;</span> -p 8787:8787 ghcr.io/ozettetech/cytoverse-bioc-2023:latest</span></code></pre></div>
 <p><em>NOTE</em>: Running docker that uses the password in plain text like above exposes the password to others in a multi-user system (like a shared workstation or compute node). In practice, consider using an environment variable instead of plain text to pass along passwords and other secrets in docker command lines.</p>

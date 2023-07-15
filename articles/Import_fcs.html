@@ -56,10 +56,13 @@
       <a href="../articles/Spillover_v2.html">Spillover, Transformation, and Visualization</a>
     </li>
     <li>
-      <a href="../articles/Gating_1.html">Gating Cells in cytoverse: Part 1</a>
+      <a href="../articles/Gating_1.html">Gating Cells in the cytoverse: Part 1</a>
     </li>
     <li>
-      <a href="../articles/ggcyto_1-5.html">Visualizations (1.5)</a>
+      <a href="../articles/Gating_2.html">Gating Cells in the cytoverse: Part 2</a>
+    </li>
+    <li>
+      <a href="../articles/ggcyto_1-5.html">Visualizations using ggcyto</a>
     </li>
     <li>
       <a href="../articles/Reporting_1.html">Reporting: Counts, Frequency, etc.</a>
@@ -103,12 +106,12 @@ files</h1>
 </h2>
 <p>Flow cytometry data (regardless of the type of instrument used) is
 generally saved as a <strong>.fcs</strong> file. This file is populated
-the raw data, fluoresence intensity (for optics based technologies) and
+with raw data, fluoresence intensity (for optics based technologies) and
 abundance (for mass cytrometry), as well as various parameters
-including: user id, instrument id, dynamic range of instrument, etc. It
-is important to be able to interact with and manipulate the
-<strong>.fcs</strong> file as it gives the users/analysts fine grain
-control!</p>
+including: <em>user id</em>, <em>instrument id</em>, <em>dynamic range
+of instrument</em>, etc. It is important to be able to interact with and
+manipulate the <strong>.fcs</strong> file as it gives the users/analysts
+fine grain control!</p>
 </div>
 <div class="section level2">
 <h2 id="installingloading-required-libraries">Installing/loading required libraries<a class="anchor" aria-label="anchor" href="#installingloading-required-libraries"></a>
@@ -193,28 +196,33 @@ Can be accessed via <code>parameters(ff)</code>,</li>
 <li>
 <code>@description</code> stores additional information extracted
 from the <strong>.fcs</strong> file header. Can be accessed via
-<code>description(ff)</code>. The file header follow ISAC guidelines.
-Visit <a href="https://isac-net.org/page/Data-Standards" class="external-link">here</a> for
-more information.</li>
+<code>keyword(ff)</code>. The file header follow ISAC guidelines. Visit
+<a href="https://isac-net.org/page/Data-Standards" class="external-link">here</a> for more
+information.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="working-with-flowframe">Working with <code>flowFrame</code><a class="anchor" aria-label="anchor" href="#working-with-flowframe"></a>
 </h2>
-<p>Working with a <code>flowFrame</code> object is going to be very
-similar to working with a <code>dataframe</code> in R.</p>
+<p>Working with a <code>flowFrame</code> object is very similar to
+working with a <code>dataframe</code> in R.</p>
 <p>A few useful definitions that help us get oriented with the
 underlying data in the <code>flowFrame</code> object.</p>
-<p><strong>Channels</strong>: Instrument derived labels of various
+<ul>
+<li>
+<strong>Channels</strong>: Instrument derived labels of various
 parameters that were measured. Channels are the column names of the
 <code>flowFrame</code>. Any data generated from the same instrument will
-have the same (similar) Channel names. <strong>Markers</strong>: User
-provided labels for various parameters that were measured. For example:
-Channel name: B710-A, Marker name: CD3 (in <code>ff</code>). Marker
-names are set by the users and may not be unique across
-experiments/users. <strong>Expression</strong>: Measured values. A
-matrix where every row is an event (frequently a cell) and every column
-is a channel.</p>
+have the same (similar) Channel names.</li>
+<li>
+<strong>Markers</strong>: User provided labels for various
+parameters that were measured. For example: Channel name: B710-A, Marker
+name: CD3 (in <code>ff</code>). Marker names are set by the users and
+may not be unique across experiments/users.</li>
+<li>
+<strong>Expression</strong>: Measured values. A matrix where every
+row is an event (frequently a cell) and every column is a channel.</li>
+</ul>
 <div class="section level3">
 <h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
@@ -465,31 +473,31 @@ dataframe should match the <code>sampleNames</code> of the
 <span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb5b9e9194_4000_BDC-CR1.fcs 4eb5b9e9194_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb1557e3d1_4000_TNK-CR1.fcs 4eb1557e3d1_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb5f498726_4001_BDC-CR1.fcs 4eb5f498726_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb582c8bb9_4001_TNK-CR1.fcs 4eb582c8bb9_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb63481e2e_4002_TNK-CR1.fcs 4eb63481e2e_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb63457684_4003_TNK-CR1.fcs 4eb63457684_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 69675488468_4000_BDC-CR1.fcs 69675488468_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 69620fcbc2f_4000_TNK-CR1.fcs 69620fcbc2f_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 69660da3453_4001_BDC-CR1.fcs 69660da3453_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 69657b6d35b_4001_TNK-CR1.fcs 69657b6d35b_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 6963e51daef_4002_TNK-CR1.fcs 6963e51daef_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 6964e97ab45_4003_TNK-CR1.fcs 6964e97ab45_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add metadata </span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4eb5b9e9194_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4eb1557e3d1_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4eb5f498726_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 4eb582c8bb9_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4eb63481e2e_4002_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 4eb63457684_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 69675488468_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 69620fcbc2f_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 69660da3453_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 69657b6d35b_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 6963e51daef_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 6964e97ab45_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb5b9e9194_4000_BDC-CR1.fcs 4eb5b9e9194_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb1557e3d1_4000_TNK-CR1.fcs 4eb1557e3d1_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb5f498726_4001_BDC-CR1.fcs 4eb5f498726_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb582c8bb9_4001_TNK-CR1.fcs 4eb582c8bb9_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb63481e2e_4002_TNK-CR1.fcs 4eb63481e2e_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 4eb63457684_4003_TNK-CR1.fcs 4eb63457684_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 69675488468_4000_BDC-CR1.fcs 69675488468_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 69620fcbc2f_4000_TNK-CR1.fcs 69620fcbc2f_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 69660da3453_4001_BDC-CR1.fcs 69660da3453_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 69657b6d35b_4001_TNK-CR1.fcs 69657b6d35b_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 6963e51daef_4002_TNK-CR1.fcs 6963e51daef_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 6964e97ab45_4003_TNK-CR1.fcs 6964e97ab45_4003_TNK-CR1.fcs</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p><em>Note</em>: Many of the sub-setting operation for
@@ -511,11 +519,11 @@ full set of files.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">fs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 4eb5b9e9194_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 4eb5f498726_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 69675488468_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 69660da3453_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
 <span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 4eb5b9e9194_4000_BDC-CR1.fcs 4eb5b9e9194_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 4eb5f498726_4001_BDC-CR1.fcs 4eb5f498726_4001_BDC-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 69675488468_4000_BDC-CR1.fcs 69675488468_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 69660da3453_4001_BDC-CR1.fcs 69660da3453_4001_BDC-CR1.fcs</span></span></code></pre>
 <p>Below is an example of <code>cytoset</code> sub-setting which also
 highlights how the operations performed on <code>cytoset</code> affects
 the underlying data.</p>
@@ -615,6 +623,20 @@ To perform a <strong>deep copy</strong> we can use
 <span><span class="co">## </span></span>
 <span><span class="co">##   column names:</span></span>
 <span><span class="co">##     FSC-A, FSC-H, SSC-A, B515-A, B610-A, B660-A, B710-A, B780-A, G575-A, G610-A, G660-A, G710-A, G780-A, R670-A, R730-A, R780-A, U390-A, U450-A, U500-A, U570-A, U660-A, U740-A, U785-A, V450-A, V510-A, V570-A, V605-A, V655-A, V710-A, V750-A, V785-A, remove_from_FS_FM, Time</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="saving-your-data">Saving your data<a class="anchor" aria-label="anchor" href="#saving-your-data"></a>
+</h2>
+<p>Saving your data is easy.</p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># save flowFrame</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/write.FCS.html" class="external-link">write.FCS</a></span><span class="op">(</span><span class="va">ff</span>,<span class="st">"mynewfile.fcs"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># save flowSet</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/write.flowSet.html" class="external-link">write.flowSet</a></span><span class="op">(</span><span class="va">fs</span>,outdir <span class="op">=</span> <span class="st">"my/data/goes/here"</span>,filename <span class="op">=</span> <span class="st">"myflowset"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># save cytoset</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/save_cytoset.html" class="external-link">save_cytoset</a></span><span class="op">(</span><span class="va">cs</span>, path <span class="op">=</span> <span class="st">"my/data/goes/here"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
