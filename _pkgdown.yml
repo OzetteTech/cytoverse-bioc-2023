@@ -17,9 +17,11 @@ navbar:
         href: articles/Import_fcs.html
       - text: Spillover, Transformation, and Visualization
         href: articles/Spillover_v2.html
-      - text: "Gating Cells in cytoverse: Part 1"
+      - text: "Gating Cells in the cytoverse: Part 1"
         href: articles/Gating_1.html
-      - text: "Visualizations (1.5)"
+      - text: "Gating Cells in the cytoverse: Part 2"
+        href: articles/Gating_2.html
+      - text: "Visualizations using ggcyto"
         href: articles/ggcyto_1-5.html
       - text: "Reporting: Counts, Frequency, etc."
         href: articles/Reporting_1.html 
