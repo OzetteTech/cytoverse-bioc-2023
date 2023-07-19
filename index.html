@@ -103,7 +103,7 @@
 <div class="section level1">
 <h1 id="workshop-outlines">Workshop outlines<a class="anchor" aria-label="anchor" href="#workshop-outlines"></a>
 </h1>
-<p><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html">This website</a> contains training materials that will be presented at a workshop at <a href="https://bioc2023.bioconductor.org/schedule/" class="external-link">Bioc2023</a>, on August 2nd. After the conference, we’ll add a link to videos of the workshop.</p>
+<p>This website contains training materials that will be presented at a workshop at <a href="https://bioc2023.bioconductor.org/schedule/" class="external-link">Bioc2023</a>, on August 2nd. After the conference, we’ll add a link to videos of the workshop.</p>
 <div class="section level2">
 <h2 id="learning-goals">Learning goals<a class="anchor" aria-label="anchor" href="#learning-goals"></a>
 </h2>
@@ -117,6 +117,20 @@
 <li>Identify sub-populations by <a href="Gating_1.html">manual or semi-automated gating of markers</a>,</li>
 <li><a href="articles/Reporting_1.html">Generate plots summarizing the expression of markers and abundance of various sub-populations</a></li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="prerequisitesassumptions">Prerequisites/assumptions<a class="anchor" aria-label="anchor" href="#prerequisitesassumptions"></a>
+</h2>
+<ul>
+<li>Some R knowledge,</li>
+<li>Basic flow cytometry knowledge,</li>
+<li>Willingness to ask questions and learn</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+</h2>
+<p>For this workshop, we will use subset of a public data set: <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">FR-FCM-Z5PC</a> that can be found in <strong>flowrepository.org</strong>. The dataset was published in the following <a href="https://doi.org/10.1038/s41467-022-34638-2" class="external-link">paper</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="workshop-schedule">Workshop schedule<a class="anchor" aria-label="anchor" href="#workshop-schedule"></a>
@@ -160,48 +174,21 @@
 </tbody>
 </table>
 </div>
-<div class="section level2">
-<h2 id="prerequisitesassumptions">Prerequisites/assumptions<a class="anchor" aria-label="anchor" href="#prerequisitesassumptions"></a>
-</h2>
-<ul>
-<li>Some R knowledge,</li>
-<li>Basic flow cytometry knowledge,</li>
-<li>Willingness to ask questions and learn</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
-</h2>
-<p>For this workshop, we will use subset of a public data set: <a href="https://flowrepository.org/public_experiment_representations/5932" class="external-link">FR-FCM-Z5PC</a> that can be found in <strong>flowrepository.org</strong>. The dataset was published in the following <a href="https://doi.org/10.1038/s41467-022-34638-2" class="external-link">paper</a>.</p>
-<hr>
-</div>
 </div>
 <div class="section level1">
-<h1 id="journey-into-the-cytoverse">Journey into the <code>cytoverse</code>
-<a class="anchor" aria-label="anchor" href="#journey-into-the-cytoverse"></a>
+<h1 id="journey-into-the-cytoverse">Journey into the <code>cytoverse</code>!<a class="anchor" aria-label="anchor" href="#journey-into-the-cytoverse"></a>
 </h1>
-<p>What do these various packages do, and where should you look for a piece of functionality?</p>
-<ul>
-<li>
-<a href="https://www.bioconductor.org/packages/release/bioc/html/flowWorkspace.html" class="external-link">flowWorkspace</a>: provides core data structures and methods for use in cytometry data analysis, including compensation, transformation, and gating.</li>
-<li>
-<a href="https://bioconductor.org/packages/release/bioc/html/flowCore.html" class="external-link">flowCore</a>: provides additional data structures and methods for use in cytometry data analysis, however in some cases has been superceded by <code>flowWorkspace</code>
-</li>
-<li>
-<a href="https://www.bioconductor.org/packages/release/bioc/html/ggcyto.html" class="external-link">ggcyto</a>: make plots of distributions of cells and their gates using a ggplot2-based framework</li>
-<li>CytoML: import and export of cytometry data to or from FlowJo, BD FACSDIVA, and Cytobank workspace formats.</li>
-<li>CytoQC: wrangle and standardize collections of FCS files.</li>
-<li>
-<a href="https://bioconductor.org/packages/release/bioc/html/openCyto.html" class="external-link">openCyto</a>: openCyto enables the development of reproducible automated analysis pipelines</li>
-<li>flowClust: implements various unsupervised clustering methods</li>
-<li>flowStats: enables calculation of sample-level summaries of gated populations</li>
-</ul>
-<hr>
+<p>Let’s begin!</p>
 </div>
 <div class="section level1">
 <h1 id="notes-on-using-the-docker-image">Notes on using the docker image<a class="anchor" aria-label="anchor" href="#notes-on-using-the-docker-image"></a>
 </h1>
+</div>
+<div class="section level1">
+<h1 id="notes-on-using-the-docker-image-1">Notes on using the docker image<a class="anchor" aria-label="anchor" href="#notes-on-using-the-docker-image-1"></a>
+</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-network</span><span class="op">=</span>host <span class="at">-e</span> PASSWORD=<span class="op">&lt;</span>choose_a_password_for_rstudio<span class="op">&gt;</span> -p 8787:8787 ghcr.io/ozettetech/cytoverse-bioc-2023:latest</span></code></pre></div>
+<p><em>NOTE</em>: Running docker that uses the password in plain text like above exposes the password to others in a multi-user system (like a shared workstation or compute node). In practice, consider using an environment variable instead of plain text to pass along passwords and other secrets in docker command lines.</p>
 </div>
 
   </div>
