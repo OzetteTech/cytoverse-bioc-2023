@@ -39,7 +39,8 @@ Suggests:
     knitr,
     rmarkdown,
     pkgdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    spelling
 URL: https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html
 BugReports: https://github.com/OzetteTech/cytoverse-bioc-2023/issues/new/choose
 VignetteBuilder: knitr
