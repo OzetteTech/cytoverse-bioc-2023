@@ -579,6 +579,49 @@ gs_pop_add(gs, cd4_cd8_quad_gate,parent = "not_MAIT_Polygon")
 recompute(gs)
 ```
 
+## Removing gates
+
+To remove a gate, we can use `gs_pop_remove`. 
+
+*Note*: Removing a gate will also prune any children gate attached to it.
+
+First, let's create 1 temporary gate and attach it to multiple nodes.
+
+```{r add_temp_gates, echo=TRUE, eval=TRUE, message=FALSE}
+# add a useless gate
+my_temp_gate <- rectangleGate(filterId = "temp_gate",
+                              .gate = list("FSC-A" = c(-Inf,Inf),
+                                           "SSC-A" = c(-Inf,Inf)))
+# add to not_MAIT_Polygon
+gs_pop_add(gs, my_temp_gate, parent = "not_MAIT_Polygon")
+# add to MAIT Cells
+gs_pop_add(gs, my_temp_gate, parent = "MAIT Cells")
+
+recompute(gs)
+```
+
+Now we remove these gates. 
+
+We first demonstrate an approach that doesn't work because `temp_gate` is attached to multiple nodes.
+
+```{r fail_example, eval=FALSE, echo=TRUE, message=TRUE}
+# remove does not work
+gs_pop_remove(gs, node = "temp_gate")
+```
+
+Being deliberate about the gate to be removed leads to successful removal!
+
+```{r success_example, eval=TRUE, echo=TRUE, message=TRUE}
+# remove works as expected
+gs_pop_remove(gs, node = "MAIT Cells/temp_gate")
+
+# remove works as expected
+gs_pop_remove(gs, node = "temp_gate")
+
+recompute(gs)
+```
+
+
 ## Visualizing the Gating Hierachy
 
 We have been creating and adding many gates to our `GatingSet`. A useful way to visualize all the gates and their relationship is by plotting the gating Hierarchy as a tree. This gives us an immediate summary of what nodes are present in our `GatingSet`.
