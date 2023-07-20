@@ -33,16 +33,16 @@ cache_workshop_data()
 
 ## Reading in FCS files
 
-There are 2 preffered approaches to read in **.fcs** file(s) into R:
+There are 2 preferred approaches to read in **.fcs** file(s) into R:
 
 - Read in individual **.fcs** files as `cytoframe`,
 - Read in a set of **.fcs** files as `cytoset`,
 
-(Additionally, you can read a workspace generated with another tool, such as FlowJo, using the cytoML package.)
+(Additionally, you can read a workspace generated with another tool, such as FlowJo, using the `CytoML` package.)
 
 A `cytoframe` and `cytoset` are all data structures that represent the cytometry data.  Some of these have overlapping functionality, and we'll eventually explain when you would prefer one data structure to another.
 
-The function `load_cytoframe_from_fcs` is used to read in individual files as a `cytoframe` object. 
+The function `load_cytoframe_from_fcs` is used to read in individual file as a `cytoframe` object. 
 
 Normally, you might download a folder with a set of FCS files and interact with that.  For instance,
 
@@ -71,11 +71,11 @@ A few useful definitions that help us get oriented with the underlying data in t
 
   - **Channels**: Instrument derived labels of various parameters that were measured. Channels are the column names of the `cytoframe`. Any data generated from the same instrument will have the same (similar) Channel names.
   - **Markers**: User provided labels for various parameters that were measured. 
-For example: Channel name: B710-A, Marker name: CD3 (in `ff`). Marker names are set by the users and may not be unique across experiments/users. Not all channels are markers -- some are physical parameters such as the forward scatter or side scatter.  These channels will have their marker names set to `NA`.
+For example: Channel name: B710-A, Marker name: CD3 (in `cf`). Marker names are set by the users and may not be unique across experiments/users. Not all channels are markers -- some are physical parameters such as the forward scatter or side scatter.  These channels will have their marker names set to `NA`.
   - **Expression**: Measured values. A matrix where every row is an event (frequently a cell) and every column is a channel.
   
-Working with a `cytoframe` object is very similar to working with a `dataframe` in R, where a "row" is a cell and a "column" is a channel.  In particular, subsetting with square brackets `ff[i,j]` or `ff$` works as you might hope. 
-An important difference, however, is that the subset operation **DOES NOT** create a new copy of the data but simply provides new window from which to view the data. 
+Working with a `cytoframe` object is very similar to working with a `data.frame` in R, where a "row" is a cell and a "column" is a channel.  In particular, subsetting with square brackets `cf[i,j]` or `cf$` works as you might hope. 
+An important difference, however, is that the subset operation **DOES NOT** create a new copy of the data but simply provides new view of the data. 
 
 ### Examples
 
@@ -206,7 +206,7 @@ metadata <- data.frame(Treatment = sample(c("Untreated","Treated"),length(cs), r
 
 Let's see what happens when `rownames` do not match!
 
-```{r metadata_cs_error, echo=TRUE, eval=TRUE, error=FALSE}
+```{r metadata_cs_error, echo=TRUE, eval=TRUE, error=TRUE}
 # try to add metadata  -- this leads to an error
 pData(cs) <- metadata
 ```
@@ -308,6 +308,16 @@ single_cf <- cs[[1]]
 list_of_cf <- cytoset_to_list(cs) 
 ```
 
+
+## List like operation with `cytoset`
+
+As indicated previously, a `cytoset` behaves like a list. To leverage this behaviour we can use `fsApply` to iterate through the samples in a `cytoset`. Important distinction, however, is that the output results in a single array like object.
+
+```{r fsApply, echo=TRUE, eval=TRUE, message=FALSE}
+# getting number of rows of individual cytoframes
+get_all_nrow <- fsApply(cs, nrow)
+get_all_nrow
+```
 
 ### Exercises
 
