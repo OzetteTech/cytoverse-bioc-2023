@@ -4,7 +4,10 @@
 \alias{make_transformed_gs}
 \title{Transform and attach gates to TNK-CR data}
 \usage{
-make_transformed_gs()
+make_transformed_gs(add_gates = FALSE)
+}
+\arguments{
+\item{add_gates}{Should we gate the object, too?}
 }
 \value{
 \code{\link[flowWorkspace:GatingSet-class]{flowWorkspace::GatingSet()}}
