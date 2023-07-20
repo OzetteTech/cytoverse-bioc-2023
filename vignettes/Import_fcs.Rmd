@@ -223,6 +223,8 @@ cs
 
 A flowSet/cytoset also can be indexed with square brackets `fs[i,j]`, however now the row index `i` selects samples (individual FCS files) rather than cells.  A flowset also behaves like a list -- a double bracket `fs[[i]]` selects a single sample as a flowFrame.
 
+Should show an example of fsApply here.
+
 <!-- does $  do anything useful to flowSets? -->
 
 Generally, each FCS file replicate has unique metadata properties that can (**and should**) be supplied to the `flowSet` or `cytoset`. These can be added after loading using `pData(x) <- data.frame`. The `rownames` of the data.frame must match the `sampleNames` of the `flowSet`.
