@@ -191,28 +191,37 @@ cs <- load_cytoset_from_fcs(files = get_workshop_data(path = "data/fcs_data/")$r
 cs
 ```
 
-A `cytoset` can also be indexed with square brackets `cs[i,j]`, however now the row index `i` selects samples (**individual FCS files**) rather than cells.
+A `cytoset` can also be indexed with square brackets `cs[i,j]`, however now the row index `i` selects samples (**individual FCS files**) rather than cells. A `cytoset` also behaves like a list -- a double bracket `cs[[i]]` selects a single sample as a `cytoframe`.
 
-Generally, each FCS file replicate has unique metadata properties that can (**and should**) be supplied to the `cytoset`. These can be added to by using `pData(x) <- data.frame`. The `rownames` of the dataframe **must match** the `sampleNames` of the `cytoet`.
+Generally, each FCS file replicate has unique metadata properties that can (**and should**) be supplied to the `cytoset`. These can be added after loading the `cytoset` by using `pData(x) <- data.frame`. The `rownames` of the data.frame **must match** the `sampleNames` of the `cytoset`.
 
 ```{r show_metadata_cs, echo=TRUE,message=TRUE}
-# create metadata
-metadata <- data.frame(row.names = sampleNames(cs),
-                       Treatment = sample(c("Untreated","Treated"),length(cs), replace = TRUE),
-                       panel = ifelse(grepl(pattern = "TNK",x = sampleNames(cs)),"T Cell Panel","Myeloid Panel"))
-
 # prior to providing metadata
 pData(cs)
 
-# add metadata 
-pData(cs) <- metadata
+# create metadata
+metadata <- data.frame(Treatment = sample(c("Untreated","Treated"),length(cs), replace = TRUE),
+                       panel = ifelse(grepl(pattern = "TNK",x = sampleNames(cs)),"T Cell Panel","Myeloid Panel"))
+```
 
+Let's see what happens when `rownames` do not match!
+
+```{r metadata_cs_error, echo=TRUE, eval=TRUE, error=FALSE}
+# try to add metadata  -- this leads to an error
+pData(cs) <- metadata
+```
+
+Now, we ensure that `rownames` of data.frame matches `sampleNames` of the `cytoset`.
+
+```{r metadata_cs_samplenames, echo=TRUE, eval=TRUE, message=TRUE}
+# not it works
+row.names(metadata) <- sampleNames(cs)
+pData(cs) <- metadata
 pData(cs)
 ```
 
-The benefit of having metadata is that we can use many of the sub-setting operations in a metadata specific manner. 
 
-*Note*: Many of the sub-setting operation for `cytoframe` are also applicable for `cytoset`. Similar to `cytoframe` sub-setting operations only create a new view of the data. For a complete copy, `realize_view` should be used.
+The benefit of having metadata is that we can use many of the sub-setting operations in a metadata specific manner. 
 
 This is much more convenient than going back and forth between the full set of files. 
 
@@ -224,7 +233,7 @@ cs_myeloid
 pData(cs_myeloid)
 ```
 
-Many of the sub-setting operation for `flowFrame` is also applicable for `flowSet` and `cytoset`. Important distinction, however, is that subset operation for `cytoset` creates a "view" of the underlying data,  and thus will point to the same set on disk.
+Many of the sub-setting operation for `cytoframe` are also applicable for `cytoset`. Similar to `cytoframe` sub-setting operations only create a new "view" of the data. For a complete copy of the data, `realize_view` should be used.
 
 Below is an example of `cytoset` sub-setting which also highlights how the operations performed on `cytoset` affects the underlying data.
 
