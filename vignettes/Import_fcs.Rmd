@@ -228,7 +228,7 @@ Many of the sub-setting operation for `flowFrame` is also applicable for `flowSe
 
 Below is an example of `cytoset` sub-setting which also highlights how the operations performed on `cytoset` affects the underlying data.
 
-```{r cytoset_subset, echo=TRUE,message=TRUE}
+```{r cytoset_subset_2, echo=TRUE,message=TRUE}
 # demonstrate how cs point to the same underlying data
 range(exprs(cs[[1]])[,"B515-A"])
 
