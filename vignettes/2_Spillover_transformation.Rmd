@@ -19,7 +19,7 @@ theme_set(theme_bw())
 
 # Background
 
-In this section, we aim to clarify the concept of Spillover, and the use of **spillover** matrix to correct for this. The last part of this section will deal with various transformations of the underlying expression data to aid in visualization and interpretation. 
+In this section, we aim to clarify the concept of Spillover, and the use of **spillover** matrix to correct for this. The last part of this section will deal with various transformations of the underlying expression data to aid in visualization and interpretation.
 
 ## Spillover
 
@@ -39,7 +39,7 @@ We note, but will not discuss further here that there are a class of more advanc
 
 ## Importance of spillover correction
 
-Let's visualize the data to highlight the main issues related to spillover. We will make use of the `ggcyto` library from the `cytoverse` for this. We will dive into more details on the usage of `ggcyto` in a later section, as well as the "transformation" we are applying.  For the moment,  think of this transformation as a glorified log-transform to visualize the fluorescent signal that spans several orders of magnitude.
+Let's visualize the data to highlight the main issues related to spillover. We will make use of the `ggcyto` library from the `cytoverse` for this. We will dive into more details on the usage of `ggcyto` in a later section, as well as the "transformation" we are applying. For the moment, think of this transformation as a glorified log-transform to visualize the fluorescent signal that spans several orders of magnitude.
 
 ```{r viz_uncompensated_data, echo=FALSE, eval=T, message=FALSE, fig.width=10}
 # read file
@@ -121,7 +121,7 @@ spillover(cf_absent)
 
 Notice that there are 3 slots. Importantly, we notice a matrix within `$SPILL` slot which has 1's in the diagonal and 0's elsewhere. This is an identity matrix.
 
-Observing an identity matrix is likely an indication that the spillover has not been calculated. If this is the case, please see the section: [Optional: Calculating spillover from single colour controls].
+Observing an identity matrix is likely an indication that the spillover has not been calculated. If this is the case, please see the section: [Calculating spillover from single colour controls (optional)].
 
 #### Example: valid spillover
 
@@ -183,9 +183,8 @@ cf_comp <- compensate(x = realize_view(cf),
 
 #### Exercise
 
--   How can you tell if the data have been compensated? Use your preferred plotting method to generate a scatter plot for the following markers: `CADM1` and `CD141` from `cf` and `cf_comp`. You may need to transform the data for appropriate visualization. 
--   Suppose the **.fcs** file does not have a spillover matrix or has an identity matrix. How confident can you be the data have been previously compensated (or not) ?
-
+1.  How can you tell if the data have been compensated? Use your preferred plotting method to generate a scatter plot for the following markers: `CADM1` and `CD141` from `cf` and `cf_comp`. You may need to transform the data for appropriate visualization.
+2.  Suppose the **.fcs** file does not have a spillover matrix or has an identity matrix. How confident can you be the data have been previously compensated (or not) ?
 
 ## Transformation and visualization
 
@@ -251,7 +250,7 @@ gridExtra::grid.arrange(no_transform,
 
 As we see, the variety of transformations aids in visualization and interpretation of the data.
 
-Also note that the choice of transformation can and will affect the interpretation. As such, use a healthy dose of caution and follow established best practices. As well, when in doubt, talk to your collaborators. 
+Also note that the choice of transformation can and will affect the interpretation. As such, use a healthy dose of caution and follow established best practices. As well, when in doubt, talk to your collaborators.
 
 ### Steps to transform data
 
@@ -293,7 +292,6 @@ cf_comp_transformed <- as.ggplot(
 gridExtra::grid.arrange(cf_comp, cf_comp_transformed, nrow = 1)
 
 ```
-
 
 Another option is to use a user defined transformation.
 
@@ -349,20 +347,19 @@ cs <- transform(cs,my_trans_list)
 
 In this section we have described the concept of **spillover** and how to use the `spillover` matrix to correct for this phenomenon. As well, we described an approach to generate the `spillover` matrix when it is has not be pre-populated in the **.fcs** files. We also highlighted several built-in transformations in `cytoverse` as well as approaches to generate new user defined transformations. Data transformation is topic that can require several workshops in itself. As such, we encourage users/analyst to follow best and appropriate practices. A highly informative reading is the following: [An updated guide for the perplexed: cytometry in the high-dimensional era](https://pubmed.ncbi.nlm.nih.gov/34489590/).
 
+# Calculating spillover from single colour controls (optional)
 
-# Optional: Calculating spillover from single colour controls
+You have noticed that there is no spillover matrix or an identity matrix is present when you call `spillover(cf)`. What can we do to calculate the spillover matrix in this scenario?
 
-You have noticed that there is no spillover matrix or an identity matrix is present when you call `spillover(cf)`. What can we do to calculate the spillover matrix in this scenario? 
+<details>
 
-First, verify that you have additional set of **.fcs** files which either have **Compensation** or **control** in the file name. These control files are generally generated as part of experiment/instrument set up before acquisition begins. 
-*If they are not available, please reach out to your collaborator or flow core manager.*
+First, verify that you have additional set of **.fcs** files which either have **Compensation** or **control** in the file name. These control files are generally generated as part of experiment/instrument set up before acquisition begins. *If they are not available, please reach out to your collaborator or flow core manager.*
 
 Generally, there ought to be the **same number** of single colour controls as the number of markers being assessed + 1 unstained to estimate the background auto-fluorescence.
 
 For demonstration purposes, we will use single colour controls from the dataset: [FR-FCM-ZZ36](https://flowrepository.org/id/FR-FCM-ZZ36). The data was published in this [manuscript](10.1002/cyto.a.22278).
 
-Here, we will make use of a csv file which maps the control files to their respective channel as well as identifies the **unstained** file. 
-*Note*: You may need to prepare such file in advance when working with your specific experiment.
+Here, we will make use of a csv file which maps the control files to their respective channel as well as identifies the **unstained** file. *Note*: You may need to prepare such file in advance when working with your specific experiment.
 
 ```{r generating_spillover_with_controls, echo=TRUE, eval =TRUE, message=FALSE, fig.width = 10, fig.height=10}
 library(magrittr)
@@ -462,3 +459,5 @@ gridExtra::grid.arrange(pre_compensation,
                         post_compensation, 
                         nrow = 1)
 ```
+
+</details>
