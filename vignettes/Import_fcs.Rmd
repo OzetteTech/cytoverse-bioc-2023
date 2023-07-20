@@ -221,30 +221,36 @@ cs <- flowSet_to_cytoset(fs)
 cs
 ```
 
-A flowSet/cytoset also can be indexed with square brackets `fs[i,j]`, however now the row index `i` selects samples (individual FCS files) rather than cells.
+A flowSet/cytoset also can be indexed with square brackets `fs[i,j]`, however now the row index `i` selects samples (individual FCS files) rather than cells.  A flowset also behaves like a list -- a double bracket `fs[[i]]` selects a single sample as a flowFrame.
 
 <!-- does $  do anything useful to flowSets? -->
 
-Generally, each FCS file replicate has unique metadata properties that can (**and should**) be supplied to the `flowSet` or `cytoset`. These can be added to by using `pData(x) <- data.frame`. The `rownames` of the dataframe must match the `sampleNames` of the `flowSet`.
+Generally, each FCS file replicate has unique metadata properties that can (**and should**) be supplied to the `flowSet` or `cytoset`. These can be added after loading using `pData(x) <- data.frame`. The `rownames` of the data.frame must match the `sampleNames` of the `flowSet`.
 
 ```{r show_metadata_fs, echo=TRUE,message=TRUE}
-# create metadata
-metadata <- data.frame(row.names = sampleNames(fs),
-                       Treatment = sample(c("Untreated","Treated"),length(fs), replace = TRUE),
-                       panel = ifelse(grepl(pattern = "TNK",x = sampleNames(fs)),"T Cell Panel","Myeloid Panel"))
-
 # prior to providing metadata
 pData(fs)
 
-# add metadata 
-pData(fs) <- metadata
 
+# create metadata but forget to specify row.names..
+metadata <- data.frame(Treatment = sample(c("Untreated","Treated"),length(fs), replace = TRUE),
+                       panel = ifelse(grepl(pattern = "TNK",x = sampleNames(fs)),"T Cell Panel","Myeloid Panel"))
+```
+
+
+```{r metadata_fs_error, echo=TRUE, error = FALSE}
+# try to add metadata -- this is an error 
+pData(fs) <- metadata
+```
+
+```{r metadata_fs_samplenames, echo=TRUE,message=TRUE}
+# now it works
+row.names(metadata) <- sampleNames(fs)
+pData(fs) <- metadata
 pData(fs)
 ```
 
 The benefit of having metadata is that we can use many of the sub-setting operations in a metadata specific manner. 
-
-*Note*: Many of the sub-setting operation for `flowFrame` is also applicable for `flowSet` and `cytoset`. Important distinction, however, is that subset operation for `cytoset` will not create a copy of the data and will point to the same set on disk.
 
 This is much more convenient than going back and forth between the full set of files. 
 
@@ -256,6 +262,8 @@ fs_myeloid <- fs[pData(fs)[["panel"]] == "Myeloid Panel"
 fs_myeloid
 pData(fs_myeloid)
 ```
+
+Many of the sub-setting operation for `flowFrame` is also applicable for `flowSet` and `cytoset`. Important distinction, however, is that subset operation for `cytoset` creates a "view" of the underlying data,  and thus will point to the same set on disk.
 
 Below is an example of `cytoset` sub-setting which also highlights how the operations performed on `cytoset` affects the underlying data.
 
