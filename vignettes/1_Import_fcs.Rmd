@@ -12,7 +12,7 @@ Flow cytometry data (regardless of the type of instrument used) is generally sav
 
 ## Installing/loading required libraries 
 
-In the workshop, all the cytoverse packages are included in the instance you launched on the Bioconductor Workshop Galaxy, and the docker image this uses will remain available in perpetuity.  That said. if you want to to install `cytoverse` packages outside of docker, the standard Bioconductor tooling works:
+In the workshop, all the cytoverse packages are included in the instance you launched on the Bioconductor Workshop Galaxy, and the docker image this uses will remain available in perpetuity.  That said, if you want to to install `cytoverse` packages outside of docker, the standard Bioconductor tooling works:
 
 ```{r install_libraries, echo=TRUE, eval=FALSE, message=FALSE}
 install.packages("BioManager")
@@ -23,7 +23,7 @@ BiocManager::install("openCyto")
 BiocManager::install("flowStats")
 ```
 
-For the moment, we only need to load flowCore.
+For the moment, we only need to load `flowCore`.
 
 ```{r load_library_download_cache, eval=TRUE, echo=TRUE, message = FALSE}
 library("flowCore")
@@ -33,243 +33,202 @@ cache_workshop_data()
 
 ## Reading in FCS files
 
-There are 3 approaches to read in **.fcs** file(s) into R:
+There are 2 preffered approaches to read in **.fcs** file(s) into R:
 
-- Read in individual **.fcs** files as `flowFrame`,
-- Read in a set of **.fcs** files as `flowSet`,
+- Read in individual **.fcs** files as `cytoframe`,
 - Read in a set of **.fcs** files as `cytoset`,
 
-(Additionally, you can read a workspace generated with another tool, such as flowjo, using the cytoML package.)
+(Additionally, you can read a workspace generated with another tool, such as FlowJo, using the cytoML package.)
 
-A `flowFrame`, `flowSet` are `cytoset` are all data structures that represent the cytometry data.  Some of these have overlapping functionality, and we'll eventually explain when you would prefer one data structure to another.
+A `cytoframe` and `cytoset` are all data structures that represent the cytometry data.  Some of these have overlapping functionality, and we'll eventually explain when you would prefer one data structure to another.
 
-The function `read.FCS` is used to read in individual files as a `flowFrame` object. 
+The function `load_cytoframe_from_fcs` is used to read in individual files as a `cytoframe` object. 
 
 Normally, you might download a folder with a set of FCS files and interact with that.  For instance,
 
-```{r, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE}
 knitr::include_graphics("images/example_fcs_path.png")
 ```
 
 For technical reasons, we can't easily distribute the **.fcs** files in this way for this workshop, but instead reference them through a file cache. This cache is essentially a set of folders, however, and we specify which files we want in it with `get_workshop_data`. (If you want to explore it, you can examine it with `BiocFileCache::bfcinfo(CytoverseBioc2023:::.get_cache())`.)
 
-```{r read.FCS, eval=TRUE, echo=TRUE, message = FALSE}
-ff <- read.FCS(get_workshop_data("data/fcs_data/4000_TNK-CR1.fcs")$rpath)
+```{r load_cytoframe, eval=TRUE, echo=TRUE, message = FALSE}
+cf <- load_cytoframe_from_fcs(get_workshop_data("data/fcs_data/4000_TNK-CR1.fcs")$rpath)
 
-# a flowFrame object
-ff
+# a cytoframe object
+cf
 ```
 
-The `flowFrame` object has 3 slots where various data is stored. 
+The `cytoframe` object has 3 slots where various data is stored. 
 
-- `exprs(ff)` stores the expression matrix (i.e. the collected data),
-- `parameters(ff)` stores information pertaining to channels: channel name, marker description,and data ranges as an AnnotatedDataFrame,
-- `keyword(ff)` stores additional information extracted from the **.fcs** file header. The file header follow ISAC guidelines. Visit [here](https://isac-net.org/page/Data-Standards) for more information. 
+- `exprs(cf)` stores the expression matrix (i.e. the collected data),
+- `parameters(cf)` stores information pertaining to channels: channel name, marker description,and data ranges as an AnnotatedDataFrame,
+- `keyword(cf)` stores additional information extracted from the **.fcs** file header. The file header follow ISAC guidelines. Visit [here](https://isac-net.org/page/Data-Standards) for more information. 
 
-## Working with `flowFrame`s
+## Working with `cytoframe`s
 
-A few useful definitions that help us get oriented with the underlying data in the `flowFrame` object.
+A few useful definitions that help us get oriented with the underlying data in the `cytoframe` object.
 
-  - **Channels**: Instrument derived labels of various parameters that were measured. Channels are the column names of the `flowFrame`. Any data generated from the same instrument will have the same (similar) Channel names.
+  - **Channels**: Instrument derived labels of various parameters that were measured. Channels are the column names of the `cytoframe`. Any data generated from the same instrument will have the same (similar) Channel names.
   - **Markers**: User provided labels for various parameters that were measured. 
 For example: Channel name: B710-A, Marker name: CD3 (in `ff`). Marker names are set by the users and may not be unique across experiments/users. Not all channels are markers -- some are physical parameters such as the forward scatter or side scatter.  These channels will have their marker names set to `NA`.
   - **Expression**: Measured values. A matrix where every row is an event (frequently a cell) and every column is a channel.
   
-Working with a `flowFrame` object is very similar to working with a `dataframe` in R, where a "row" is a cell and a "column" is a channel.  In particular, subsetting with square brackets `ff[i,j]` or `ff$` works as you might hope.
+Working with a `cytoframe` object is very similar to working with a `dataframe` in R, where a "row" is a cell and a "column" is a channel.  In particular, subsetting with square brackets `ff[i,j]` or `ff$` works as you might hope. 
+An important difference, however, is that the subset operation **DOES NOT** create a new copy of the data but simply provides new window from which to view the data. 
 
 ### Examples
 
+#### Accessing parameter summary and metadata
+
+Summary of measured parameters.
+
+```{r accessor_examples, echo=TRUE, eval=TRUE, message=FALSE}
+# parameters
+parameters(cf) |> pData() # show as a dataframe
+
+```
+
+Various metadata present in the **.fcs** files.
+
+```{r}
+# keywords
+keyword(cf) |> head(10) # only show the first 10
+
+```
+
+#### Channels, Expression, and Subsets
 
 ```{r channels, echo=TRUE, message=FALSE}
 # channels
-colnames(ff)
+colnames(cf)
 
 # markernames
-markernames(ff)
+markernames(cf)
 
 # expression
-exprs(ff)[1:5,1:5]
+exprs(cf)[1:5,1:5]
 
 ```
 
-Notice that there is a correspondence between channels, markers, and the expression matrix. i.e. the `names` of the named vector `markernames(ff)` are a subset of the columns of the expression matrix `exprs(ff)` as well as the columns of the `flowFrame`.
+Notice that there is a correspondence between channels, markers, and the expression matrix. i.e. the `names` of the named vector `markernames(cf)` are a subset of the columns of the expression matrix `exprs(cf)` as well as the columns of the `cytoframe`.
 
 ```{r correspondance, echo=TRUE,message=FALSE}
 # interested marker: CD4
-marker_cd4 <- markernames(ff)[grepl(pattern = "CD4 ", x = markernames(ff))]
+# easy to find which channel is mapped to CD4
+marker_cd4 <- flowCore::getChannelMarker(frm = cf, name = "CD4")
+
+# view the structure
 marker_cd4
 
 # extract expression of cd4
-e_cd4 <- exprs(ff)[,names(marker_cd4)]
+e_cd4 <- exprs(cf)[,marker_cd4[,"name"]]
 head(e_cd4)
 
-# subset flowFrame by column
-s_ff <- ff[,names(marker_cd4)]
-s_ff
+# subset cytorame by column
+s_cf <- cf[,marker_cd4[,"name"]]
+s_cf
 
-# subset flowFrame by row
-s2_ff <- ff[1:100,]
-s2_ff
+# subset cytoframe by row
+s2_cf <- cf[1:100,]
+s2_cf
 ```
 
-Notice that the subset (`<- [`) operation can be applied directly to the `flowFrame` object so that information regarding the file is preserved.
+Notice that the subset (`<- [`) operation can be applied directly to the `cytoframe` object so that information regarding the file is preserved. Also, as indicated above, these operations provide a new view of the data without creating a **copy**. 
 
-Below, we show examples of how to manipulate the `flowFrame` object:
+Below, we show examples of how to manipulate the `cytoframe` object and create a copy using `realize_view()`:
 
 ```{r manipulate_flowFrame, echo=TRUE, message=FALSE}
 # create a new markername
 new_name <- c("U785-A" = "test")
 
+# create a new cytoframe subset
+s_cf <- cf[1:150,] |> realize_view() # realize_view creates a new cytoframe, distinct from the original
+
 # old markernames
-markernames(s_ff)
+markernames(s_cf)
 
 # set new markername
-markernames(s_ff) <- new_name
-markernames(s_ff)
+markernames(s_cf) <- new_name
+markernames(s_cf)
 
 # manipulating expression values
 # notice the data range 
-s_ff
-hist(exprs(s_ff))
+s_cf
+hist(exprs(s_cf))
 
 # transform
-exprs(s_ff) <- exprs(s_ff)/100
+exprs(s_cf) <- exprs(s_cf)/100
 
 # notice the data range after transformation
-s_ff
-hist(exprs(s_ff))
+s_cf
+hist(exprs(s_cf))
 
 ```
 
 
-Notice that the data range summary was not updated when we used `<-` to change the underlying expression matrix. A good practice is to use `transform` function to transform the underlying expression matrix. Importantly, `transform` also updates the data range summary. Moreover, `transform` can also be used to add new columns to the `flowFrame`.
-
-### Exercise
-
-1. Why is `length(colnames(ff))` different than `length(markernames(ff))`?
-2. How could you make a random downsample of 1000 cells from `ff`?
-3. Make a scatter plot of the forward scatter (`FSC-A`) vs side scatter (`SSC-A`) of `ff` using a graphics package of your choice.
-
-Example
+Notice that the data range summary was not updated when we used `<-` to change the underlying expression matrix. A good practice is to use `transform` function to transform the underlying expression matrix. Importantly, `transform` also updates the data range summary. Moreover, `transform` can also be used to add new columns to the `cytoframe`. 
 
 *Note*: We will go over `transformations` in a later section.
  
-<!-- AM: should we move this ? -->
+### Exercise
 
-```{r transform_flowFrame, echo=TRUE,message=FALSE}
-# define the transformation
-simple_trans <- function(x)x/100
+1. Why is `length(colnames(cf))` different than `length(markernames(cf))`?
+2. How could you make a random downsample of 1000 cells from `cf`?
+3. Make a scatter plot of the forward scatter (`FSC-A`) vs side scatter (`SSC-A`) of `cf` using a graphics package of your choice.
 
-# create a transformList
-# this indicates which columns to transform and what transformation to do
-t_list <- flowCore::transformList(from = c("U785-A"),
-                                  tfun = simple_trans)
 
-# before transformation
-range(s_ff)
+## Reading in a set of FCS files as a `cytoset`
 
-# after transformation
-s_ff_trans <- flowCore::transform(s_ff,
-                                  t_list)
-range(s_ff_trans)
+In a experimental sense, a single **.fcs** file is not very interesting, since this represents only a single sample.  To draw any conclusions, we'll want replicates.   When there are a set of **.fcs** files they can be loaded into R either as a `cytoset`. 
 
-# add a new column
-s_ff_trans <- flowCore::transform(s_ff,
-                                  "New_col" = simple_trans(`U785-A`)
-                                  )
-s_ff_trans
-```
+**cytoset**: A collection of **.fcs** files, preferably, but not necessarily from the same panel/experiment.
 
-## Reading in a set of FCS files as `flowSet` or `cytoset`
-
-In a biological sense, a single **.fcs** file is not very interesting, since this represents only a single sample.  To draw any conclusions, we'll want replicates.   When there are a set of **.fcs** files they can be loaded into R either as a `flowSet` or a `cytoset`. 
-
-**flowSet/cytoset**: A collection of **.fcs** files, preferably, but not necessarily from the same panel/experiment.
-
-*Note*: The difference between `flowSet` and `cytoset` is the underlying representation of the data. `cytoset` is implemented in the package `flowWorkspace` which we will encounter in more detail later. Additionally, `cytoset` is built upon a collection of `cytoframe`, analogous to `flowFrame`.
-
-Let's start by going over options to create `flowSet`:
-
-<!-- AM: I wonder if we can avoid discussing flowSets all together?-->
-
-```{r flowSet_example, echo=T, message=TRUE}
-# steps to create flowSet
-
-# option 1
-# load fcs files as a list
-fcs_list <- lapply(X = get_workshop_data(path = "data/fcs_data/")$rpath,
-                   FUN = read.FCS)
-
-# convert to flowSet
-fs <- as(fcs_list,"flowSet")
-fs
-
-# option 2 (preferred)
-fs <- read.flowSet(files = get_workshop_data(path = "data/fcs_data/")$rpath) # read in directly as a flowSet
-fs
-```
-
-Options to create a `cytoset`
 
 ```{r cytoset_example, echo=TRUE, message=TRUE}
 library(flowWorkspace)
-# option 1 (preferred)
 cs <- load_cytoset_from_fcs(files = get_workshop_data(path = "data/fcs_data/")$rpath)
-
-# option 2 (convert flowSet to cytoset)
-cs <- flowSet_to_cytoset(fs)
 cs
 ```
 
-A flowSet/cytoset also can be indexed with square brackets `fs[i,j]`, however now the row index `i` selects samples (individual FCS files) rather than cells.  A flowset also behaves like a list -- a double bracket `fs[[i]]` selects a single sample as a flowFrame.
+A `cytoset` can also be indexed with square brackets `cs[i,j]`, however now the row index `i` selects samples (**individual FCS files**) rather than cells.
 
-Should show an example of fsApply here.
+Generally, each FCS file replicate has unique metadata properties that can (**and should**) be supplied to the `cytoset`. These can be added to by using `pData(x) <- data.frame`. The `rownames` of the dataframe **must match** the `sampleNames` of the `cytoet`.
 
-<!-- does $  do anything useful to flowSets? -->
+```{r show_metadata_cs, echo=TRUE,message=TRUE}
+# create metadata
+metadata <- data.frame(row.names = sampleNames(cs),
+                       Treatment = sample(c("Untreated","Treated"),length(cs), replace = TRUE),
+                       panel = ifelse(grepl(pattern = "TNK",x = sampleNames(cs)),"T Cell Panel","Myeloid Panel"))
 
-Generally, each FCS file replicate has unique metadata properties that can (**and should**) be supplied to the `flowSet` or `cytoset`. These can be added after loading using `pData(x) <- data.frame`. The `rownames` of the data.frame must match the `sampleNames` of the `flowSet`.
-
-```{r show_metadata_fs, echo=TRUE,message=TRUE}
 # prior to providing metadata
-pData(fs)
+pData(cs)
 
+# add metadata 
+pData(cs) <- metadata
 
-# create metadata but forget to specify row.names..
-metadata <- data.frame(Treatment = sample(c("Untreated","Treated"),length(fs), replace = TRUE),
-                       panel = ifelse(grepl(pattern = "TNK",x = sampleNames(fs)),"T Cell Panel","Myeloid Panel"))
-```
-
-
-```{r metadata_fs_error, echo=TRUE, error = TRUE}
-# try to add metadata -- this is an error 
-pData(fs) <- metadata
-```
-
-```{r metadata_fs_samplenames, echo=TRUE,message=TRUE}
-# now it works
-row.names(metadata) <- sampleNames(fs)
-pData(fs) <- metadata
-pData(fs)
+pData(cs)
 ```
 
 The benefit of having metadata is that we can use many of the sub-setting operations in a metadata specific manner. 
 
+*Note*: Many of the sub-setting operation for `cytoframe` are also applicable for `cytoset`. Similar to `cytoframe` sub-setting operations only create a new view of the data. For a complete copy, `realize_view` should be used.
+
 This is much more convenient than going back and forth between the full set of files. 
 
-```{r flowset_subset, echo=TRUE, message=TRUE}
-# subset by files that have myeloid staining panel
-fs_myeloid <- fs[pData(fs)[["panel"]] == "Myeloid Panel"
-                 ,]
+```{r cytoset_subset, echo=TRUE, message=TRUE}
+# subset by files that have myeloid staining panel without creating a copy of the data
+cs_myeloid <- cs[pData(cs)[["panel"]] == "Myeloid Panel",]
 
-fs_myeloid
-pData(fs_myeloid)
+cs_myeloid
+pData(cs_myeloid)
 ```
 
 Many of the sub-setting operation for `flowFrame` is also applicable for `flowSet` and `cytoset`. Important distinction, however, is that subset operation for `cytoset` creates a "view" of the underlying data,  and thus will point to the same set on disk.
 
 Below is an example of `cytoset` sub-setting which also highlights how the operations performed on `cytoset` affects the underlying data.
 
-```{r cytoset_subset, echo=TRUE,message=TRUE}
+```{r cytoset_subset_2, echo=TRUE,message=TRUE}
 # demonstrate how cs point to the same underlying data
 range(exprs(cs[[1]])[,"B515-A"])
 
@@ -313,23 +272,11 @@ range(exprs(cs[[2]])[,"B515-A"])
 
 Notice that `cs` is left unchanged. 
 
-## Adding additional **.fcs** files to `flowSet` and `cytoset`
+## Adding additional **.fcs** files to `cytoset`
 
-Lastly, we can also add additional **.fcs** files to a `flowSet` or `cytoset` using `rbind2(flowSet1,flowFrame)` or `cs_add_cytoframe`.
+Lastly, we can also add additional **.fcs** files to a `cytoset` using `cs_add_cytoframe`.
 
 ```{r add_more_fcs, echo=TRUE, eval=T}
-# add to flowSet
-fs_small <- fs[1]
-fs_small
-
-# add a flowFrame to a flowSet
-fs_small <- rbind2(fs_small, fs[[2]]) # fs[[2]] results in a flowFrame
-fs_small
-
-# add a flowSet to a flowSet
-fs_small <- rbind2(fs_small, fs[3]) # fs[3] results in a flowSet
-fs_small
-
 # add to cytoset
 cs_small <- realize_view(cs[1]) # cs[1] subsets cs into a cytoset while realize_view leads to a deep_copy into a new cytoset
 cs_small
@@ -339,21 +286,49 @@ cs_add_cytoframe(cs = cs_small, sn = "Sample Name", cf = cs[[3]]) # cs[[3]] resu
 cs_small
 ```
 
+
+## From `cytoset` to `cytoframe`
+
+It is possible that you may want to extract a `cytoframe` or extract all files as a list of `cytoframe`. We can either use ``[[`` to directly grab a `cytoframe` or `cytoset_to_list`.
+
+```{r cytoset_to_cytoframe, echo=TRUE, eval=TRUE, message = FALSE}
+# extract a single cytoframe by using cs[[index/samplename]]
+single_cf <- cs[[1]]
+
+# convert to a list
+list_of_cf <- cytoset_to_list(cs) 
+```
+
+
+### Exercises
+
+1. How would you extract marker names that are stored within a the cytoset `cs`?
+2. How would you create a `cytoset` from the object `list_of_cf`?
+3. Alter expression of a specific marker the 1st `cytoframe` within the `list_of_cf`. Now plot a histogram of the expression. What do you think happens to the expression to the `cytoframe`: `cs[[1]]`?
+
 ## Saving your data
 
 Saving your data is easy.
 
-```{r save_fcs,echo=TRUE, eval=FALSE,message=FALSE}
-# save flowFrame
-write.FCS(ff,"mynewfile.fcs")
-
-# save flowSet
-write.flowSet(fs,outdir = "my/data/goes/here",filename = "myflowset")
+```{r save_cytoset,echo=TRUE, eval=FALSE,message=FALSE}
+# save cytoframe
+cf_write_disk(cf,
+              "path/to/my_new_cf")
 
 # save cytoset
 save_cytoset(cs, path = "my/data/goes/here")
 ```
 
+Loading it back is just as easy.
+
+```{r load_cf_cs, echo=TRUE, eval=FALSE, message=FALSE}
+# load cytoframe
+load_cytoframe("path/to/my_cf")
+
+# load cytoset
+load_cytoset("path/to/my/cs")
+
+```
 
 ## Conclusion
 
