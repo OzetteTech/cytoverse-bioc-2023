@@ -1,5 +1,5 @@
 ---
-title: "Gating Cells in cytoverse: Part 2"
+title: "Gating Cells in cytoverse using gatingTemplates (optional)"
 vignette: >
   %\VignetteIndexEntry{Gating Cells}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,7 +22,7 @@ library(CytoverseBioc2023)
 cache_workshop_data()
 
 # make gs available
-gs <- make_transformed_gs()
+gs <- make_transformed_gs(add_gates = TRUE)
 ```
 
 ```{r gatingTemplate_load, echo=TRUE, eval= TRUE, message = FALSE}

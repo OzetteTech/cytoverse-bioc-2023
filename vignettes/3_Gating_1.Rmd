@@ -1,5 +1,5 @@
 ---
-title: "Gating Cells in cytoverse: Part 1"
+title: "Gating Cells in cytoverse"
 vignette: >
   %\VignetteIndexEntry{Gating Cells}
   %\VignetteEngine{knitr::rmarkdown}
@@ -33,71 +33,15 @@ library(CytoverseBioc2023)
 cache_workshop_data()
 ```
 
-First we create a `GatingSet`.
+We will use a `GatingSet` that we have already transformed and compensated.  See `R/workshop_gs.R` for details.
 
 ```{r intro_gatingset, eval = T, echo=TRUE, message = FALSE}
-# create a cytoset
-fcs_files <- get_workshop_data("fcs_data/")
-fcs_files_TNK <- dplyr::filter(fcs_files, grepl(pattern = "TNK-CR1",x = rname))
-cs <- flowWorkspace::load_cytoset_from_fcs(files = fcs_files_TNK$rpath, # loading a set of FCS files as a cytoset
-                                           pattern = "TNK-CR1")
-
-# add mock metadata
-set.seed(123)
-meta <- data.frame(name = sampleNames(cs), 
-                   status = "Healthy", 
-                   panel = "T Cell",
-                   mock_treatment = sample(x = c("Treated","Control"),size = 4,prob = c(0.5,0.5),replace = TRUE),
-                   row.names = sampleNames(cs))
-pData(cs) <- meta
-
-# creating a GatingSet
-gs <- flowWorkspace::GatingSet(cs)
-gs
+gs <- make_transformed_gs(add_gates = FALSE)
 ```
 
-We have now created a `GatingSet` called **gs**. Also note that we have associated some (albeit mock) metadata to the `GatingSet`. We are able to leverage the metadata to help construct gates (if need be).
+## Adding gates and building a hierarchy {.tabset}
 
-First, we revisit some of the concepts that we have seen previously: **compensation** and **transformation**.
-
-We can directly compensate the `GatingSet` object.
-
-```{r comp_trans_gs, echo=TRUE, eval=TRUE, fig.height=10, fig.width=10, message=FALSE,warning=FALSE}
-# compensate a GatingSet
-spill <- keyword(gs[[1]],"$SPILLOVER") # extract spillover matrix stored within the file
-
-gs <- compensate(gs,spill) # GatingSet will be compensated and stores the spill matrix as well
-
-recompute(gs) # update the gs
-
-# retrieve compensation information; return NULL is GatingSet was not compensated
-gs_spill <- gs_get_compensations(gs[[1]])
-
-# output is a rich spillover information
-slot(gs_spill[[1]],"spillover")[1:4, 1:4]
-```
-
-As well we can transform the `GatingSet`.
-
-For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
-
-```{r demo_transformation_gs, echo = TRUE, eval = TRUE, message=FALSE}
-# transformation of GatingSet
-t.rds <- dplyr::filter(get_workshop_data("/fj_wsp"), # a previously defined transformation
-                       grepl(pattern = "transform", 
-                             x = rname))$rpath
-my_trans <- readRDS(file = t.rds)
-
-# make into transformerList object
-my_trans_list <- flowWorkspace::transformerList(from = names(my_trans),
-                                                trans = my_trans)
-
-gs <- flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
-```
-
-## Adding gates and building a hierarchy
-
-Now that we have created a `GatingSet` we should start adding various gates that identifies cells of interest. Each sample within a `GatingSet` is associated with a `GatingHierarchy` that stores information regarding various gates that we would have created and applied to the samples.
+On this `GatingSet`,  we will add various gates that identifies cells of interest. Each sample within a `GatingSet` is associated with a `GatingHierarchy` that stores information regarding various gates that we would have created and applied to the samples.
 
 Below, we demonstrate various types of gates that could be estimated **automatically** or defined **manually** that can be applied to the samples within a `GatingSet` to build a hierarchy.
 
@@ -115,8 +59,7 @@ singlet_vis <- autoplot(gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) 
                         bins = 256
                         )+
               facet_wrap(~sampleNames(gs)) # leverage the metadata that is saved within the GatingSet to facet plots 
-
-singlet_vis
+# singlet_vis
 ```
 
 Now, we estimate a gate that will be used to filter out **singlets**. For this, we make use of the `flowStats` library from the `cytoverse`.
@@ -161,7 +104,7 @@ live_viz <- ggcyto(gs,
                    aes(x = "Live"))+
             geom_histogram(bins = 128)+
             facet_wrap(~name)
-live_viz
+# live_viz
   
 live_gate <- fsApply(gs_pop_get_data(gs,"singlet"), # indicating that estimation should be done on filtered data: singlet
                      function(x){
@@ -200,7 +143,7 @@ lymph_viz <- ggcyto(gs,
                        y = "SSC-A"))+
             geom_hex(bins = 128)
 
-lymph_viz
+# lymph_viz
 
 # define
 lymphocyte_gate <- fsApply(gs_pop_get_data(gs,"live"),
@@ -244,8 +187,8 @@ cd3_vis <- ggcyto(
   axis_x_inverse_trans()+
   axis_y_inverse_trans()
 
-# visualize
-cd3_vis
+# before
+# cd3_vis
 
 # using rectangle gate to add T cell gate
 cd3_rectanlge <- matrix(c(140, 205, 0, 200),
@@ -273,7 +216,7 @@ nkt_vis <- ggcyto(gs, subset = "CD3+ T cells",
   facet_wrap(~name)
 
 # visualize
-nkt_vis
+# nkt_vis
 
 # define coordinates
 nkt_poly <- matrix(c(
@@ -350,10 +293,10 @@ Below we show an approach to generate a `Rectangular gate` by using sampled data
 t_cell_vis <- ggcyto(
   gs, subset = "non-NKT Cells",
   aes(x = "Vg9", y = "Vd1")
-)+geom_hex(bins = 256)+
+) + geom_hex(bins = 256)+
   facet_wrap(~name)
 
-t_cell_vis
+# t_cell_vis
 
 # Example use multiple gating tools and piping
 ## Estimate gate by sampling the data within the entire GatingSet

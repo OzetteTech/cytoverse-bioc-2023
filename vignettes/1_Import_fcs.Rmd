@@ -240,7 +240,7 @@ metadata <- data.frame(Treatment = sample(c("Untreated","Treated"),length(fs), r
 ```
 
 
-```{r metadata_fs_error, echo=TRUE, error = FALSE}
+```{r metadata_fs_error, echo=TRUE, error = TRUE}
 # try to add metadata -- this is an error 
 pData(fs) <- metadata
 ```

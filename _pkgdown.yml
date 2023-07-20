@@ -2,7 +2,8 @@ url: https://cdn.ozetteai.com/cytoverse-bioc-2023/
 
 template:
   params:
-    bootswatch: flatly
+    bootstrap: 5
+    bootswatch: cyborg
     #ganalytics: UA-99999999-9
 
 navbar:
@@ -14,17 +15,17 @@ navbar:
       text: Articles
       menu:
       - text: Importing and Basics of working with FCS files
-        href: articles/Import_fcs.html
+        href: articles/1_Import_fcs.html
       - text: Spillover, Transformation, and Visualization
-        href: articles/Spillover_v2.html
-      - text: "Gating Cells in the cytoverse: Part 1"
-        href: articles/Gating_1.html
-      - text: "Gating Cells in the cytoverse: Part 2"
-        href: articles/Gating_2.html
+        href: articles/2_Spillover_transformation.html
+      - text: "Gating Cells with scripts"
+        href: articles/3_Gating_1.html
+      - text: "Gating Cells with gatingTemplates"
+        href: articles/4_Gating_gatingTemplate.html
       - text: "Visualizations using ggcyto"
-        href: articles/ggcyto_1-5.html
+        href: articles/5_ggcyto.html
       - text: "Reporting: Counts, Frequency, etc."
-        href: articles/Reporting_1.html 
+        href: articles/6_Reporting.html 
         
      
 

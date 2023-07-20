@@ -6,7 +6,8 @@ A number of packages make up the `cytoverse`. [flowCore](https://bioconductor.or
 
 # Workshop outlines
 
-[This website](https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html) contains training materials that will be presented at a workshop at [Bioc2023](https://bioc2023.bioconductor.org/schedule/), on August 2nd.  After the conference, we'll add a link to videos of the workshop.
+[This website](https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html) contains training materials that will be presented at a workshop at [Bioc2023](https://bioc2023.bioconductor.org/schedule/), on August 2nd.  If you couldn't attend the conference, don't worry, as we'll add links to videos of the workshop.
+You may also explore these training materials at your own pace.
 
 ## Learning goals
 
@@ -14,11 +15,12 @@ The aim of this workshop is to empower flow cytometry users and analysts towards
 
 By the end of this workshop, the attendees will be able to
 
--   [Import flow cytometry data](articles/Import_fcs.html)
--   [Understand the difference between **uncompensated**, **compensated**, and **transformed** data](articles/Spillover_v2.html),
--   Identify and [generate important plots](articles/ggcyto_1-5.html) to assess the **data** and  **quality**,
--   Identify sub-populations by [manual or semi-automated gating of markers](Gating_1.html),
--   [Generate plots summarizing the expression of markers and abundance of various sub-populations](articles/Reporting_1.html)
+-   [Import flow cytometry data](articles/1_Import_fcs.html)
+-   [Understand the difference between **uncompensated**, **compensated**, and **transformed** data](articles/2_Spillover_transformation.html),
+-   Identify sub-populations by [manual or semi-automated gating of markers](articles/3_Gating_1.html),
+-   Be aware of [csv-templating of Gating](articles/4_Gating_gatingTemplate.html) to perform large-scale gating
+-   Identify and [generate important plots](articles/5_ggcyto.html) to assess the **data** and  **quality**,
+-   [Generate plots summarizing the expression of markers and abundance of various sub-populations](articles/6_Reporting.html)
 
 ## Workshop schedule
 

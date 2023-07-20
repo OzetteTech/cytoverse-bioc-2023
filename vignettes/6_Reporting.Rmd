@@ -22,7 +22,7 @@ cache_workshop_data()
 ```
 
 ```{r get_gatingset, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
-gs = make_transformed_gs()
+gs <- make_transformed_gs(add_gates = TRUE)
 ```
 
 ## Counts, Frequencies, and MFI

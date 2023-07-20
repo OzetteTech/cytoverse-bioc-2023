@@ -24,7 +24,7 @@ cache_workshop_data()
 ```
 
 ```{r echo=F, eval=T, message=FALSE, warning=FALSE}
-gs <- make_transformed_gs()
+gs <- make_transformed_gs(add_gates = TRUE)
 ff <- gh_pop_get_data(gs[[1]],"root",
                       returnType = "flowFrame")
 ```
