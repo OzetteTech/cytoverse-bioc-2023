@@ -17,7 +17,7 @@ By the end of this workshop, the attendees will be able to
 -   [Import flow cytometry data](articles/Import_fcs.html)
 -   [Understand the difference between **uncompensated**, **compensated**, and **transformed** data](articles/Spillover_v2.html),
 -   Identify and [generate important plots](articles/ggcyto_1-5.html) to assess the **data** and  **quality**,
--   Identify sub-populations by [manual or semi-automated gating of markers](Gating_1.html),
+-   Identify sub-populations by [manual or semi-automated gating of markers](articles/Gating_1.html),
 -   [Generate plots summarizing the expression of markers and abundance of various sub-populations](articles/Reporting_1.html)
 
 ## Workshop schedule
