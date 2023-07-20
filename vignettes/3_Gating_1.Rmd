@@ -552,6 +552,6 @@ save_gs(gs, path = "path/to/a/folder")
 
 In this section, we spent some time identifying various types of gates that are available in `cytoverse`. As well, we demonstrated how to programmatically create such gates, either manually (i.e. by defining ranges or vertices) or in a semi-automated and data driven manner.
 
-In [**Part 2**](Gating_2.Rmd) we will take a look at how users can leverage a `gatingTemplate` generate gates as we have done here, but with minimal scripting. It is worth noting that while the use `gatingTemplate` minimizes scripting, it does not compromise on reproducibility!
+In [**Part 2**](4_Gating_gatingTemplate.Rmd) we will take a look at how users can leverage a `gatingTemplate` generate gates as we have done here, but with minimal scripting. It is worth noting that while the use `gatingTemplate` minimizes scripting, it does not compromise on reproducibility!
 
-Lastly, we also made ample use of the `ggcyto` library in order to generate visualizations that helped in QC'ing the data and the gates that we generated. We will go over `ggcyto` in more detail in [**Visualizations**](ggcyto_1-5.Rmd).
+Lastly, we also made ample use of the `ggcyto` library in order to generate visualizations that helped in QC'ing the data and the gates that we generated. We will go over `ggcyto` in more detail in [**Visualizations**](5_ggcyto.Rmd).
