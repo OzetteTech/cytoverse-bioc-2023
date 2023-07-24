@@ -12,7 +12,7 @@ Flow cytometry data (regardless of the type of instrument used) is generally sav
 
 ## Installing/loading required libraries 
 
-In the workshop, all the cytoverse packages are included in the instance you launched on the Bioconductor Workshop Galaxy, and the docker image this uses will remain available in perpetuity.  That said, if you want to to install `cytoverse` packages outside of docker, the standard Bioconductor tooling works:
+In the workshop, all the cytoverse packages are included in the instance you launched on the Bioconductor Workshop Galaxy, and the docker image this uses will remain available indefinitely (see the [README.md](https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html#notes-on-using-the-docker-image-1) for details).  That said, if you want to install and use `cytoverse` packages outside of docker, the standard Bioconductor tooling works:
 
 ```{r install_libraries, echo=TRUE, eval=FALSE, message=FALSE}
 install.packages("BioManager")
@@ -23,10 +23,11 @@ BiocManager::install("openCyto")
 BiocManager::install("flowStats")
 ```
 
-For the moment, we only need to load `flowCore`.
+For the moment, we only need to load `flowCore` and `flowWorkspace`.
 
 ```{r load_library_download_cache, eval=TRUE, echo=TRUE, message = FALSE}
-library("flowCore")
+library(flowCore)
+library(flowWorkspace)
 library(CytoverseBioc2023)
 cache_workshop_data()
 ```
@@ -75,7 +76,8 @@ For example: Channel name: B710-A, Marker name: CD3 (in `cf`). Marker names are 
   - **Expression**: Measured values. A matrix where every row is an event (frequently a cell) and every column is a channel.
   
 Working with a `cytoframe` object is very similar to working with a `data.frame` in R, where a "row" is a cell and a "column" is a channel.  In particular, subsetting with square brackets `cf[i,j]` or `cf$` works as you might hope. 
-An important difference, however, is that the subset operation **DOES NOT** create a new copy of the data but simply provides new view of the data. 
+An important difference, however, is that unlike most other functions in R, the subset and assignment operations **DO NOT** create a new copy of the data but simply provides an updated "view" of the data. 
+Because this is quite unlike the rest of R, we will perseverate on this point.
 
 ### Examples
 
@@ -134,7 +136,7 @@ s2_cf <- cf[1:100,]
 s2_cf
 ```
 
-Notice that the subset (`<- [`) operation can be applied directly to the `cytoframe` object so that information regarding the file is preserved. Also, as indicated above, these operations provide a new view of the data without creating a **copy**. 
+Notice that the subset (`<- [`) operation can be applied directly to the `cytoframe` object so that information regarding the file is preserved. Also, as indicated above, these operations provide an aliased view of the data without creating a **copy**. 
 
 Below, we show examples of how to manipulate the `cytoframe` object and create a copy using `realize_view()`:
 
@@ -174,9 +176,8 @@ Notice that the data range summary was not updated when we used `<-` to change t
 ### Exercise
 
 1. Why is `length(colnames(cf))` different than `length(markernames(cf))`?
-2. How could you make a random downsample of 1000 cells from `cf`?
+2. How could you create a random downsample of 1000 cells from `cf`?
 3. Make a scatter plot of the forward scatter (`FSC-A`) vs side scatter (`SSC-A`) of `cf` using a graphics package of your choice.
-
 
 ## Reading in a set of FCS files as a `cytoset`
 
@@ -186,7 +187,6 @@ In a experimental sense, a single **.fcs** file is not very interesting, since t
 
 
 ```{r cytoset_example, echo=TRUE, message=TRUE}
-library(flowWorkspace)
 cs <- load_cytoset_from_fcs(files = get_workshop_data(path = "data/fcs_data/")$rpath)
 cs
 ```
@@ -214,7 +214,7 @@ pData(cs) <- metadata
 Now, we ensure that `rownames` of data.frame matches `sampleNames` of the `cytoset`.
 
 ```{r metadata_cs_samplenames, echo=TRUE, eval=TRUE, message=TRUE}
-# not it works
+# now it works
 row.names(metadata) <- sampleNames(cs)
 pData(cs) <- metadata
 pData(cs)
@@ -232,6 +232,8 @@ cs_myeloid <- cs[pData(cs)[["panel"]] == "Myeloid Panel",]
 cs_myeloid
 pData(cs_myeloid)
 ```
+
+### Cytoset views and aliasing
 
 Many of the sub-setting operation for `cytoframe` are also applicable for `cytoset`. Similar to `cytoframe` sub-setting operations only create a new "view" of the data. For a complete copy of the data, `realize_view` should be used.
 
@@ -257,7 +259,15 @@ range(exprs(cs_small[[1]])[,"B515-A"])
 range(exprs(cs[[1]])[,"B515-A"])
 ```
 
-As you see, the transformation was applied to a subset `cs_small` however the original `cs` was also altered highlighting that both objects were pointing to the same data. To perform a **deep copy** we can use `realize_view()`
+As you see, the transformation was applied to a subset `cs_small` however the original `cs` was also altered highlighting that both objects were pointing to the same data. To confirm this, you can use `cs_get_uri` or `cf_get_uri`:
+
+```{r}
+cs_get_uri(cs_small)
+cs_get_uri(cs)
+```
+
+
+To perform a **deep copy** we can use `realize_view()`
 
 ```{r cytoset_deep_copy, echo=TRUE, message=TRUE}
 # look at underlying expression
@@ -281,6 +291,15 @@ range(exprs(cs[[2]])[,"B515-A"])
 
 Notice that `cs` is left unchanged. 
 
+Exercise:
+
+1. Explain why the following code does not work as expected:
+```r
+cf_log_trans <- cf
+exprs(cf_log_trans) <- log2(exprs(cf))
+plot(exprs(cf)[,"V510-A"], exprs(cf_log_trans)[,"V510-A"], main = "Effect of log2 transformation on  V510-A (CD3)")
+```
+
 ## Adding additional **.fcs** files to `cytoset`
 
 Lastly, we can also add additional **.fcs** files to a `cytoset` using `cs_add_cytoframe`.
@@ -290,7 +309,7 @@ Lastly, we can also add additional **.fcs** files to a `cytoset` using `cs_add_c
 cs_small <- realize_view(cs[1]) # cs[1] subsets cs into a cytoset while realize_view leads to a deep_copy into a new cytoset
 cs_small
 
-# no need to point to cs_small
+# no need to assign back to cs_small, because this function operates by reference and returns NULL anyways.
 cs_add_cytoframe(cs = cs_small, sn = "Sample Name", cf = cs[[3]]) # cs[[3]] results in a cytoframe
 cs_small
 ```
@@ -311,19 +330,18 @@ list_of_cf <- cytoset_to_list(cs)
 
 ## List like operation with `cytoset`
 
-As indicated previously, a `cytoset` behaves like a list. To leverage this behaviour we can use `fsApply` to iterate through the samples in a `cytoset`. Important distinction, however, is that the output results in a single array like object.
+As indicated previously, a `cytoset` behaves like a list. To leverage this behaviour we can use `fsApply` to iterate through the samples in a `cytoset`. By default, output is attempted to be coerced to a single array like object.  (Set `simplify = FALSE` to return another list.)
 
 ```{r fsApply, echo=TRUE, eval=TRUE, message=FALSE}
-# getting number of rows of individual cytoframes
-get_all_nrow <- fsApply(cs, nrow)
-get_all_nrow
+# getting number of rows (cells) of individual cytoframes
+n_cell_events <- fsApply(cs, nrow)
+n_cell_events
 ```
 
 ### Exercises
 
 1. How would you extract marker names that are stored within a the cytoset `cs`?
 2. How would you create a `cytoset` from the object `list_of_cf`?
-3. Alter expression of a specific marker the 1st `cytoframe` within the `list_of_cf`. Now plot a histogram of the expression. What do you think happens to the expression to the `cytoframe`: `cs[[1]]`?
 
 ## Saving your data
 
@@ -331,11 +349,10 @@ Saving your data is easy.
 
 ```{r save_cytoset,echo=TRUE, eval=FALSE,message=FALSE}
 # save cytoframe
-cf_write_disk(cf,
-              "path/to/my_new_cf")
+cf_write_disk(cf, "path/to/my_new_cf")
 
 # save cytoset
-save_cytoset(cs, path = "my/data/goes/here")
+save_cytoset(cs, path = "path/to/my/cs")
 ```
 
 Loading it back is just as easy.
