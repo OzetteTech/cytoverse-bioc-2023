@@ -3,7 +3,7 @@ url: https://cdn.ozetteai.com/cytoverse-bioc-2023/
 template:
   params:
     bootstrap: 5
-    bootswatch: cyborg
+    bootswatch: lumen
     #ganalytics: UA-99999999-9
 
 navbar:
