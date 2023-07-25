@@ -148,7 +148,7 @@ gridExtra::grid.arrange(
 It is now clear that the expression of PD1 indeed tends to be higher on MAIT Cells compared to non-MAIT T Cells. 
 
 ## (Optional) Additional statistics
-
+<details>
 It is also possible to calculate additional statistics for the population of interest. For instance, if you were interested in nth percentile expression of a specific marker you could define a function and use it in `gs_pop_get_stats` like so:
 
 ```{r user_stats_function, eval=TRUE, echo=TRUE, message=TRUE}
@@ -172,7 +172,7 @@ knitr::kable(median_cd4,caption = "Median expression of CD4 extracted using user
 ```
 
 As we see, we were able to extract median expression of the marker **CD4** on 4 different populations. As expected, expression is highest on **CD4+ T Cells** and lowest on **CD8+ T Cells**.
-
+</details>
 # Conclusion
 
 In this section, we show how to easily generate reports and visualizations from the `GatingSet` object which we created earlier. We demonstrated some approaches to easily extract counts, frequencies, MFI, or a user defined metric from the `GatingSet` object easily. 
