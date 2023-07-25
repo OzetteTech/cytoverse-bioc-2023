@@ -12,7 +12,7 @@ We have spent a bit of time going over import, manupulation, compensation, and t
 
 For those who have experience working with `ggplot`, the approach is going to be similar. As such, `ggcyto` provides a easy to use yet powerful approach to visualize flow cytometry data.
 
-It is also important to note that `ggcyto` works with each of `flowFrame`, `flowSet`, `cytoframe`, `cytoset`, `GatingSet`, and `GatingHierarchy` and allows the user to utilize various attributes of each of the object. For instance, **metadata** within a `flowSet`/`cytoset` and `GatingSet` can be used to prepare insightful visualizations, rapidly.
+It is also important to note that `ggcyto` works with each of `cytoframe`, `cytoset`, `GatingSet`, and `GatingHierarchy` and allows the user to utilize various attributes of each of the object. For instance, **metadata** within a `flowSet`/`cytoset` and `GatingSet` can be used to prepare insightful visualizations, rapidly.
 
 ```{r required_libraries, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 library(flowCore)
@@ -29,7 +29,7 @@ cf <- gh_pop_get_data(gs[[1]],"root",
                       returnType = "cytoframe")
 ```
 
-First, extract a cytoframe from the richly gated GatingSet we worked in [3_Gating_1.Rmd].  Shortly we'll also see how to work with the GatingSet itself.
+First, extract a cytoframe from the richly gated GatingSet we worked in [3_Gating_1.Rmd]. Shortly we'll also see how to work with the GatingSet itself.
 
 ## Hit the ground running using `autoplot`
 
@@ -76,7 +76,7 @@ autoplot(gs,
          axis_y_inverse_trans()
 ```
 
-*Note*: When working with `GatingSet` or `GatingHierarchy`, the `autoplot` method does not take **x** and **y** parameters. Rather either a \*\*gate\* can be specified or if left unspecified, the entire `GatingHierachy` is plotted.
+*Note*: When working with `GatingSet` or `GatingHierarchy`, the `autoplot` method does not take **x** and **y** parameters. Rather either a **gate** can be specified or if left unspecified, the entire `GatingHierachy` is plotted.
 
 ## Granular control using `ggcyto`
 
@@ -92,11 +92,11 @@ ggcyto(gs,
   facet_wrap(~name)
 ```
 
-The marker combination "CD8a vs CD4" is used to at the node `gs_get_pop_paths(gs)[8]` to define CD4+ vs CD8+ T cells. Unlike with `autoplot`, `ggcyto` method allows us to look at the data from the point of `subset`. In the above example, `subset = "singlet"`.
+The marker combination "CD8a vs CD4" is used to at the node `r gs_get_pop_paths(gs)[8]` to define CD4+ vs CD8+ T cells. Unlike with `autoplot`, `ggcyto` method allows us to look at the data from the point of `subset`. In the above example, `subset = "singlet"`.
 
 ### Exercise
 
-1. Repeat the previous plot, but `facet_wrap` upon another variable.
+1.  Repeat the previous plot, but `facet_wrap` upon another variable.
 
 <!-- 2.  Adding a gate and stats layer that doesn't exist in the `subset` node -->
 
@@ -119,10 +119,9 @@ ggcyto(gs,
 
 ### Exercise
 
-1. Repeat the above plot but now set the parent subset to be the `"not_MAIT_polygon"`.  Why does your plot look different than the previous one?
-<details>
-*Answer*: The `singlet/CD4+CD8a-` population that in effect we were visualizing, was not defined in the `GatingSet`; instead the parent node to `CD4+CD8a-` is non-MAIT conventional T cells (`/singlet/live/lymphocytes/CD3+ T cells/non-NKT Cells/conv_Tcells/not_MAIT_Polygon/`). This ad hoc visualization tells us that CD4+ cells (not sure at this point if they are CD3+ T cells) are \~47% of total `singlet` population that we had defined.
-</details>
+1.  Repeat the above plot but now set the parent subset to be the `"not_MAIT_polygon"`. Why does your plot look different than the previous one?
+
+    <details>*Answer*: The `singlet/CD4+CD8a-` population that in effect we were visualizing, was not defined in the `GatingSet`; instead the parent node to `CD4+CD8a-` is non-MAIT conventional T cells (`/singlet/live/lymphocytes/CD3+ T cells/non-NKT Cells/conv_Tcells/not_MAIT_Polygon/`). This ad hoc visualization tells us that CD4+ cells (not sure at this point if they are CD3+ T cells) are \~47% of total `singlet` population that we had defined.</details>
 
 In a similar manner, we can use a newly defined gate to interrogate the `GatingSet`.
 
