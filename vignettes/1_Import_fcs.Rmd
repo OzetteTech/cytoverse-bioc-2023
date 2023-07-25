@@ -32,6 +32,18 @@ library(CytoverseBioc2023)
 cache_workshop_data()
 ```
 
+
+## `cytoverse` data structures for **.fcs** files
+
+There are 3 **main** data structures that represent flow cytometry data in `cytoverse`: `cytoframe`, `cytoset`, and `GatingSet`.  
+
+- `cytoframe`: a single **.fcs** file,
+- `cytoset`: a list like object that can store multiple **.fcs** files,
+- `GatingSet`: a list like object that allows building and attaching gates and filter to a `cytoset`
+
+Some of these have overlapping functionality, and we'll eventually explain when you would prefer one data structure to another as we continue through this workshop. 
+
+
 ## Reading in FCS files
 
 There are 2 preferred approaches to read in **.fcs** file(s) into R:
@@ -40,8 +52,6 @@ There are 2 preferred approaches to read in **.fcs** file(s) into R:
 - Read in a set of **.fcs** files as `cytoset`,
 
 (Additionally, you can read a workspace generated with another tool, such as FlowJo, using the `CytoML` package.)
-
-A `cytoframe` and `cytoset` are all data structures that represent the cytometry data.  Some of these have overlapping functionality, and we'll eventually explain when you would prefer one data structure to another.
 
 The function `load_cytoframe_from_fcs` is used to read in individual file as a `cytoframe` object. 
 
