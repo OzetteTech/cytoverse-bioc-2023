@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spillover, compensation, and Transformations • CytoverseBioc2023</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cyborg/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -557,7 +557,7 @@ transformation if required.</p>
 <span>                                         tfun <span class="op">=</span> <span class="va">my_trans</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># transform</span></span>
-<span><span class="va">cf_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>, <span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cf_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>, <span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
 <p>We can also transform a set of FCS files (<code>cytoset</code>)</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># read in a cytoet</span></span>
@@ -576,7 +576,7 @@ transformation if required.</p>
 <span>                                         tfun <span class="op">=</span> <span class="va">asinh_trans</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># transform: this will transform the underlying data </span></span>
-<span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs</span>,<span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs</span>,<span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Importing and Basics of working with FCS files • CytoverseBioc2023</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cyborg/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -118,9 +118,10 @@ fine grain control!</p>
 </h2>
 <p>In the workshop, all the cytoverse packages are included in the
 instance you launched on the Bioconductor Workshop Galaxy, and the
-docker image this uses will remain available in perpetuity. That said,
-if you want to to install <code>cytoverse</code> packages outside of
-docker, the standard Bioconductor tooling works:</p>
+docker image this uses will remain available indefinitely (see the <a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html#notes-on-using-the-docker-image-1">README.md</a>
+for details). That said, if you want to install and use
+<code>cytoverse</code> packages outside of docker, the standard
+Bioconductor tooling works:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BioManager"</span><span class="op">)</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"flowCore"</span><span class="op">)</span></span>
@@ -128,9 +129,11 @@ docker, the standard Bioconductor tooling works:</p>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"ggcyto"</span><span class="op">)</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"openCyto"</span><span class="op">)</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"flowStats"</span><span class="op">)</span></span></code></pre></div>
-<p>For the moment, we only need to load <code>flowCore</code>.</p>
+<p>For the moment, we only need to load <code>flowCore</code> and
+<code>flowWorkspace</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"flowCore"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">flowCore</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">flowWorkspace</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html">CytoverseBioc2023</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: replacing previous import 'flowViz::contour' by 'graphics::contour'</span></span>
 <span><span class="co">## when loading 'flowStats'</span></span></code></pre>
@@ -171,7 +174,7 @@ examine it with
 <span></span>
 <span><span class="co"># a cytoframe object</span></span>
 <span><span class="va">cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c9151f6041_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c5a0706bb_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -231,9 +234,11 @@ row is an event (frequently a cell) and every column is a channel.</li>
 working with a <code>data.frame</code> in R, where a “row” is a cell and
 a “column” is a channel. In particular, subsetting with square brackets
 <code>cf[i,j]</code> or <code>cf$</code> works as you might hope. An
-important difference, however, is that the subset operation <strong>DOES
-NOT</strong> create a new copy of the data but simply provides new view
-of the data.</p>
+important difference, however, is that unlike most other functions in R,
+the subset and assignment operations <strong>DO NOT</strong> create a
+new copy of the data but simply provides an updated “view” of the data.
+Because this is quite unlike the rest of R, we will perseverate on this
+point.</p>
 <div class="section level3">
 <h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
@@ -384,7 +389,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytorame by column</span></span>
 <span><span class="va">s_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span>,<span class="va">marker_cd4</span><span class="op">[</span>,<span class="st">"name"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c9151f6041_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c5a0706bb_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 1 observables:</span></span>
 <span><span class="co">##        name       desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P23 U785-A CD4 BUV805    262143  -80.5002    262143</span></span>
@@ -395,7 +400,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytoframe by row</span></span>
 <span><span class="va">s2_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span></span>
 <span><span class="va">s2_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c9151f6041_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c5a0706bb_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 100 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -415,7 +420,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <p>Notice that the subset (<code>&lt;- [</code>) operation can be
 applied directly to the <code>cytoframe</code> object so that
 information regarding the file is preserved. Also, as indicated above,
-these operations provide a new view of the data without creating a
+these operations provide an aliased view of the data without creating a
 <strong>copy</strong>.</p>
 <p>Below, we show examples of how to manipulate the
 <code>cytoframe</code> object and create a copy using
@@ -477,7 +482,7 @@ these operations provide a new view of the data without creating a
 <code class="sourceCode R"><span><span class="co"># manipulating expression values</span></span>
 <span><span class="co"># notice the data range </span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c9151f6041_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c5a0706bb_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 150 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -502,7 +507,7 @@ these operations provide a new view of the data without creating a
 <span></span>
 <span><span class="co"># notice the data range after transformation</span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c9151f6041_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c5a0706bb_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 150 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -537,7 +542,7 @@ later section.</p>
 <ol style="list-style-type: decimal">
 <li>Why is <code>length(colnames(cf))</code> different than
 <code>length(markernames(cf))</code>?</li>
-<li>How could you make a random downsample of 1000 cells from
+<li>How could you create a random downsample of 1000 cells from
 <code>cf</code>?</li>
 <li>Make a scatter plot of the forward scatter (<code>FSC-A</code>) vs
 side scatter (<code>SSC-A</code>) of <code>cf</code> using a graphics
@@ -557,8 +562,7 @@ any conclusions, we’ll want replicates. When there are a set of
 files, preferably, but not necessarily from the same
 panel/experiment.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">flowWorkspace</span><span class="op">)</span></span>
-<span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoset_from_fcs.html" class="external-link">load_cytoset_from_fcs</a></span><span class="op">(</span>files <span class="op">=</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data/fcs_data/"</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoset_from_fcs.html" class="external-link">load_cytoset_from_fcs</a></span><span class="op">(</span>files <span class="op">=</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data/fcs_data/"</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span><span class="op">)</span></span>
 <span><span class="va">cs</span></span></code></pre></div>
 <pre><code><span><span class="co">## A cytoset with 6 samples.</span></span>
 <span><span class="co">## </span></span>
@@ -580,12 +584,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <code class="sourceCode R"><span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 5c948c23c8_4000_BDC-CR1.fcs   5c948c23c8_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5c9151f6041_4000_TNK-CR1.fcs 5c9151f6041_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c928cfb6cf_4001_BDC-CR1.fcs 5c928cfb6cf_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5c91ba6b2d7_4001_TNK-CR1.fcs 5c91ba6b2d7_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c94e3f7421_4002_TNK-CR1.fcs 5c94e3f7421_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c91dc50293_4003_TNK-CR1.fcs 5c91dc50293_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 5c5459ebd_4000_BDC-CR1.fcs     5c5459ebd_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5c5a0706bb_4000_TNK-CR1.fcs   5c5a0706bb_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c57c1a424b_4001_BDC-CR1.fcs 5c57c1a424b_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5c5daf41f7_4001_TNK-CR1.fcs   5c5daf41f7_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c5a2cdf47_4002_TNK-CR1.fcs   5c5a2cdf47_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c56440071c_4003_TNK-CR1.fcs 5c56440071c_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create metadata</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Untreated"</span>,<span class="st">"Treated"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -598,17 +602,17 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <p>Now, we ensure that <code>rownames</code> of data.frame matches
 <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># not it works</span></span>
+<code class="sourceCode R"><span><span class="co"># now it works</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">metadata</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/featureNames.html" class="external-link">sampleNames</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5c948c23c8_4000_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5c9151f6041_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5c928cfb6cf_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5c91ba6b2d7_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 5c94e3f7421_4002_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5c91dc50293_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
+<span><span class="co">## 5c5459ebd_4000_BDC-CR1.fcs   Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c5a0706bb_4000_TNK-CR1.fcs    Treated  T Cell Panel</span></span>
+<span><span class="co">## 5c57c1a424b_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c5daf41f7_4001_TNK-CR1.fcs  Untreated  T Cell Panel</span></span>
+<span><span class="co">## 5c5a2cdf47_4002_TNK-CR1.fcs    Treated  T Cell Panel</span></span>
+<span><span class="co">## 5c56440071c_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p>This is much more convenient than going back and forth between the
@@ -625,8 +629,11 @@ full set of files.</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5c948c23c8_4000_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5c928cfb6cf_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span></code></pre>
+<span><span class="co">## 5c5459ebd_4000_BDC-CR1.fcs   Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c57c1a424b_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span></code></pre>
+<div class="section level3">
+<h3 id="cytoset-views-and-aliasing">Cytoset views and aliasing<a class="anchor" aria-label="anchor" href="#cytoset-views-and-aliasing"></a>
+</h3>
 <p>Many of the sub-setting operation for <code>cytoframe</code> are also
 applicable for <code>cytoset</code>. Similar to <code>cytoframe</code>
 sub-setting operations only create a new “view” of the data. For a
@@ -647,7 +654,7 @@ the underlying data.</p>
 <code class="sourceCode R"><span><span class="co"># create a transformList</span></span>
 <span><span class="va">trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span><span class="st">"B515-A"</span>,<span class="va">asinh</span><span class="op">)</span></span>
 <span><span class="co"># transform</span></span>
-<span><span class="va">cs_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs_small</span>,<span class="va">trans</span><span class="op">)</span></span>
+<span><span class="va">cs_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs_small</span>,<span class="va">trans</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># after transformation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs_small</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -659,31 +666,48 @@ the underlying data.</p>
 <p>As you see, the transformation was applied to a subset
 <code>cs_small</code> however the original <code>cs</code> was also
 altered highlighting that both objects were pointing to the same data.
-To perform a <strong>deep copy</strong> we can use
-<code><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view()</a></code></p>
+To confirm this, you can use <code>cs_get_uri</code> or
+<code>cf_get_uri</code>:</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs_small</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmpu6WLU8/00949599-f051-4fb6-b018-de804e63050d"</span></span></code></pre>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmpu6WLU8/00949599-f051-4fb6-b018-de804e63050d"</span></span></code></pre>
+<p>To perform a <strong>deep copy</strong> we can use
+<code><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view()</a></code></p>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># look at underlying expression</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1]   -15.63437 23545.83203</span></span></code></pre>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># subset and show prior to transformation</span></span>
 <span><span class="va">cs_small2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs_small2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1]   -15.63437 23545.83203</span></span></code></pre>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a transformList</span></span>
 <span><span class="va">trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span><span class="st">"B515-A"</span>,<span class="va">asinh</span><span class="op">)</span></span>
 <span><span class="co"># transform</span></span>
-<span><span class="va">cs_small2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs_small2</span>,<span class="va">trans</span><span class="op">)</span></span>
+<span><span class="va">cs_small2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs_small2</span>,<span class="va">trans</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># after transformation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs_small2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] -3.44364 10.75985</span></span></code></pre>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># whole cs </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1]   -15.63437 23545.83203</span></span></code></pre>
 <p>Notice that <code>cs</code> is left unchanged.</p>
+<p>Exercise:</p>
+<ol style="list-style-type: decimal">
+<li>Explain why the following code does not work as expected:</li>
+</ol>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cf_log_trans</span> <span class="op">&lt;-</span> <span class="va">cf</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cf_log_trans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">[</span>,<span class="st">"V510-A"</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cf_log_trans</span><span class="op">)</span><span class="op">[</span>,<span class="st">"V510-A"</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"Effect of log2 transformation on  V510-A (CD3)"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="adding-additional--fcs-files-to-cytoset">Adding additional <strong>.fcs</strong> files to
@@ -691,7 +715,7 @@ To perform a <strong>deep copy</strong> we can use
 </h2>
 <p>Lastly, we can also add additional <strong>.fcs</strong> files to a
 <code>cytoset</code> using <code>cs_add_cytoframe</code>.</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add to cytoset</span></span>
 <span><span class="va">cs_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># cs[1] subsets cs into a cytoset while realize_view leads to a deep_copy into a new cytoset</span></span>
 <span><span class="va">cs_small</span></span></code></pre></div>
@@ -699,8 +723,8 @@ To perform a <strong>deep copy</strong> we can use
 <span><span class="co">## </span></span>
 <span><span class="co">##   column names:</span></span>
 <span><span class="co">##     FSC-A, FSC-H, SSC-A, B515-A, B610-A, B660-A, B710-A, B780-A, G575-A, G610-A, G660-A, G710-A, G780-A, R670-A, R730-A, R780-A, U390-A, U450-A, U500-A, U570-A, U660-A, U740-A, U785-A, V450-A, V510-A, V570-A, V605-A, V655-A, V710-A, V750-A, V785-A, remove_from_FS_FM, Time</span></span></code></pre>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># no need to point to cs_small</span></span>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># no need to assign back to cs_small, because this function operates by reference and returns NULL anyways.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_add_cytoframe.html" class="external-link">cs_add_cytoframe</a></span><span class="op">(</span>cs <span class="op">=</span> <span class="va">cs_small</span>, sn <span class="op">=</span> <span class="st">"Sample Name"</span>, cf <span class="op">=</span> <span class="va">cs</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="co"># cs[[3]] results in a cytoframe</span></span>
 <span><span class="va">cs_small</span></span></code></pre></div>
 <pre><code><span><span class="co">## A cytoset with 2 samples.</span></span>
@@ -715,7 +739,7 @@ To perform a <strong>deep copy</strong> we can use
 or extract all files as a list of <code>cytoframe</code>. We can either
 use <code>[[</code> to directly grab a <code>cytoframe</code> or
 <code>cytoset_to_list</code>.</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract a single cytoframe by using cs[[index/samplename]]</span></span>
 <span><span class="va">single_cf</span> <span class="op">&lt;-</span> <span class="va">cs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
@@ -727,19 +751,20 @@ use <code>[[</code> to directly grab a <code>cytoframe</code> or
 </h2>
 <p>As indicated previously, a <code>cytoset</code> behaves like a list.
 To leverage this behaviour we can use <code>fsApply</code> to iterate
-through the samples in a <code>cytoset</code>. Important distinction,
-however, is that the output results in a single array like object.</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># getting number of rows of individual cytoframes</span></span>
-<span><span class="va">get_all_nrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">nrow</span><span class="op">)</span></span>
-<span><span class="va">get_all_nrow</span></span></code></pre></div>
+through the samples in a <code>cytoset</code>. By default, output is
+attempted to be coerced to a single array like object. (Set
+<code>simplify = FALSE</code> to return another list.)</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># getting number of rows (cells) of individual cytoframes</span></span>
+<span><span class="va">n_cell_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">nrow</span><span class="op">)</span></span>
+<span><span class="va">n_cell_events</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                [,1]</span></span>
-<span><span class="co">## 5c948c23c8_4000_BDC-CR1.fcs  912254</span></span>
-<span><span class="co">## 5c9151f6041_4000_TNK-CR1.fcs 102015</span></span>
-<span><span class="co">## 5c928cfb6cf_4001_BDC-CR1.fcs 924474</span></span>
-<span><span class="co">## 5c91ba6b2d7_4001_TNK-CR1.fcs  92703</span></span>
-<span><span class="co">## 5c94e3f7421_4002_TNK-CR1.fcs 372224</span></span>
-<span><span class="co">## 5c91dc50293_4003_TNK-CR1.fcs 146150</span></span></code></pre>
+<span><span class="co">## 5c5459ebd_4000_BDC-CR1.fcs   912254</span></span>
+<span><span class="co">## 5c5a0706bb_4000_TNK-CR1.fcs  102015</span></span>
+<span><span class="co">## 5c57c1a424b_4001_BDC-CR1.fcs 924474</span></span>
+<span><span class="co">## 5c5daf41f7_4001_TNK-CR1.fcs   92703</span></span>
+<span><span class="co">## 5c5a2cdf47_4002_TNK-CR1.fcs  372224</span></span>
+<span><span class="co">## 5c56440071c_4003_TNK-CR1.fcs 146150</span></span></code></pre>
 <div class="section level3">
 <h3 id="exercises">Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
 </h3>
@@ -748,10 +773,6 @@ however, is that the output results in a single array like object.</p>
 cytoset <code>cs</code>?</li>
 <li>How would you create a <code>cytoset</code> from the object
 <code>list_of_cf</code>?</li>
-<li>Alter expression of a specific marker the 1st <code>cytoframe</code>
-within the <code>list_of_cf</code>. Now plot a histogram of the
-expression. What do you think happens to the expression to the
-<code>cytoframe</code>: <code>cs[[1]]</code>?</li>
 </ol>
 </div>
 </div>
@@ -759,15 +780,14 @@ expression. What do you think happens to the expression to the
 <h2 id="saving-your-data">Saving your data<a class="anchor" aria-label="anchor" href="#saving-your-data"></a>
 </h2>
 <p>Saving your data is easy.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save cytoframe</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cf_write_disk.html" class="external-link">cf_write_disk</a></span><span class="op">(</span><span class="va">cf</span>,</span>
-<span>              <span class="st">"path/to/my_new_cf"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cf_write_disk.html" class="external-link">cf_write_disk</a></span><span class="op">(</span><span class="va">cf</span>, <span class="st">"path/to/my_new_cf"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># save cytoset</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/save_cytoset.html" class="external-link">save_cytoset</a></span><span class="op">(</span><span class="va">cs</span>, path <span class="op">=</span> <span class="st">"my/data/goes/here"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/save_cytoset.html" class="external-link">save_cytoset</a></span><span class="op">(</span><span class="va">cs</span>, path <span class="op">=</span> <span class="st">"path/to/my/cs"</span><span class="op">)</span></span></code></pre></div>
 <p>Loading it back is just as easy.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load cytoframe</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoframe.html" class="external-link">load_cytoframe</a></span><span class="op">(</span><span class="st">"path/to/my_cf"</span><span class="op">)</span></span>
 <span></span>

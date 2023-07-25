@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Visualizations using ggcyto • CytoverseBioc2023</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cyborg/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -123,9 +123,16 @@ be used to prepare insightful visualizations, rapidly.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">flowCore</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RGLab/ggcyto/issues" class="external-link">ggcyto</a></span><span class="op">)</span></span>
 <span><span class="co"># set theme</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html">CytoverseBioc2023</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/cache_workshop_data.html">cache_workshop_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html">CytoverseBioc2023</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cache_workshop_data.html">cache_workshop_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_transformed_gs.html">make_transformed_gs</a></span><span class="op">(</span>add_gates <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gh_pop_get_data.html" class="external-link">gh_pop_get_data</a></span><span class="op">(</span><span class="va">gs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,<span class="st">"root"</span>,</span>
+<span>                      returnType <span class="op">=</span> <span class="st">"cytoframe"</span><span class="op">)</span></span></code></pre></div>
+<p>First, extract a cytoframe from the richly gated GatingSet we worked
+in [3_Gating_1.Rmd]. Shortly we’ll also see how to work with the
+GatingSet itself.</p>
 <div class="section level3">
 <h3 id="hit-the-ground-running-using-autoplot">Hit the ground running using <code>autoplot</code><a class="anchor" aria-label="anchor" href="#hit-the-ground-running-using-autoplot"></a>
 </h3>
@@ -134,9 +141,9 @@ of plots with minimal effort.</p>
 <ol style="list-style-type: decimal">
 <li>Bivariate plot</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># flowFrame: bivariate plot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff</span>,</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cytoframe: bivariate plot</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">cf</span>,</span>
 <span>         x <span class="op">=</span> <span class="st">"CD4"</span>, <span class="co"># markername in human readable format</span></span>
 <span>         y <span class="op">=</span> <span class="st">"R730-A"</span>, <span class="co"># markername as colname of flowFrame </span></span>
 <span>         bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span></span></code></pre></div>
@@ -144,17 +151,17 @@ of plots with minimal effort.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Density plot</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># flowFrame: density plot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">ff</span>,</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cytoframe: density plot</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">cf</span>,</span>
 <span>         x <span class="op">=</span> <span class="st">"CD4"</span><span class="op">)</span><span class="op">+</span> <span class="co"># y not results in a density plot</span></span>
-<span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="co"># utilize ggplot geom</span></span></code></pre></div>
+<span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># utilize ggplot geom</span></span></code></pre></div>
 <p><img src="5_ggcyto_files/figure-html/autoplot_ff_test-1.png" width="700"></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Bivariate plot of the entire <code>GatingHeirarchy</code>
 </li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GatingSet: full GatingHierachy</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="co"># single GatingHierachy will plot the entire gating path</span></span>
 <span>        bins <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">+</span> <span class="co"># bins control resolution</span></span>
@@ -165,7 +172,7 @@ of plots with minimal effort.</p>
 <li>Specific node within a <code>GatingSet</code>
 </li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GatingSet: single gate</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>         gate <span class="op">=</span> <span class="st">"CD3+ T cells"</span>, <span class="co"># plot a specific gate for all samples </span></span>
@@ -191,7 +198,7 @@ now start to make visualizations not afforded by
 <li>Bivariate plot for data within a specific node using markers other
 than those defined for a node</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>       subset <span class="op">=</span> <span class="st">"singlet"</span>, <span class="co"># extract data at specific node</span></span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"CD8a"</span>, y <span class="op">=</span> <span class="st">"CD4"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span> <span class="co"># any marker combination </span></span>
@@ -203,12 +210,15 @@ than those defined for a node</li>
 Unlike with <code>autoplot</code>, <code>ggcyto</code> method allows us
 to look at the data from the point of <code>subset</code>. In the above
 example, <code>subset = "singlet"</code>.</p>
-<ol start="2" style="list-style-type: decimal">
-<li>Adding a gate and stats layer that doesn’t exist in the
-<code>subset</code> node</li>
+<div class="section level4">
+<h4 id="exercise">Exercise<a class="anchor" aria-label="anchor" href="#exercise"></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>Repeat the previous plot, but <code>facet_wrap</code> upon another
+variable.</li>
 </ol>
-<p>During reporting, it is possible that users would want to see</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<!-- 2.  Adding a gate and stats layer that doesn't exist in the `subset` node --><p>During reporting, it is possible that users would want to see</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get a gate</span></span>
 <span><span class="va">cd4_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_get_gate.html" class="external-link">gs_pop_get_gate</a></span><span class="op">(</span><span class="va">gs</span>,<span class="st">"CD4+CD8a-"</span><span class="op">)</span></span>
 <span></span>
@@ -222,14 +232,28 @@ example, <code>subset = "singlet"</code>.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/axis_x_inverse_trans.html" class="external-link">axis_x_inverse_trans</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/axis_x_inverse_trans.html" class="external-link">axis_y_inverse_trans</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="5_ggcyto_files/figure-html/ggcyto_gs_add_gate-1.png" width="700"></p>
-<p><em>Note</em>: This population has not been defined in the
-<code>GatingSet</code>! Yet, we are able to connect multiple components
-to generate an informative report quickly. We now know that CD4+ cells
-(not sure at this point if they are CD3+ T cells) are ~47% of total
-<code>singlet</code> population that we had defined.</p>
+</div>
+<div class="section level4">
+<h4 id="exercise-1">Exercise<a class="anchor" aria-label="anchor" href="#exercise-1"></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>Repeat the above plot but now set the parent subset to be the
+<code>"not_MAIT_polygon"</code>. Why does your plot look different than
+the previous one?
+<details><em>Answer</em>: The <code>singlet/CD4+CD8a-</code> population that in
+effect we were visualizing, was not defined in the
+<code>GatingSet</code>; instead the parent node to
+<code>CD4+CD8a-</code> is non-MAIT conventional T cells
+(<code>/singlet/live/lymphocytes/CD3+ T cells/non-NKT Cells/conv_Tcells/not_MAIT_Polygon/</code>).
+This ad hoc visualization tells us that CD4+ cells (not sure at this
+point if they are CD3+ T cells) are ~47% of total <code>singlet</code>
+population that we had defined.
+</details>
+</li>
+</ol>
 <p>In a similar manner, we can use a newly defined gate to interrogate
 the <code>GatingSet</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_gate</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/rectangleGate-class.html" class="external-link">rectangleGate</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"V570-A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">150</span>,<span class="fl">210</span><span class="op">)</span>,</span>
 <span>       <span class="st">"V510-A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>,<span class="fl">210</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -246,21 +270,20 @@ the <code>GatingSet</code>.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/axis_x_inverse_trans.html" class="external-link">axis_x_inverse_trans</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/axis_x_inverse_trans.html" class="external-link">axis_y_inverse_trans</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="5_ggcyto_files/figure-html/ggcyto_gs_add_gate_new-1.png" width="700"></p>
-<p>Above we created a gate, did not apply it to a <code>GatingSet</code>
-directly, but are now leveraging the <code>ggcyto</code> library to
-rapidly generate insight regarding CD8a+ CD3+ T cells from the
-<code>singlet</code> node. Moreover, we have leveraged the metadata from
-<code>pData</code> to generate additional insight regarding the
-data.</p>
+<p>We created a gate, did not apply it to a <code>GatingSet</code>
+directly, but rather made an ad hoc plot regarding CD8a+ CD3+ T cells
+from the <code>singlet</code> node. This plot also shows how metadata
+from <code>pData</code> is available to facet the plot.</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="expression-using-histograms-and-densities">Expression using histograms and densities<a class="anchor" aria-label="anchor" href="#expression-using-histograms-and-densities"></a>
 </h3>
 <p>A common way to report or view specific population data is to ask
-whether there is a change in expression levels (fluoresence intensity)
+whether there is a change in expression levels (fluorescence intensity)
 across samples or groups.</p>
 <p>Let’s take a look at PD1 expression in CD8+ T Cells</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cd8</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>       subset <span class="op">=</span> <span class="st">"CD4-CD8a+"</span>,</span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"PD1"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -271,7 +294,7 @@ across samples or groups.</p>
 <p><img src="5_ggcyto_files/figure-html/ggcyto_histogram-1.png" width="700"></p>
 <p>What if you would like to compare 2 different populations side by
 side?</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cd4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/as.ggplot.html" class="external-link">as.ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>              subset <span class="op">=</span> <span class="st">"CD4+CD8a-"</span>,</span>
 <span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"PD1"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -282,7 +305,7 @@ side?</p>
 <span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">cd4</span>,<span class="va">cd8</span>, ncol <span class="op">=</span><span class="fl">2</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="5_ggcyto_files/figure-html/ggcyto_gs_arrange-1.png" width="700"></p>
 <p>Or, if you would like to compare population on top of each other?</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">overlay</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>                  subset <span class="op">=</span> <span class="st">"CD4+CD8a-"</span>,</span>
 <span>                  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"PD1"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -311,7 +334,7 @@ top of density of a different unrelated node.</p>
 <p>Below, we go through another example where we ask the question: what
 is the general expression level of CD4 and CD8a on MAIT cells compared
 to all CD3+ T cells?</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mait_expression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>                          subset <span class="op">=</span> <span class="st">"CD3+ T cells"</span>,</span>
 <span>                          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"CD4"</span>, y <span class="op">=</span> <span class="st">"CD8a"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
