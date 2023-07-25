@@ -18,7 +18,7 @@ In this section we work with `GatingSet` and `GatingHierarchy`. These objects, l
 
 In **part 1** of this section, we will go over variety of native methods that exist in the `cytoverse` which analysts can utilize to gate their cells of interest.
 
-In **part 2**, we will demonstrate how analysts can automate this process by utilizing a `gatingTemplate` (a csv file that can be used to define and build the hierarchy).
+In **part 3 (optional)**, we will demonstrate how analysts can automate this process by utilizing a `gatingTemplate` (a csv file that can be used to define and build the hierarchy).
 
 ## Building the gating tree: manual and semi-supervised
 
@@ -33,32 +33,24 @@ library(CytoverseBioc2023)
 cache_workshop_data()
 ```
 
-First we create a `GatingSet`.
+To create a `GatingSet`, first load in a `cytoset`. Here, we are making use of the `cytoset` that we have created previously. 
 
 ```{r intro_gatingset, eval = T, echo=TRUE, message = FALSE}
-# create a cytoset
-fcs_files <- get_workshop_data("fcs_data/")
-fcs_files_TNK <- dplyr::filter(fcs_files, grepl(pattern = "TNK-CR1",x = rname)) # simple matching
-cs <- flowWorkspace::load_cytoset_from_fcs(files = fcs_files_TNK$rpath, # loading a set of FCS files as a cytoset
-                                           pattern = "TNK-CR1")
-
-# add mock metadata
-set.seed(123)
-meta <- data.frame(name = sampleNames(cs), 
-                   status = "Healthy", 
-                   panel = "T Cell",
-                   mock_treatment = sample(x = c("Treated","Control"),size = 4,prob = c(0.5,0.5),replace = TRUE),
-                   row.names = sampleNames(cs))
-pData(cs) <- meta
+# load cytoset
+cs <- make_cytoset(only_TNK = TRUE)
 
 # creating a GatingSet
 gs <- flowWorkspace::GatingSet(cs)
 gs
 ```
 
-We have now created a `GatingSet` called **gs**. Also note that we have associated some (albeit mock) metadata to the `GatingSet`. We are able to leverage the metadata to help construct gates (if need be).
+We have now created a `GatingSet` called **gs**.
 
-First, we revisit some of the concepts that we have seen previously: **compensation** and **transformation** as it pertains to `GatingSet`.
+### Exercise
+1. How would you check the metadata associated with the `GatingSet`?
+2. How would you subset `gs` to only include samples where **Treatment = Control**?
+
+Now, we revisit some of the concepts that we have seen previously: **compensation** and **transformation** as it pertains to a `GatingSet`.
 
 We can directly compensate the `GatingSet` object.
 
@@ -70,7 +62,7 @@ gs <- compensate(gs,spill) # GatingSet will be compensated and stores the spill 
 
 recompute(gs) # update the gs
 
-# retrieve compensation information; return NULL is GatingSet was not compensated
+# retrieve compensation information
 gs_spill <- gs_get_compensations(gs[[1]])
 
 # output is a rich spillover information
@@ -81,6 +73,7 @@ As well we can transform the `GatingSet`.
 
 For convenience, we are using a previously defined **transformerList** object. The **transformerList** object was extracted from the workspace file created by the authors of [this](https://doi.org/10.1038/s41467-022-34638-2) study and can be found [here](https://flowrepository.org/public_experiment_representations/5932).
 
+<details>
 ```{r demo_transformation_gs, echo = TRUE, eval = TRUE, message=FALSE}
 # transformation of GatingSet
 t.rds <- dplyr::filter(get_workshop_data("/fj_wsp"), # a previously defined transformation
@@ -94,117 +87,43 @@ my_trans_list <- flowWorkspace::transformerList(from = names(my_trans),
 
 gs <- flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
 ```
+</details>
+
+### Exercise
+
+1. How would you be able to tell if a `GatingSet` has been compensated?
+2. How would be able to tell if a `GatingSet` has been transformed?
+*Hint*: Try `help.search("get_transformation")`.
+3. Why might it be beneficial to compensate and transform a `GatingSet` rather than a `cytoframe` or a `cytoset`?
+
+
+## A note about `GatingHierarchy`
+
+You may have noticed above that some function calls have `gs_` and others have `gh_`.
+
+`gs_` indicates that  `GatingSet` while `gh_` indicates a `GatingHierarchy`.
+
+The `GatingHierarchy` is a data structure that stores the sample-wise gating information present in a `GatingSet`. In essence a `GatingSet` is a collection of `GatingHierarchy`. 
+
+You can access the `GatingHierarchy` using the `[[` subset operation. 
+
+### Exercise
+1. Try running `gh_get_compensation(gs)`. Why do you get an error message? How would you fix this?
+2. What is the difference between `gs[1]` and `gs[[1]]`?
+3. Why are there multiple data structures to represent and hold flow cytometry data in the `cytoverse`?
+
 
 ## Adding gates and building a hierarchy {.tabset}
 
 On this `GatingSet`, we will add various gates that identifies cells of interest. Each sample within a `GatingSet` is associated with a `GatingHierarchy` that stores information regarding various gates that we would have created and applied to the samples.
 
-Below, we demonstrate various types of gates that could be defined **programmatically** or be estimated **automatically** that can be applied to the samples within a `GatingSet` to build a hierarchy.
+Below, we demonstrate various types of gates that could be estimated **automatically** or be defined **programmatically** which can be applied to the samples within a `GatingSet` to build a hierarchy.
 
 *Note:* This process is informed by **visualization** of the data. As such, we will make ample use of the `ggcyto` library.
-
-### Programmatic construction of gates
-
-#### Rectangular gate
-
-As the name suggests, we can explicitly define a `rectangular gate` by by defining a `matrix` where the columns are the ranges for markers in `x-axis` and `y-axis`. Only 1 dimension can also be provided. In this scenario, the constructed gate filter the events marginated over the dimension provided.
-
-```{r example_manual_rect, echo = TRUE, eval=TRUE, message=FALSE}
-## Example of rectangleGate
-cd3_vis <- ggcyto(
-  gs, subset = "root", aes(x = "CD3", y = "CD56")
-)+
-  geom_hex(bins = 256)+
-  facet_wrap(~name)
-
-# before
-cd3_vis
-
-# using rectangle gate to add T cell gate
-cd3_rectangle <- matrix(c(140, 205, 0, 200),
-                       nrow = 2,ncol = 2,
-                       byrow = F,
-                       dimnames = list(NULL, # rownames
-                                       c("V510-A","U570-A"))) # colnames are channel names
-cd3_rectangle_gate <- rectangleGate(.gate = cd3_rectangle,filterId = "CD3+ T cells")
-cd3_vis+geom_gate(cd3_rectangle_gate)
-```
-
-When a single dimension is provided:
-
-```{r example_manual_rect_2, echo = TRUE, eval=TRUE, message=FALSE}
-# provide the range
-cd3_range <- matrix(data = c(140,200))
-# set the column name to the requirec channel
-colnames(cd3_range) <- "V510-A"
-
-# construct gate
-cd3_range_gate <- rectangleGate(.gate = cd3_range,
-                                filterId = "CD3+ Range") 
-
-cd3_vis + geom_gate(cd3_range_gate)
-```
-
-#### Polygon gate
-
-Similar to `Rectangular gate` we can define a `Polygon gate` by generating a `matrix` of **vertices**.
-
-Here, each **row** of the matrix is the coordinate for a **vertex** and the columns are the channels.
-
-```{r example_manual_poly, echo=TRUE,eval=TRUE,message=FALSE}
-## Example of polygonGate
-nkt_vis <- ggcyto(gs, subset = "root",
-                  aes(x = "CD1d", y = "CD3"))+ # fuzzy matching of marker names
-  geom_hex(bins = 256)+
-  facet_wrap(~name)
-
-# visualize
-nkt_vis
-
-# define coordinates
-## coordinates are based on visualization!
-nkt_poly <- matrix(c(
-  115,140, # are arranged as x,y pair
-  150,150,
-  150,180,
-  200,180,
-  200,140), # coordinates
-  ncol = 2,
-  byrow = T, # indicates that add as x,y pair
-  dimnames = list(NULL, # rownames 
-                  c("R670-A","V510-A")) # colnames are channel names
-)
-
-# create a gate
-nkt_poly_gate <- polygonGate(nkt_poly,
-                             filterId = "NKT cells")
-# visualize
-nkt_vis + geom_gate(nkt_poly_gate)
-```
-
-Editing a gate after construction is straight forward.
-
-```{r edit_poly_gate, echo=TRUE, eval=TRUE, message=FALSE}
-# move up and scale
-nkt_poly_gate_scale <- flowCore::transform_gate(nkt_poly_gate, # gate object
-                                          dx = 1, # which dimension to shift and by how much
-                                        # dy = 1,
-                                        # scale = 2 # scales both dimensions equally
-                                          scale = c(1.05,1.05) # individually scale each dimension
-                                          )
-nkt_vis+geom_gate(nkt_poly_gate_scale)
-```
-
-##### Exercise
-
-1.  Construct a new `Rectangular gate` that can be used to filter **CD4- CD3+** population. *Hint*: Visualize the data and then define the best ranges.
-2.  How would you rotate this gate? *Hint*: try running `help(flowCore::transform_gate)`.
 
 ### Automatic estimation of gates
 
 The `gs_add_gating_method` call from `openCyto` library can be leveraged for automatic estimation of gates, as well as clean scripting! Available gating methods can be listed by calling `gt_list_methods()`.
-
-Unlike with **programmatic** construction, `gs_add_gating_method` not only estimates, but also attaches the gate to the `GatingSet`.
 
 #### Singlets gate
 
@@ -254,7 +173,7 @@ live_viz <- ggcyto(gs,
                    aes(x = "Live", y = "FSC-A"))+
             geom_hex(bins = 128)+
             facet_wrap(~name)
-live_viz
+# live_viz
 
 # add gate using gate_quantile
 gs_add_gating_method(gs,
@@ -274,7 +193,7 @@ gs_add_gating_method(gs,
                      gating_method = "gate_mindensity2",
                      gating_args = "max = 100, gate_range = c(50,75)")
 
-# visualize gates
+# visualize the 2 extimated gates
 live_viz+
   geom_gate(gs_pop_get_gate(gs, "live"), colour = "red")+
   geom_gate(gs_pop_get_gate(gs, "live_mindensity"), colour = "blue")
@@ -292,7 +211,7 @@ t_cell_vis <- ggcyto(
   facet_wrap(~name)
 
 # visualize 
-t_cell_vis
+# t_cell_vis
 
 # estimate and add
 gs_add_gating_method(gs,
@@ -324,7 +243,7 @@ gs_add_gating_method(gs,
                      parent = "live",
                      dims = "U785-A,V510-A",
                      gating_method = "gate_flowclust_2d",
-                     gating_args = "K = 3, target = c(100,150),quantile = 0.9, plot = FALSE") #
+                     gating_args = "K = 3, target = c(100,150),quantile = 0.9, plot = FALSE")
 
 # visualize
 cd3_ellipse+
@@ -340,7 +259,7 @@ cd3_ellipse+
 
 #### Quad gate
 
-When there are population(s) of interest in all 4 quadrants, it is useful to estimate a `Quadg gate`. For this, we can once again utilize `gate_quantile` and `gate_mindensity2`.
+When there are population(s) of interest in all 4 quadrants, it is useful to estimate a `Quad gate`. For this, we can once again utilize `gate_quantile` and `gate_mindensity2`.
 *Note*: Pay attention to `alias` and `pop` arguments!
 
 ```{r viz_cd4_cd8,echo=TRUE, eval=TRUE,message=FALSE}
@@ -351,7 +270,7 @@ t_subsets <- ggcyto(gs,subset = "CD3+",
   facet_wrap(~name)
 
 # visualize
-t_subsets
+# t_subsets
 
 # estimate and add
 gs_add_gating_method(gs,
@@ -360,20 +279,149 @@ gs_add_gating_method(gs,
                      parent = "CD3+",
                      dims = "CD45RA,CCR7",
                      gating_method = "gate_quantile",
-                     gating_args = "probs = 0.9, mins = 0")
+                     gating_args = "probs = 0.9")
 
 
 # visualize (exercise)
 # Fill with call to ggcyto
+# 1. Gates/Nodes are a combination of CD45RA[+/-]CCR7[+-] 
 ```
 
 ##### Exercise
 
 1. How would you confirm that the attached gates have correct boundaries? 
 *Hint*: Refer to the section on visualization.
-2. `plot(gs)` is displaying many nodes, not all are useful. Try to delete `CCR7+` and re-do the visualization!
+2. How would you remove the gates attached by `gs_add_gating_method`?
+*Hint*: Try running `help(gs_add_gating_method)` and read the details.
+<details>`gs_remove_gating_method` reverses the the results of `gs_add_gating_method` in a step wise manner.</details>
 
-### Boolean Gates
+
+### Programmatic construction of gates
+
+Suppose you would like to add a gate that has a particular shape or range that cannot be easily estimated using the automatic estimation approaches above. In this case, you could **programmatically** define a gate by either providing ranges, coordinates, or logical statements as demonstrated below.
+
+#### Rectangular gate
+
+As the name suggests, we can explicitly define a `rectangular gate` by by defining a `matrix` where the columns are the ranges for markers in `x-axis` and `y-axis`. Only 1 dimension can also be provided. In this scenario, the constructed gate filter the events marginated over the dimension provided.
+
+```{r example_manual_rect, echo = TRUE, eval=TRUE, message=FALSE}
+## Example of rectangleGate
+cd3_vis <- ggcyto(
+  gs, subset = "root", aes(x = "CD3", y = "CD56")
+)+
+  geom_hex(bins = 256)+
+  facet_wrap(~name)
+
+# before
+# cd3_vis
+
+# using rectangle gate to add T cell gate
+cd3_rectangle <- matrix(c(140, 205, 0, 200),
+                       nrow = 2,ncol = 2,
+                       byrow = F,
+                       dimnames = list(NULL, # rownames
+                                       c("V510-A","U570-A"))) # colnames are channel names
+cd3_rectangle_gate <- rectangleGate(.gate = cd3_rectangle,filterId = "CD3+ T cells")
+cd3_vis+geom_gate(cd3_rectangle_gate)
+```
+
+When a single dimension is provided:
+
+```{r example_manual_rect_2, echo = TRUE, eval=TRUE, message=FALSE}
+# provide the range
+cd3_range <- matrix(data = c(140,200))
+# set the column name to the requirec channel
+colnames(cd3_range) <- "V510-A"
+
+# construct gate
+cd3_range_gate <- rectangleGate(.gate = cd3_range,
+                                filterId = "CD3+ Range") 
+
+cd3_vis + geom_gate(cd3_range_gate)
+```
+
+To add this gate we call `gs_pop_add` like so:
+
+```{r show_add_gate, echo = TRUE, eval=TRUE}
+gs_pop_add(gs = gs,
+           parent = "live",
+           gate = cd3_range_gate)
+```
+
+Each call to `gs_pop_add` requires a `recompute(gs)` call. 
+
+##### Exercise
+
+1. Try to run the following code.
+<details>
+```{r no_recompute, echo=TRUE, eval=FALSE}
+no_recompute <- ggcyto(gs, 
+       subset = "CD3+ Range",
+       aes(x = "CD3", y = "CD4"))+
+  geom_hex(bins = 256)
+no_recompute
+```
+Why do you get an error? Try calling `recompute(gs)`. Now rerun the code.</details>
+
+*Note*:<details>While `gs_add_pop` attaches the gates to the `GatingSet`, the index of the filtered events are not calculated until you call `recompute`.</details>
+
+#### Polygon gate
+
+Similar to `Rectangular gate` we can define a `Polygon gate` by generating a `matrix` of **vertices**.
+
+Here, each **row** of the matrix is the coordinate for a **vertex** and the columns are the channels.
+
+```{r example_manual_poly, echo=TRUE,eval=TRUE,message=FALSE}
+## Example of polygonGate
+nkt_vis <- ggcyto(gs, subset = "root",
+                  aes(x = "CD1d", y = "CD3"))+ # fuzzy matching of marker names
+  geom_hex(bins = 256)+
+  facet_wrap(~name)
+
+# visualize
+# nkt_vis
+
+# define coordinates
+## coordinates are based on visualization!
+nkt_poly <- matrix(c(
+  115,140, # are arranged as x,y pair
+  150,150,
+  150,180,
+  200,180,
+  200,140), # coordinates
+  ncol = 2,
+  byrow = T, # indicates that add as x,y pair
+  dimnames = list(NULL, # rownames 
+                  c("R670-A","V510-A")) # colnames are channel names
+)
+
+# create a gate
+nkt_poly_gate <- polygonGate(nkt_poly,
+                             filterId = "NKT cells")
+# visualize
+nkt_vis + geom_gate(nkt_poly_gate)
+```
+
+Editing a gate after construction is straight forward.
+
+```{r edit_poly_gate, echo=TRUE, eval=TRUE, message=FALSE}
+# move up and scale
+nkt_poly_gate_scale <- flowCore::transform_gate(nkt_poly_gate, # gate object
+                                          dx = 1, # which dimension to shift and by how much
+                                        # dy = 1,
+                                        # scale = 2 # scales both dimensions equally
+                                          scale = c(1.05,1.05) # individually scale each dimension
+                                          )
+nkt_vis+geom_gate(nkt_poly_gate_scale)
+```
+
+##### Exercise
+
+1.  Construct a new `Rectangular gate` that can be used to filter **CD4- CD3+** population. *Hint*: Visualize the data and then define the best ranges.
+2.  How would you rotate this gate? *Hint*: try running `help(flowCore::transform_gate)`.
+
+
+#### Boolean Gates
 
 We can use `booleanFilter` to simply **negate** a gated population! The resulting filter does not have a geometric representation.
 
@@ -411,8 +459,9 @@ recompute(gs)
 
 #### Exercise
 
-1. What does `gs_add_pop` do? What is the purpose of `recompute(gs)` above?
-2. How would you create a `booleanFilter` that only filters out **naive** T cells defined as **CD45RA+CCR7+**? Can you visualize the result?
+1. How would you create a `booleanFilter` that only filters out **naive** T cells defined as **CD45RA+CCR7+**? Can you visualize the result?
+2. How would you remove an attached gate? Is `recompute` required after removal of a gate?
+3. What happens if you remove a parent gate?
 
 ## Visualizing the Gating Hierachy
 
