@@ -13,7 +13,7 @@ It is important to note here that the **gates** essentially act as filter for th
 
 
 ```{r load_libraries, eval=TRUE, echo=TRUE, message=FALSE}
-libray(flowWorkspace)
+library(flowWorkspace)
 library(flowCore)
 library(CytoverseBioc2023)
 cache_workshop_data()
@@ -66,7 +66,7 @@ gs_get_leaf_nodes(gs)
 ### Exercise
 
 1. Run `gs_get_pop_paths(gs)` by include a `path = 1` argument. How is the output different compared to not providing `path`? What happens when you change this to `path = 2`?
-2. Suppose you do not know what is the parent population for `Double Negative CD3+ T cells`, what is an easy approach to get this information? *Hint*: Try help(gs_pop_get_paths) to check other available methods.
+2. Suppose you do not know what is the parent population for `Double Negative CD3+ T cells`, what is an easy approach to get this information? *Hint*: Try `help(gs_pop_get_paths)` to check other available methods.
 
 
 ## Extracting filtered data 
