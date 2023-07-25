@@ -12,7 +12,7 @@ We have spent a bit of time going over import, manupulation, compensation, and t
 
 For those who have experience working with `ggplot`, the approach is going to be similar. As such, `ggcyto` provides a easy to use yet powerful approach to visualize flow cytometry data.
 
-It is also important to note that `ggcyto` works with each of `cytoframe`, `cytoset`, `GatingSet`, and `GatingHierarchy` and allows the user to utilize various attributes of each of the object. For instance, **metadata** within a `flowSet`/`cytoset` and `GatingSet` can be used to prepare insightful visualizations, rapidly.
+It is also important to note that `ggcyto` works with each of `cytoframe`, `cytoset`, `GatingSet`, and `GatingHierarchy` and allows the user to utilize various attributes of each of the object. For instance, **metadata** within a `cytoset` and `GatingSet` can be used to prepare insightful visualizations, rapidly.
 
 ```{r required_libraries, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 library(flowCore)
@@ -25,11 +25,10 @@ theme_set(theme_bw())
 library(CytoverseBioc2023)
 cache_workshop_data()
 gs <- make_transformed_gs(add_gates = TRUE)
-cf <- gh_pop_get_data(gs[[1]],"root",
-                      returnType = "cytoframe")
+cf <- gh_pop_get_data(gs[[1]],"root")
 ```
 
-First, extract a cytoframe from the richly gated GatingSet we worked in [3_Gating_1.Rmd]. Shortly we'll also see how to work with the GatingSet itself.
+First, extract a `cytoframe` from the richly gated `GatingSet` we worked in [Gating cells in cytoverse](articles/3_Gating_1.html). Shortly we'll also see how to work with the `GatingSet` itself.
 
 ## Hit the ground running using `autoplot`
 

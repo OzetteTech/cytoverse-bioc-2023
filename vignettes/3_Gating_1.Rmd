@@ -18,6 +18,8 @@ In this section we work with `GatingSet` and `GatingHierarchy`. These objects, l
 
 In **part 1** of this section, we will go over variety of native methods that exist in the `cytoverse` which analysts can utilize to gate their cells of interest.
 
+In **part 2** of this sections, we will go over methods to extract gated data for cells/populations of interest.
+
 In **part 3 (optional)**, we will demonstrate how analysts can automate this process by utilizing a `gatingTemplate` (a csv file that can be used to define and build the hierarchy).
 
 ## Building the gating tree: manual and semi-supervised

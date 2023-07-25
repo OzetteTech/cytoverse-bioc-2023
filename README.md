@@ -18,9 +18,10 @@ By the end of this workshop, the attendees will be able to
 -   [Import flow cytometry data](articles/1_Import_fcs.html)
 -   [Understand the difference between **uncompensated**, **compensated**, and **transformed** data](articles/2_Spillover_transformation.html),
 -   Identify sub-populations by [manual or semi-automated gating of markers](articles/3_Gating_1.html),
--   Be aware of [csv-templating of Gating](articles/4_Gating_gatingTemplate.html) to perform large-scale gating
--   Identify and [generate important plots](articles/5_ggcyto.html) to assess the **data** and  **quality**,
--   [Generate plots summarizing the expression of markers and abundance of various sub-populations](articles/6_Reporting.html)
+-   [Access and extract expression matrix from a gated data](articles/4_Gating_2.html),
+-   Be aware of [csv-templating of Gating](articles/5_Gating_gatingTemplate.html) to perform large-scale gating
+-   Identify and [generate important plots](articles/6_ggcyto.html) to assess the **data** and  **quality**,
+-   [Generate plots summarizing the expression of markers and abundance of various sub-populations](articles/7_Reporting.html)
 
 ## Workshop schedule
 
