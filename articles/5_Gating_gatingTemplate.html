@@ -94,8 +94,8 @@
 (optional)</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OzetteTech/cytoverse-bioc-2023/blob/HEAD/vignettes/4_Gating_gatingTemplate.Rmd" class="external-link"><code>vignettes/4_Gating_gatingTemplate.Rmd</code></a></small>
-      <div class="hidden name"><code>4_Gating_gatingTemplate.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/OzetteTech/cytoverse-bioc-2023/blob/HEAD/vignettes/5_Gating_gatingTemplate.Rmd" class="external-link"><code>vignettes/5_Gating_gatingTemplate.Rmd</code></a></small>
+      <div class="hidden name"><code>5_Gating_gatingTemplate.Rmd</code></div>
 
     </div>
 
@@ -450,7 +450,7 @@ the <code>GatingSet</code> we created earlier.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># show gt</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gt</span><span class="op">)</span></span></code></pre></div>
-<p><img src="4_Gating_gatingTemplate_files/figure-html/plot_gt-1.png" width="700"></p>
+<p><img src="5_Gating_gatingTemplate_files/figure-html/plot_gt-1.png" width="700"></p>
 <p>The tree diagram summarizes the gating path as well as the gating
 methods used. Also note that the <code>grey</code> colored arrows
 identify <strong>helper gates</strong>. These are gates which
@@ -460,7 +460,7 @@ gates <code>TCR Va7_2+</code> and <code>CD161+</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># show gs</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gs</span><span class="op">)</span></span></code></pre></div>
-<p><img src="4_Gating_gatingTemplate_files/figure-html/plot_gs-1.png" width="700"></p>
+<p><img src="5_Gating_gatingTemplate_files/figure-html/plot_gs-1.png" width="700"></p>
 <p>Beside the names, most nodes look the same!</p>
 </div>
 <div class="section level2">
@@ -492,7 +492,7 @@ it!</p>
 <span></span>
 <span><span class="co"># visualize</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gt</span><span class="op">)</span></span></code></pre></div>
-<p><img src="4_Gating_gatingTemplate_files/figure-html/append_gt-1.png" width="700"></p>
+<p><img src="5_Gating_gatingTemplate_files/figure-html/append_gt-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="running-and-attaching-the-nodes-to-the-gatingset">Running and attaching the nodes to the <code>GatingSet</code><a class="anchor" aria-label="anchor" href="#running-and-attaching-the-nodes-to-the-gatingset"></a>
@@ -512,7 +512,7 @@ to the <code>GatingSet</code> in a single call.</p>
 <span></span>
 <span><span class="co"># visualize Gating Hierarchy</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gs</span>, bool <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="4_Gating_gatingTemplate_files/figure-html/compute_with_gating_template-1.png" width="700"></p>
+<p><img src="5_Gating_gatingTemplate_files/figure-html/compute_with_gating_template-1.png" width="700"></p>
 <p>We see that all the helper gates are also visualized. We can’t remove
 them as it would affect downstream nodes! However we can hide them.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -539,7 +539,7 @@ them as it would affect downstream nodes! However we can hide them.</p>
 <code class="sourceCode R"><span><span class="co"># visualize the full gated data</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">gs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, bool <span class="op">=</span> <span class="cn">TRUE</span>, bins <span class="op">=</span> <span class="fl">128</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto_par_set.html" class="external-link">ggcyto_par_set</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="4_Gating_gatingTemplate_files/figure-html/hide_nodes_gt-1.png" width="700"></p>
+<p><img src="5_Gating_gatingTemplate_files/figure-html/hide_nodes_gt-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>

@@ -141,6 +141,36 @@ Bioconductor tooling works:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cache_workshop_data.html">cache_workshop_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="cytoverse-data-structures-for--fcs-files">
+<code>cytoverse</code> data structures for <strong>.fcs</strong>
+files<a class="anchor" aria-label="anchor" href="#cytoverse-data-structures-for--fcs-files"></a>
+</h2>
+<p>There are 3 <strong>main</strong> data structures that represent flow
+cytometry data in <code>cytoverse</code>: <code>cytoframe</code>,
+<code>cytoset</code>, and <code>GatingSet</code>.</p>
+<ul>
+<li>
+<code>cytoframe</code>: a single <strong>.fcs</strong> file,</li>
+<li>
+<code>cytoset</code>: a list like object that can store multiple
+<strong>.fcs</strong> files,</li>
+<li>
+<code>GatingSet</code>: a list like object that allows building and
+attaching gates and filter to a <code>cytoset</code>
+</li>
+</ul>
+<p>Some of these have overlapping functionality, and we’ll eventually
+explain when you would prefer one data structure to another as we
+continue through this workshop.</p>
+<em>Note:</em>
+<details><em>There are additional legacy data structures called
+<code>flowFrame</code> and <code>flowSet</code> in
+<code>cytoverse</code> that are analogous to <code>cytoframe</code> and
+<code>cytoset</code> in function. We will not use these data structures
+in this workshop.</em>
+</details>
+</div>
+<div class="section level2">
 <h2 id="reading-in-fcs-files">Reading in FCS files<a class="anchor" aria-label="anchor" href="#reading-in-fcs-files"></a>
 </h2>
 <p>There are 2 preferred approaches to read in <strong>.fcs</strong>
@@ -153,10 +183,6 @@ file(s) into R:</p>
 </ul>
 <p>(Additionally, you can read a workspace generated with another tool,
 such as FlowJo, using the <code>CytoML</code> package.)</p>
-<p>A <code>cytoframe</code> and <code>cytoset</code> are all data
-structures that represent the cytometry data. Some of these have
-overlapping functionality, and we’ll eventually explain when you would
-prefer one data structure to another.</p>
 <p>The function <code>load_cytoframe_from_fcs</code> is used to read in
 individual file as a <code>cytoframe</code> object.</p>
 <p>Normally, you might download a folder with a set of FCS files and
@@ -174,7 +200,7 @@ examine it with
 <span></span>
 <span><span class="co"># a cytoframe object</span></span>
 <span><span class="va">cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5ca65485de7_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '651346145ca_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -389,7 +415,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytorame by column</span></span>
 <span><span class="va">s_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span>,<span class="va">marker_cd4</span><span class="op">[</span>,<span class="st">"name"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5ca65485de7_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '651346145ca_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 1 observables:</span></span>
 <span><span class="co">##        name       desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P23 U785-A CD4 BUV805    262143  -80.5002    262143</span></span>
@@ -400,7 +426,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytoframe by row</span></span>
 <span><span class="va">s2_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span></span>
 <span><span class="va">s2_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5ca65485de7_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '651346145ca_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 100 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -482,7 +508,7 @@ these operations provide an aliased view of the data without creating a
 <code class="sourceCode R"><span><span class="co"># manipulating expression values</span></span>
 <span><span class="co"># notice the data range </span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5ca65485de7_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '651346145ca_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 150 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -507,7 +533,7 @@ these operations provide an aliased view of the data without creating a
 <span></span>
 <span><span class="co"># notice the data range after transformation</span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5ca65485de7_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '651346145ca_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 150 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -584,12 +610,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <code class="sourceCode R"><span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 5ca3e99539c_4000_BDC-CR1.fcs 5ca3e99539c_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5ca65485de7_4000_TNK-CR1.fcs 5ca65485de7_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5ca57f5e662_4001_BDC-CR1.fcs 5ca57f5e662_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5ca2c7f1411_4001_TNK-CR1.fcs 5ca2c7f1411_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5ca265802b4_4002_TNK-CR1.fcs 5ca265802b4_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5ca1f6e6e5d_4003_TNK-CR1.fcs 5ca1f6e6e5d_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 651570cd36e_4000_BDC-CR1.fcs 651570cd36e_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 651346145ca_4000_TNK-CR1.fcs 651346145ca_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 65176abbca6_4001_BDC-CR1.fcs 65176abbca6_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 65154824baa_4001_TNK-CR1.fcs 65154824baa_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 65171d53c9f_4002_TNK-CR1.fcs 65171d53c9f_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 651369c9d1f_4003_TNK-CR1.fcs 651369c9d1f_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create metadata</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Untreated"</span>,<span class="st">"Treated"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -607,12 +633,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5ca3e99539c_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5ca65485de7_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5ca57f5e662_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5ca2c7f1411_4001_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 5ca265802b4_4002_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5ca1f6e6e5d_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
+<span><span class="co">## 651570cd36e_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 651346145ca_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 65176abbca6_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 65154824baa_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 65171d53c9f_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 651369c9d1f_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p>This is much more convenient than going back and forth between the
@@ -629,8 +655,8 @@ full set of files.</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5ca3e99539c_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5ca57f5e662_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span></code></pre>
+<span><span class="co">## 651570cd36e_4000_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
+<span><span class="co">## 65176abbca6_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span></code></pre>
 <div class="section level3">
 <h3 id="cytoset-views-and-aliasing">Cytoset views and aliasing<a class="anchor" aria-label="anchor" href="#cytoset-views-and-aliasing"></a>
 </h3>
@@ -670,10 +696,10 @@ To confirm this, you can use <code>cs_get_uri</code> or
 <code>cf_get_uri</code>:</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs_small</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpCpjmZT/83395914-8124-4cbf-ae96-77e7843c85be"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmp51dng6/4b84e72e-6560-4558-b8b1-722d713b995c"</span></span></code></pre>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpCpjmZT/83395914-8124-4cbf-ae96-77e7843c85be"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmp51dng6/4b84e72e-6560-4558-b8b1-722d713b995c"</span></span></code></pre>
 <p>To perform a <strong>deep copy</strong> we can use
 <code><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view()</a></code></p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
@@ -699,7 +725,10 @@ To confirm this, you can use <code>cs_get_uri</code> or
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html" class="external-link">exprs</a></span><span class="op">(</span><span class="va">cs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>,<span class="st">"B515-A"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1]   -15.63437 23545.83203</span></span></code></pre>
 <p>Notice that <code>cs</code> is left unchanged.</p>
-<p>Exercise:</p>
+</div>
+<div class="section level3">
+<h3 id="exercise-1">Exercise<a class="anchor" aria-label="anchor" href="#exercise-1"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Explain why the following code does not work as expected:</li>
 </ol>
@@ -759,12 +788,12 @@ attempted to be coerced to a single array like object. (Set
 <span><span class="va">n_cell_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">nrow</span><span class="op">)</span></span>
 <span><span class="va">n_cell_events</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                [,1]</span></span>
-<span><span class="co">## 5ca3e99539c_4000_BDC-CR1.fcs 912254</span></span>
-<span><span class="co">## 5ca65485de7_4000_TNK-CR1.fcs 102015</span></span>
-<span><span class="co">## 5ca57f5e662_4001_BDC-CR1.fcs 924474</span></span>
-<span><span class="co">## 5ca2c7f1411_4001_TNK-CR1.fcs  92703</span></span>
-<span><span class="co">## 5ca265802b4_4002_TNK-CR1.fcs 372224</span></span>
-<span><span class="co">## 5ca1f6e6e5d_4003_TNK-CR1.fcs 146150</span></span></code></pre>
+<span><span class="co">## 651570cd36e_4000_BDC-CR1.fcs 912254</span></span>
+<span><span class="co">## 651346145ca_4000_TNK-CR1.fcs 102015</span></span>
+<span><span class="co">## 65176abbca6_4001_BDC-CR1.fcs 924474</span></span>
+<span><span class="co">## 65154824baa_4001_TNK-CR1.fcs  92703</span></span>
+<span><span class="co">## 65171d53c9f_4002_TNK-CR1.fcs 372224</span></span>
+<span><span class="co">## 651369c9d1f_4003_TNK-CR1.fcs 146150</span></span></code></pre>
 <div class="section level3">
 <h3 id="exercises">Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
 </h3>

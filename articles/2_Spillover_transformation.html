@@ -485,20 +485,6 @@ In the <code>cytoverse</code> this is done by a simple call to
 <span><span class="co"># spillover(cf)[[3]] indicates where the matrix to use lives</span></span>
 <span><span class="va">cf_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/compensation-class.html" class="external-link">compensate</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>,</span>
 <span>                 spillover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> </span></code></pre></div>
-<div class="section level5">
-<h5 id="exercise">Exercise<a class="anchor" aria-label="anchor" href="#exercise"></a>
-</h5>
-<ol style="list-style-type: decimal">
-<li>How can you tell if the data have been compensated? Use your
-preferred plotting method to generate a scatter plot for the following
-markers: <code>CADM1</code> and <code>CD141</code> from <code>cf</code>
-and <code>cf_comp</code>. You may need to transform the data for
-appropriate visualization.</li>
-<li>Suppose the <strong>.fcs</strong> file does not have a spillover
-matrix or has an identity matrix. How confident can you be the data have
-been previously compensated (or not) ?</li>
-</ol>
-</div>
 </div>
 </div>
 <div class="section level3">
@@ -577,6 +563,20 @@ transformation if required.</p>
 <span></span>
 <span><span class="co"># transform: this will transform the underlying data </span></span>
 <span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs</span>,<span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="exercise">Exercise<a class="anchor" aria-label="anchor" href="#exercise"></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>How can you tell if the data have been compensated? Use your
+preferred plotting method to generate a scatter plot for the following
+markers: <code>CADM1</code> and <code>CD141</code> from <code>cf</code>
+and <code>cf_comp</code>. You may need to transform the data for
+appropriate visualization.</li>
+<li>Suppose the <strong>.fcs</strong> file does not have a spillover
+matrix or has an identity matrix. How confident can you be the data have
+been previously compensated (or not) ?</li>
+</ol>
 </div>
 </div>
 </div>
