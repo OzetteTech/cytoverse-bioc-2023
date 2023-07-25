@@ -1,0 +1,10 @@
+---
+title: "Accessing gated data in cytoverse"
+vignette: >
+  %\VignetteIndexEntry{Gating Cells}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Background 
+
