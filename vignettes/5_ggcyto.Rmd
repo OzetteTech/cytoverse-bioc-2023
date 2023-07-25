@@ -19,15 +19,17 @@ library(flowCore)
 library(ggcyto)
 # set theme
 theme_set(theme_bw())
-library(CytoverseBioc2023)
-cache_workshop_data()
 ```
 
-```{r echo=F, eval=T, message=FALSE, warning=FALSE}
+```{r boilerplate, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+library(CytoverseBioc2023)
+cache_workshop_data()
 gs <- make_transformed_gs(add_gates = TRUE)
-ff <- gh_pop_get_data(gs[[1]],"root",
-                      returnType = "flowFrame")
+cf <- gh_pop_get_data(gs[[1]],"root",
+                      returnType = "cytoframe")
 ```
+
+First, extract a cytoframe from the richly gated GatingSet we worked in [3_Gating_1.Rmd].  Shortly we'll also see how to work with the GatingSet itself.
 
 ## Hit the ground running using `autoplot`
 
@@ -36,8 +38,8 @@ The `autoplot` method is a convenient for rapid generation of plots with minimal
 1.  Bivariate plot
 
 ```{r autoplot_ff, echo=TRUE, eval=TRUE}
-# flowFrame: bivariate plot
-autoplot(ff,
+# cytoframe: bivariate plot
+autoplot(cf,
          x = "CD4", # markername in human readable format
          y = "R730-A", # markername as colname of flowFrame 
          bins = 256)
@@ -46,10 +48,10 @@ autoplot(ff,
 2.  Density plot
 
 ```{r autoplot_ff_test, eval=TRUE,echo=TRUE}
-# flowFrame: density plot
-autoplot(ff,
+# cytoframe: density plot
+autoplot(cf,
          x = "CD4")+ # y not results in a density plot
-         geom_density(fill = "red") # utilize ggplot geom
+         geom_density() # utilize ggplot geom
 ```
 
 3.  Bivariate plot of the entire `GatingHeirarchy`
@@ -92,7 +94,11 @@ ggcyto(gs,
 
 The marker combination "CD8a vs CD4" is used to at the node `gs_get_pop_paths(gs)[8]` to define CD4+ vs CD8+ T cells. Unlike with `autoplot`, `ggcyto` method allows us to look at the data from the point of `subset`. In the above example, `subset = "singlet"`.
 
-2.  Adding a gate and stats layer that doesn't exist in the `subset` node
+### Exercise
+
+1. Repeat the previous plot, but `facet_wrap` upon another variable.
+
+<!-- 2.  Adding a gate and stats layer that doesn't exist in the `subset` node -->
 
 During reporting, it is possible that users would want to see
 
@@ -111,7 +117,12 @@ ggcyto(gs,
   axis_y_inverse_trans()
 ```
 
-*Note*: This population has not been defined in the `GatingSet`! Yet, we are able to connect multiple components to generate an informative report quickly. We now know that CD4+ cells (not sure at this point if they are CD3+ T cells) are \~47% of total `singlet` population that we had defined.
+### Exercise
+
+1. Repeat the above plot but now set the parent subset to be the `"not_MAIT_polygon"`.  Why does your plot look different than the previous one?
+<details>
+*Answer*: The `singlet/CD4+CD8a-` population that in effect we were visualizing, was not defined in the `GatingSet`; instead the parent node to `CD4+CD8a-` is non-MAIT conventional T cells (`/singlet/live/lymphocytes/CD3+ T cells/non-NKT Cells/conv_Tcells/not_MAIT_Polygon/`). This ad hoc visualization tells us that CD4+ cells (not sure at this point if they are CD3+ T cells) are \~47% of total `singlet` population that we had defined.
+</details>
 
 In a similar manner, we can use a newly defined gate to interrogate the `GatingSet`.
 
@@ -134,11 +145,11 @@ ggcyto(gs,
 
 ```
 
-Above we created a gate, did not apply it to a `GatingSet` directly, but are now leveraging the `ggcyto` library to rapidly generate insight regarding CD8a+ CD3+ T cells from the `singlet` node. Moreover, we have leveraged the metadata from `pData` to generate additional insight regarding the data.
+We created a gate, did not apply it to a `GatingSet` directly, but rather made an ad hoc plot regarding CD8a+ CD3+ T cells from the `singlet` node. This plot also shows how metadata from `pData` is available to facet the plot.
 
 ## Expression using histograms and densities
 
-A common way to report or view specific population data is to ask whether there is a change in expression levels (fluoresence intensity) across samples or groups.
+A common way to report or view specific population data is to ask whether there is a change in expression levels (fluorescence intensity) across samples or groups.
 
 Let's take a look at PD1 expression in CD8+ T Cells
 
