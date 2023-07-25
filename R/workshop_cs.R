@@ -8,7 +8,6 @@
 #' @return [flowWorkspace::cytoset()]
 #' @export
 #' @import flowWorkspace
-#' @import dplyr
 make_cytoset = function(only_TNK = FALSE){
   cache_workshop_data()
   

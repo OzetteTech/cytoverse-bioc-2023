@@ -292,7 +292,7 @@ make_transformed_gs = function(add_gates = FALSE) {
                gate <- scale_gate(gate, 3)
                ff <-
                  cytoframe_to_flowFrame(gh_pop_get_data(gs[[x]], "conv_Tcells"))
-               fl <- filter(ff, gate)
+               fl <- flowCore::filter(ff, gate)
                idx <- which(!fl@subSet)
                set.seed(123)
                sample_n <- min(length(idx), 1E5)
