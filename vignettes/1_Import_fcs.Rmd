@@ -301,7 +301,7 @@ range(exprs(cs[[2]])[,"B515-A"])
 
 Notice that `cs` is left unchanged. 
 
-Exercise:
+### Exercise
 
 1. Explain why the following code does not work as expected:
 ```r

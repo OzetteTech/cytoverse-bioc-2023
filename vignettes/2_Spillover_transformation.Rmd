@@ -181,10 +181,6 @@ cf_comp <- compensate(x = realize_view(cf),
                  spillover = spillover(cf)[[3]]) 
 ```
 
-#### Exercise
-
-1.  How can you tell if the data have been compensated? Use your preferred plotting method to generate a scatter plot for the following markers: `CADM1` and `CD141` from `cf` and `cf_comp`. You may need to transform the data for appropriate visualization.
-2.  Suppose the **.fcs** file does not have a spillover matrix or has an identity matrix. How confident can you be the data have been previously compensated (or not) ?
 
 ## Transformation and visualization
 
@@ -342,6 +338,11 @@ my_trans_list <- flowCore::transformList(from = names(markernames(cf)),
 # transform: this will transform the underlying data 
 cs <- transform(cs,my_trans_list)
 ```
+
+### Exercise
+
+1.  How can you tell if the data have been compensated? Use your preferred plotting method to generate a scatter plot for the following markers: `CADM1` and `CD141` from `cf` and `cf_comp`. You may need to transform the data for appropriate visualization.
+2.  Suppose the **.fcs** file does not have a spillover matrix or has an identity matrix. How confident can you be the data have been previously compensated (or not) ?
 
 # Conclusion
 
