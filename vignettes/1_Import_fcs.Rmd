@@ -43,7 +43,7 @@ There are 3 **main** data structures that represent flow cytometry data in `cyto
 
 Some of these have overlapping functionality, and we'll eventually explain when you would prefer one data structure to another as we continue through this workshop. 
 
-*Note:* <detail>*There are additional legacy data structures called `flowFrame` and `flowSet` in `cytoverse` that are analogous to `cytoframe` and `cytoset` in function. We will not use these data structures in this workshop.* </detail>
+*Note:* <details>*There are additional legacy data structures called `flowFrame` and `flowSet` in `cytoverse` that are analogous to `cytoframe` and `cytoset` in function. We will not use these data structures in this workshop.* </details>
 
 
 ## Reading in FCS files
