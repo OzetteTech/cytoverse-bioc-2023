@@ -137,14 +137,14 @@ below).</p>
 <p>Raw Signal in <span class="math inline">\(B = \text{Signal from FITC
 (spillover)} + \text{Signal from another (perhaps dedicated)
 fluorophore}.\)</span></p>
-<p>Recovery of the true FITC signal from its spread across detectors,
-known as <strong>compensation</strong> requires a set of controls be
-present to calculate the spillover. These controls are called <em>Single
-Colour Controls</em> and are acquired prior to sample acquisition. The
-purpose of the single colour control is to estimate the amount of
-spillover of emission from fluorophore <strong>F</strong> onto
-non-primary detectors (detector <strong>B</strong> in the image
-above).</p>
+<p>FITC signal detected erroneously by secondary detectors can be
+performed by a process of <strong>fluorescence compensation</strong>
+which requires a set of controls be present to calculate the spillover.
+These controls are called <em>Single Colour Controls</em> and are
+acquired prior to sample acquisition. The purpose of the single colour
+control is to estimate the amount of spillover of emission from
+fluorophore <strong>F</strong> onto non-primary detectors (detector
+<strong>B</strong> in the image above).</p>
 <p>We note, but will not discuss further here that there are a class of
 more advanced fluorescence-based cytometers known as <em>spectral</em>
 flow cytometers. Spectral instruments require a different and more
@@ -191,7 +191,11 @@ the presence of by using the function <code>spillover(cf)</code>.</p>
 data was published in this <a href="10.1002/cyto.a.22278">manuscript</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># absent spill</span></span>
-<span><span class="va">cf_absent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoframe_from_fcs.html" class="external-link">load_cytoframe_from_fcs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"luca"</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span><span class="op">)</span></span>
+<span><span class="va">cf_absent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoframe_from_fcs.html" class="external-link">load_cytoframe_from_fcs</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span></span>
+<span>    <span class="st">"luca"</span></span>
+<span>  <span class="op">)</span><span class="op">$</span><span class="va">rpath</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># check spillover results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">cf_absent</span><span class="op">)</span></span></code></pre></div>
@@ -262,7 +266,11 @@ spillover from single colour controls (optional)</a>.</p>
 The dataset was published in the following <a href="https://doi.org/10.1038/s41467-022-34638-2" class="external-link">paper</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load cytoframe</span></span>
-<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoframe_from_fcs.html" class="external-link">load_cytoframe_from_fcs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"4000_BDC-CR1.fcs"</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span><span class="op">)</span></span>
+<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoframe_from_fcs.html" class="external-link">load_cytoframe_from_fcs</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span></span>
+<span>    <span class="st">"4000_BDC-CR1.fcs"</span></span>
+<span>  <span class="op">)</span><span class="op">$</span><span class="va">rpath</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># show spillover</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span></code></pre></div>
@@ -483,8 +491,10 @@ In the <code>cytoverse</code> this is done by a simple call to
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># single call to compensate </span></span>
 <span><span class="co"># spillover(cf)[[3]] indicates where the matrix to use lives</span></span>
-<span><span class="va">cf_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/compensation-class.html" class="external-link">compensate</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>,</span>
-<span>                 spillover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">cf_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/compensation-class.html" class="external-link">compensate</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>,</span>
+<span>  spillover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="op">)</span> </span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -524,12 +534,18 @@ transformation if required.</p>
 <span><span class="va">asinh_trans</span> <span class="op">&lt;-</span> <span class="fu">flowWorkspace</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/asinh_Gml2.html" class="external-link">asinh_Gml2</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a transformList that indicates which parameters to transform</span></span>
-<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                                         tfun <span class="op">=</span> <span class="va">asinh_trans</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span></span>
+<span>  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  tfun <span class="op">=</span> <span class="va">asinh_trans</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># transform </span></span>
-<span><span class="va">cf_transformed</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>, <span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cf_transformed</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>,</span>
+<span>  <span class="va">my_trans_list</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="2_Spillover_transformation_files/figure-html/viz_transform-1.png" width="700"></p>
 <p>Another option is to use a user defined transformation.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -539,16 +555,26 @@ transformation if required.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># create a transformList</span></span>
-<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>                                         tfun <span class="op">=</span> <span class="va">my_trans</span><span class="op">)</span></span>
+<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span></span>
+<span>  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>, </span>
+<span>  tfun <span class="op">=</span> <span class="va">my_trans</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># transform</span></span>
-<span><span class="va">cf_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>, <span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cf_transformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>,</span>
+<span>  <span class="va">my_trans_list</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>We can also transform a set of FCS files (<code>cytoset</code>)</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># read in a cytoet</span></span>
-<span><span class="va">fcs_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"fcs_data/"</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span></span>
-<span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoset_from_fcs.html" class="external-link">load_cytoset_from_fcs</a></span><span class="op">(</span>files <span class="op">=</span> <span class="va">fcs_files</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># read in a cytoset</span></span>
+<span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoset_from_fcs.html" class="external-link">load_cytoset_from_fcs</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span></span>
+<span>    <span class="st">"fcs_data/"</span></span>
+<span>  <span class="op">)</span><span class="op">$</span><span class="va">rpath</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># extract per file compensation matrix into a list</span></span>
 <span><span class="va">compensation_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/convert.html" class="external-link">cytoset_to_list</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span>,</span>
@@ -558,8 +584,12 @@ transformation if required.</p>
 <span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/compensation-class.html" class="external-link">compensate</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">compensation_list</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># using asinh_trans defined previously</span></span>
-<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                                         tfun <span class="op">=</span> <span class="va">asinh_trans</span><span class="op">)</span></span>
+<span><span class="va">my_trans_list</span> <span class="op">&lt;-</span> <span class="fu">flowCore</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transformList-class.html" class="external-link">transformList</a></span><span class="op">(</span></span>
+<span>  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/markernames.html" class="external-link">markernames</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  tfun <span class="op">=</span> <span class="va">asinh_trans</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># transform: this will transform the underlying data </span></span>
 <span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">cs</span>,<span class="va">my_trans_list</span><span class="op">)</span></span></code></pre></div>
@@ -621,8 +651,12 @@ such file in advance when working with your specific experiment.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load csv file </span></span>
-<span><span class="va">csv_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"control_files.csv"</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>            <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">csv_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span></span>
+<span>  <span class="st">"control_files.csv"</span></span>
+<span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span></span>
+<span>  row.names <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># take a peek at the file</span></span>
 <span><span class="va">csv_file</span></span></code></pre></div>
@@ -660,33 +694,31 @@ such file in advance when working with your specific experiment.</p>
 <span><span class="co">## Unstained                 Unstained</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load the set of compensation files</span></span>
-<span><span class="va">comp_frames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">csv_file</span><span class="op">[[</span><span class="st">"filename"</span><span class="op">]</span><span class="op">]</span>, </span>
-<span>                       <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
-<span>                         <span class="va">file_location</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">rpath</span></span>
-<span>                         <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoframe_from_fcs.html" class="external-link">load_cytoframe_from_fcs</a></span><span class="op">(</span><span class="va">file_location</span><span class="op">)</span></span>
-<span>                       <span class="op">}</span><span class="op">)</span> <span class="co"># example of using lapply to read in FCS files into a list</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">comp_frames</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">csv_file</span><span class="op">[[</span><span class="st">"channel"</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span><span class="co"># convert to cytoset</span></span>
-<span><span class="va">comp_cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoset.html" class="external-link">cytoset</a></span><span class="op">(</span><span class="va">comp_frames</span><span class="op">)</span></span></code></pre></div>
-<p><img src="2_Spillover_transformation_files/figure-html/comp_viz-1.png" width="700"></p>
-<p>Notice that the signal received in the channel
-<strong>PerCP-Cy5-5-A</strong> is highest for <strong>PerCP
-Cy5.5</strong>. At the same time, other fluorophores are also spilling
-over into this channel, for instance <strong>PE</strong>.</p>
+<span><span class="va">comp_cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoset_from_fcs.html" class="external-link">load_cytoset_from_fcs</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span></span>
+<span>    <span class="va">csv_file</span><span class="op">[[</span><span class="st">"filename"</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">)</span><span class="op">$</span><span class="va">rpath</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/featureNames.html" class="external-link">sampleNames</a></span><span class="op">(</span><span class="va">comp_cs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">csv_file</span><span class="op">[[</span><span class="st">"channel"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<p><img src="2_Spillover_transformation_files/figure-html/comp_viz-1.png" width="100%"></p>
+<p>Notice that <strong>Alexa Fluor 405</strong> is spilling heavily into
+<strong>Alexa Fluor 430-A</strong> and <strong>BV605-</strong>, but not
+into any of the other detectors.</p>
 <p>Now, we calculate the spillover matrix using the set of controls. We
 will use <code>spillover</code> function from <code>flowStats</code>
 package within the <code>cytoverse</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># calculate spillover</span></span>
 <span><span class="co">## using spillover from flowStats</span></span>
-<span><span class="va">spill</span> <span class="op">&lt;-</span> <span class="fu">flowStats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span><span class="va">comp_cs</span>,</span>
-<span>                   unstained <span class="op">=</span> <span class="st">"Unstained"</span>, <span class="co"># indicate how the unstained file is named in flowset</span></span>
-<span>                   patt <span class="op">=</span> <span class="st">"-A"</span>, <span class="co"># indicate which parameter should be considered </span></span>
-<span>                   fsc <span class="op">=</span> <span class="st">"FSC-A"</span>,</span>
-<span>                   ssc <span class="op">=</span> <span class="st">"SSC-A"</span>,</span>
-<span>                   stain_match <span class="op">=</span> <span class="st">"regexpr"</span>,</span>
-<span>                   useNormFilt <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">spill</span> <span class="op">&lt;-</span> <span class="fu">flowStats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/flowFrame-class.html" class="external-link">spillover</a></span><span class="op">(</span></span>
+<span>  <span class="va">comp_cs</span>,</span>
+<span>  unstained <span class="op">=</span> <span class="st">"Unstained"</span>, <span class="co"># indicate how the unstained file is named in flowset</span></span>
+<span>  patt <span class="op">=</span> <span class="st">"-A"</span>, <span class="co"># indicate which parameter should be considered </span></span>
+<span>  fsc <span class="op">=</span> <span class="st">"FSC-A"</span>,</span>
+<span>  ssc <span class="op">=</span> <span class="st">"SSC-A"</span>,</span>
+<span>  stain_match <span class="op">=</span> <span class="st">"regexpr"</span>,</span>
+<span>  useNormFilt <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Now, let’s visualize the spill matrix that we calculated.</p>
 <p><img src="2_Spillover_transformation_files/figure-html/viz_calculated_spill-1.png" width="700"></p>
 <p><em>Note: Close or related fluorophores will have some degree of
