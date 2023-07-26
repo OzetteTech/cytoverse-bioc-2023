@@ -33,7 +33,7 @@ The **spillover** of signal onto secondary detector(s) is *additive* and can be 
 
 Raw Signal in $B = \text{Signal from FITC (spillover)} + \text{Signal from another (perhaps dedicated) fluorophore}.$
 
-Recovery of the true FITC signal from its spread across detectors, known as **compensation** requires a set of controls be present to calculate the spillover. These controls are called *Single Colour Controls* and are acquired prior to sample acquisition. The purpose of the single colour control is to estimate the amount of spillover of emission from fluorophore **F** onto non-primary detectors (detector **B** in the image above).
+FITC signal detected erroneously by secondary detectors can be performed by a process of **fluorescence compensation** which requires a set of controls be present to calculate the spillover. These controls are called *Single Colour Controls* and are acquired prior to sample acquisition. The purpose of the single colour control is to estimate the amount of spillover of emission from fluorophore **F** onto non-primary detectors (detector **B** in the image above).
 
 We note, but will not discuss further here that there are a class of more advanced fluorescence-based cytometers known as *spectral* flow cytometers. Spectral instruments require a different and more specialized procedure to perform compensation.
 
@@ -43,57 +43,94 @@ Let's visualize the data to highlight the main issues related to spillover. We w
 
 ```{r viz_uncompensated_data, echo=FALSE, eval=T, message=FALSE, fig.width=10}
 # read file
-cf <- load_cytoframe_from_fcs(get_workshop_data("4000_BDC-CR1.fcs")$rpath)[,-32]
+cf <- load_cytoframe_from_fcs(
+  get_workshop_data(
+    "4000_BDC-CR1.fcs"
+  )$rpath
+)[,-32]
 
 # define transformation
-trans <- transformList(from = names(markernames(cf)),
-                       tfun = (function(x)asinh(x/500))) # user definition
+trans <- transformList(
+  from = names(markernames(cf)),
+  tfun = (function(x)asinh(x/500))  # user definition
+) 
+
 # transform
 # notice that we are creating a copy of the data
-cf_trans <- transform(realize_view(cf),trans)
+cf_trans <- transform(
+  realize_view(cf),
+  trans
+)
 
 # plot
-uncompensated <- as.ggplot(ggcyto(cf_trans, # flowFrame, flowSet, cytoframe, cytoset, GatingSet, or GatingHierarchy can be used as data source
-                                  aes(x = "CD3", y = "CD5"))+ # automatic matching of markernames
-                          geom_hex(bins = 128)+
-                          theme_bw()+
-                          labs(title = "Uncompensated data"))
+uncompensated <- as.ggplot(
+  ggcyto(
+    cf_trans, # flowFrame, flowSet, cytoframe, cytoset, GatingSet, or GatingHierarchy can be used as data source
+    aes(x = "CD3", y = "CD5")  # automatic matching of markernames
+  ) + 
+  geom_hex(bins = 128)+
+  theme_bw()+
+  labs(title = "Uncompensated data")
+)
 
 # compensate
-cf_comp <- compensate(realize_view(cf), spillover(cf)[["$SPILLOVER"]])
+cf_comp <- compensate(
+  realize_view(cf),
+  spillover(cf)[["$SPILLOVER"]]
+)
+
 # transform
 cf_comp <- transform(cf_comp,trans)
 
 # plot
-compensated <- as.ggplot(ggcyto(cf_comp, 
-                                aes(x = "CD3", y = "CD5"))+
-                        geom_hex(bins = 128)+
-                        theme_bw()+
-                        labs(title = "Compensated data")+
-                        axis_x_inverse_trans()) # axis is transformed instead of data
+compensated <- as.ggplot(
+  ggcyto(
+    cf_comp, 
+    aes(x = "CD3", y = "CD5")
+  ) +
+  geom_hex(bins = 128)+
+  theme_bw()+
+  labs(title = "Compensated data")+
+  axis_x_inverse_trans() # axis is transformed instead of data
+) 
 
-gridExtra::grid.arrange(uncompensated,
-                        compensated,
-                        nrow = 1, 
-                        top = "1. Dicficulty resolving the correct populations")
+# arrange plots for comparison
+gridExtra::grid.arrange(
+  uncompensated,
+  compensated,
+  nrow = 1, 
+  top = "1. Dicficulty resolving the correct populations"
+)
 
+# plot uncompensated data
+uncompensated <- as.ggplot(
+  ggcyto(
+    cf_trans, 
+    aes(x = "SSC-A", y = "Live")
+  )+
+  geom_hex(bins = 128)+
+  theme_bw()+
+  labs(title = "Uncompensated data")
+)
 
-uncompensated <- as.ggplot(ggcyto(cf_trans, 
-                                  aes(x = "SSC-A", y = "Live"))+
-                                  geom_hex(bins = 128)+
-                                  theme_bw()+
-                                  labs(title = "Uncompensated data"))
+# plot compensated data
+compensated <- as.ggplot(
+  ggcyto(
+    cf_comp, 
+    aes(x = "SSC-A", y = "Live")
+  )+
+  geom_hex(bins = 128)+
+  theme_bw()+
+  labs(title = "Compensated data")
+)
 
-compensated <- as.ggplot(ggcyto(cf_comp, 
-                                aes(x = "SSC-A", y = "Live"))+
-                                geom_hex(bins = 128)+
-                                theme_bw()+
-                                labs(title = "Compensated data"))
-
-gridExtra::grid.arrange(uncompensated, 
-                        compensated, 
-                        nrow = 1, 
-                        top = "2. Wrong conclusions")
+# arrange plots for comparison
+gridExtra::grid.arrange(
+  uncompensated, 
+  compensated, 
+  nrow = 1, 
+  top = "2. Wrong conclusions"
+)
 
 ```
 
@@ -113,7 +150,11 @@ For this example, we are using data from the following dataset [FR-FCM-ZZ36](htt
 
 ```{r absent_spill, eval=TRUE, echo=TRUE, message=FALSE}
 # absent spill
-cf_absent <- load_cytoframe_from_fcs(get_workshop_data("luca")$rpath)
+cf_absent <- load_cytoframe_from_fcs(
+  get_workshop_data(
+    "luca"
+  )$rpath
+)
 
 # check spillover results
 spillover(cf_absent)
@@ -129,7 +170,11 @@ For this example, we are using the dataset from [FR-FCM-Z5PC](https://flowreposi
 
 ```{r show_spill, echo=T, message=TRUE}
 # load cytoframe
-cf <- load_cytoframe_from_fcs(get_workshop_data("4000_BDC-CR1.fcs")$rpath)
+cf <- load_cytoframe_from_fcs(
+  get_workshop_data(
+    "4000_BDC-CR1.fcs"
+  )$rpath
+)
 
 # show spillover
 spillover(cf)
@@ -150,14 +195,18 @@ The columns of the spillover matrix are the **detectors** while the rows are con
 s.mat <- spillover(cf)[[3]]
 rownames(s.mat) <- markernames(cf)[-29]
 
-pheatmap::pheatmap(mat = s.mat,
-                   cluster_rows = F,
-                   cluster_cols = F,
-                   color = colorRampPalette(c("black","orange","cyan","magenta"))(100),
-                   display_numbers = T,
-                   number_format = "%.2f",
-                   legend = FALSE,
-                   number_color = "white")
+pheatmap::pheatmap(
+  mat = s.mat,
+  cluster_rows = F,
+  cluster_cols = F,
+  color = colorRampPalette(
+    c("black","orange","cyan","magenta")
+  )(100),
+  display_numbers = T,
+  number_format = "%.2f",
+  legend = FALSE,
+  number_color = "white"
+)
 ```
 
 Looking at the figure, column 2: B610-A has high spillover from flurophore: PE-Dazzle594 and PE.
@@ -177,8 +226,10 @@ Now to perform spillover correction (**Compensation**). In the `cytoverse` this 
 ```{r compensate, echo=TRUE, eval=TRUE,message=FALSE}
 # single call to compensate 
 # spillover(cf)[[3]] indicates where the matrix to use lives
-cf_comp <- compensate(x = realize_view(cf),
-                 spillover = spillover(cf)[[3]]) 
+cf_comp <- compensate(
+  x = realize_view(cf),
+  spillover = spillover(cf)[[3]]
+) 
 ```
 
 
@@ -192,56 +243,90 @@ First, let's visualize why transformation is necessary. We go back to working wi
 
 ```{r demo_transformations, echo=FALSE, eval=T, fig.width=10, fig.height=10}
 # read in fcs
-demo_fcs <- get_workshop_data("4000_BDC-CR1.fcs")$rpath
+cf <- load_cytoframe_from_fcs(
+  get_workshop_data(
+    "4000_BDC-CR1.fcs"
+  )$rpath
+)
 
-cf <- load_cytoframe_from_fcs(demo_fcs)
-cf <- compensate(cf, spillover(cf)[[3]])
+# apply compensation
+cf <- compensate(
+  cf, 
+  spillover(cf)[[3]]
+)
 
-no_transform <- as.ggplot(autoplot(cf,
-         x = "CD14",
-         y = "HLA-DR",
-         bins = 256)+
-  labs(title = "No transformation applied"))
+# plot linear compensated data
+linear <- as.ggplot(
+  autoplot(
+    cf,
+    x = "CD14",
+    y = "HLA-DR",
+    bins = 256
+  ) +
+  labs(title = "No transformation applied")
+)
 
-biexp <- as.ggplot(autoplot(cf,
-         x = "CD14",
-         y = "HLA-DR",
-         bins = 256)+
+# plot biexponential compensated data
+biexp <- as.ggplot(
+  autoplot(
+    cf,
+    x = "CD14",
+    y = "HLA-DR",
+    bins = 256
+  )+
   scale_x_flowjo_biexp()+
   scale_y_flowjo_biexp()+
   labs(title = "Biexponential"))
 
-log_trans <- as.ggplot(autoplot(cf,
-         x = "CD14",
-         y = "HLA-DR",
-         bins = 256)+
+# plot log compensated data
+log_trans <- as.ggplot(
+  autoplot(
+    cf,
+    x = "CD14",
+    y = "HLA-DR",
+    bins = 256
+  )+
   scale_x_continuous(trans = flowWorkspace::flowjo_log_trans())+
   scale_y_continuous(trans = flowWorkspace::flowjo_log_trans())+
-  labs(title = "Log"))
+  labs(title = "Log")
+)
 
-asinh_t <- as.ggplot(autoplot(cf,
-         x = "CD14",
-         y = "HLA-DR",
-         bins = 256)+
+# plot asinh compensated data
+asinh_t <- as.ggplot(
+  autoplot(
+    cf,
+    x = "CD14",
+    y = "HLA-DR",
+    bins = 256
+  )+
   scale_x_flowjo_fasinh()+
   scale_y_flowCore_fasinh()+
-  labs(title = "inverse hyperbolic sine"))
+  labs(title = "inverse hyperbolic sine")
+)
 
-logicle <- as.ggplot(autoplot(cf,
-         x = "CD14",
-         y = "HLA-DR",
-         bins = 256)+
+# plot logicle compensated data
+logicle <- as.ggplot(
+  autoplot(
+    cf,
+    x = "CD14",
+    y = "HLA-DR",
+    bins = 256
+  )+
   scale_x_logicle()+
   scale_y_logicle()+
-  labs(title = "Logicle"))
+  labs(title = "Logicle")
+)
 
-gridExtra::grid.arrange(no_transform,
-                        biexp, 
-                        log_trans,
-                        asinh_t, 
-                        logicle, 
-                        nrow = 2,
-                        bottom = "Generic transformations of compensated data")
+# arrange plots for comparison
+gridExtra::grid.arrange(
+  linear,
+  biexp, 
+  log_trans,
+  asinh_t, 
+  logicle, 
+  nrow = 2,
+  bottom = "Generic transformations of compensated data"
+)
 ```
 
 As we see, the variety of transformations aids in visualization and interpretation of the data.
@@ -260,33 +345,48 @@ Let's first use a built in transformation.
 asinh_trans <- flowWorkspace::asinh_Gml2()
 
 # create a transformList that indicates which parameters to transform
-my_trans_list <- flowCore::transformList(from = names(markernames(cf)),
-                                         tfun = asinh_trans)
-
+my_trans_list <- flowCore::transformList(
+  from = names(
+    markernames(cf)
+  ),
+  tfun = asinh_trans
+)
 
 # transform 
-cf_transformed <- flowCore::transform(realize_view(cf), my_trans_list)
+cf_transformed <- flowCore::transform(
+  realize_view(cf),
+  my_trans_list
+)
 
 ```
 
 ```{r viz_transform, echo=FALSE, eval=TRUE, message=FALSE}
-# visualize
+# visualize linear compensated
 cf_comp <- as.ggplot(
-  autoplot(cf,
-           x = "CD14", 
-           y = "HLA-DR",
-           bins = 256)
+  autoplot(
+    cf,
+    x = "CD14", 
+    y = "HLA-DR",
+    bins = 256
+  )
 )
 
+# visualize transformed compensatd
 cf_comp_transformed <- as.ggplot(
-  autoplot(cf_transformed,
-           x = "CD14",
-           y = "HLA-DR",
-           bins = 256)
+  autoplot(
+    cf_transformed,
+    x = "CD14",
+    y = "HLA-DR",
+    bins = 256
+  )
 )
 
-gridExtra::grid.arrange(cf_comp, cf_comp_transformed, nrow = 1)
-
+# arrange plot for comparison
+gridExtra::grid.arrange(
+  cf_comp, 
+  cf_comp_transformed, 
+  nrow = 1
+)
 ```
 
 Another option is to use a user defined transformation.
@@ -298,31 +398,48 @@ my_trans <- function(x){
 }
 
 # create a transformList
-my_trans_list <- flowCore::transformList(from = names(markernames(cf)), 
-                                         tfun = my_trans)
+my_trans_list <- flowCore::transformList(
+  from = names(
+    markernames(cf)
+  ), 
+  tfun = my_trans
+)
 
 # transform
-cf_transformed <- transform(realize_view(cf), my_trans_list)
+cf_transformed <- transform(
+  realize_view(cf),
+  my_trans_list
+)
 ```
 
 ```{r viz_transform_user_defined, echo=FALSE, eval=FALSE, message=FALSE}
-# visualize
+# visualize custom transfromed compensated
 cf_comp_transformed <- as.ggplot(
-  autoplot(cf_transformed,
-           x = "CD14",
-           y = "HLA-DR",
-           bins = 256)
+  autoplot(
+    cf_transformed,
+    x = "CD14",
+    y = "HLA-DR",
+    bins = 256
+  )
 )
 
-gridExtra::grid.arrange(cf_comp, cf_comp_transformed, nrow = 1)
+# arrange plots to compare with unstransformed data
+gridExtra::grid.arrange(
+  cf_comp,
+  cf_comp_transformed, 
+  nrow = 1
+)
 ```
 
 We can also transform a set of FCS files (`cytoset`)
 
 ```{r transform_cytoset, echo=TRUE, eval=TRUE}
-# read in a cytoet
-fcs_files <- get_workshop_data("fcs_data/")$rpath
-cs <- load_cytoset_from_fcs(files = fcs_files)
+# read in a cytoset
+cs <- load_cytoset_from_fcs(
+  get_workshop_data(
+    "fcs_data/"
+  )$rpath
+)
 
 # extract per file compensation matrix into a list
 compensation_list <- lapply(cytoset_to_list(cs),
@@ -332,8 +449,12 @@ compensation_list <- lapply(cytoset_to_list(cs),
 cs <- compensate(cs, compensation_list)
 
 # using asinh_trans defined previously
-my_trans_list <- flowCore::transformList(from = names(markernames(cf)),
-                                         tfun = asinh_trans)
+my_trans_list <- flowCore::transformList(
+  from = names(
+    markernames(cf)
+  ),
+  tfun = asinh_trans
+)
 
 # transform: this will transform the underlying data 
 cs <- transform(cs,my_trans_list)
@@ -366,62 +487,98 @@ Here, we will make use of a csv file which maps the control files to their respe
 library(magrittr)
 
 # load csv file 
-csv_file <- get_workshop_data("control_files.csv")$rpath %>% 
-            read.csv(row.names = 1)
+csv_file <- get_workshop_data(
+  "control_files.csv"
+)$rpath[1] %>% 
+read.csv(
+  row.names = 1
+)
 
 # take a peek at the file
 csv_file
 
 # load the set of compensation files
-comp_frames <- lapply(csv_file[["filename"]], 
-                       function(x){
-                         file_location <- get_workshop_data(x)$rpath
-                         load_cytoframe_from_fcs(file_location)
-                       }) # example of using lapply to read in FCS files into a list
-names(comp_frames) <- csv_file[["channel"]]
-
-# convert to cytoset
-comp_cs <- cytoset(comp_frames)
+comp_cs <- load_cytoset_from_fcs(
+  get_workshop_data(
+    csv_file[["filename"]]
+  )$rpath
+)
+sampleNames(comp_cs) <- csv_file[["channel"]]
 ```
 
-```{r comp_viz, echo=FALSE, eval=TRUE, message=FALSE}
-# quick visualization of what the control files contain
-all_control_percp <- ggcyto::as.ggplot(ggcyto(comp_cs,
-                                      aes(x = "FSC-A", y = "PerCP-Cy5-5-A"))+
-                                      geom_hex(bins = 256)+
-                                      theme_bw()+
-                                      scale_y_flowCore_fasinh(b = 1/150)+
-                                      labs(title = "Detection of PerCP-Cy5-5 in all control samples "))
-all_control_percp
+```{r comp_viz, echo=FALSE, eval=TRUE, message=FALSE, fig.width=12, out.width="100%"}
+# # quick visualization of what the control files contain
+# all_control_percp <- ggcyto::as.ggplot(
+#   ggcyto(
+#     comp_cs,
+#     aes(x = "FSC-A", y = "PerCP-Cy5-5-A")
+#   )+
+#   geom_hex(bins = 256)+
+#   theme_bw()+
+#   scale_y_flowCore_fasinh(b = 1/150)+
+#   labs(title = "Detection of PerCP-Cy5-5 in all control samples ")
+# )
+# all_control_percp
+chans <- colnames(comp_cs)[-c(1,2,17)]
+chans <- chans[-match(sampleNames(comp_cs[1]), chans)]
+plots <- lapply(
+  chans,
+  function(x) {
+    ggcyto::as.ggplot(
+      ggcyto(
+        comp_cs[1],
+        aes(x = !!sampleNames(comp_cs[1]), y = !!x)
+      ) + 
+      geom_hex(bins = 256) +
+      theme_bw() +
+      scale_y_flowCore_fasinh(b = 1/150)
+    )
+  }
+)
+
+do.call(
+  gridExtra::grid.arrange,
+  c(
+    plots,
+    ncol = 4
+  )
+)
+
 ```
 
-Notice that the signal received in the channel **PerCP-Cy5-5-A** is highest for **PerCP Cy5.5**. At the same time, other fluorophores are also spilling over into this channel, for instance **PE**.
+Notice that **Alexa Fluor 405** is spilling heavily into **Alexa Fluor 430-A** and **BV605-**, but not into any of the other detectors.
 
 Now, we calculate the spillover matrix using the set of controls. We will use `spillover` function from `flowStats` package within the `cytoverse`.
 
 ```{r generating_spillover_with_controls_calculate, eval = TRUE, echo = TRUE, message = FALSE}
 # calculate spillover
 ## using spillover from flowStats
-spill <- flowStats::spillover(comp_cs,
-                   unstained = "Unstained", # indicate how the unstained file is named in flowset
-                   patt = "-A", # indicate which parameter should be considered 
-                   fsc = "FSC-A",
-                   ssc = "SSC-A",
-                   stain_match = "regexpr",
-                   useNormFilt = TRUE)
+spill <- flowStats::spillover(
+  comp_cs,
+  unstained = "Unstained", # indicate how the unstained file is named in flowset
+  patt = "-A", # indicate which parameter should be considered 
+  fsc = "FSC-A",
+  ssc = "SSC-A",
+  stain_match = "regexpr",
+  useNormFilt = TRUE
+)
 ```
 
 Now, let's visualize the spill matrix that we calculated.
 
 ```{r viz_calculated_spill, eval=T, echo=FALSE}
-pheatmap::pheatmap(mat = spill,
-                   cluster_rows = F,
-                   cluster_cols = F,
-                   color = colorRampPalette(c("black","orange","cyan","magenta"))(100),
-                   display_numbers = T, 
-                   legend = FALSE,
-                   number_color = "white",
-                   number_format = "%.3f")
+pheatmap::pheatmap(
+  mat = spill,
+  cluster_rows = F,
+  cluster_cols = F,
+  color = colorRampPalette(
+    c("black","orange","cyan","magenta")
+  )(100),
+  display_numbers = T, 
+  legend = FALSE,
+  number_color = "white",
+  number_format = "%.3f"
+)
 ```
 
 *Note: Close or related fluorophores will have some degree of overlap.*
@@ -430,35 +587,55 @@ Lastly, we check the effect of *compensating* these files.
 
 ```{r show_comp_effect, echo=FALSE, eval=TRUE}
 # read in FCS
-cf <- load_cytoframe_from_fcs(get_workshop_data("pbmc_luca.fcs")$rpath)
+cf <- load_cytoframe_from_fcs(
+  get_workshop_data(
+    "pbmc_luca.fcs"
+  )$rpath
+)
 
 
-trans <- flowCore::transformList(from = setdiff(sampleNames(comp_cs),"Unstained"),
-                                 tfun = flowCore::arcsinhTransform(b = 1/150)
-                                 )
-cf_trans <- transform(realize_view(cf),trans) # transformation defined above
+trans <- flowCore::transformList(
+  from = setdiff(
+    sampleNames(comp_cs),
+    "Unstained"
+  ),
+  tfun = flowCore::arcsinhTransform(b = 1/150)
+)
+cf_trans <- transform(
+  realize_view(cf),
+  trans   # transformation defined above
+) 
 
 # plot pre-compensation
-pre_compensation <- as.ggplot(autoplot(cf_trans,          # autoplot can be used to generate plots rapidly
-                                       x = "PE-Cy5-5-A", 
-                                       y = "PE-Cy5-A", 
-                                       bins = 256)+
-                                labs(title = "Uncompensated data"))
+pre_compensation <- as.ggplot(
+  autoplot(
+    cf_trans,          # autoplot can be used to generate plots rapidly
+    x = "PE-Cy5-5-A", 
+    y = "PE-Cy5-A", 
+    bins = 256)+
+    labs(title = "Uncompensated data")
+)
 
 # compensate
 cf_comp <- compensate(realize_view(cf),spill)
 cf_comp <- transform(cf_comp,trans)
 
 # plot post-compensation
-post_compensation <- as.ggplot(autoplot(cf_comp,
-                                       x = "PE-Cy5-5-A", 
-                                       y = "PE-Cy5-A", 
-                                       bins = 256)+
-                                 labs(title = "Compensated data"))
+post_compensation <- as.ggplot(
+  autoplot(
+    cf_comp,
+    x = "PE-Cy5-5-A", 
+    y = "PE-Cy5-A", 
+    bins = 256
+  )+
+  labs(title = "Compensated data")
+)
 
-gridExtra::grid.arrange(pre_compensation, 
-                        post_compensation, 
-                        nrow = 1)
+gridExtra::grid.arrange(
+  pre_compensation, 
+  post_compensation, 
+  nrow = 1
+)
 ```
 
 </details>
