@@ -36,5 +36,17 @@ cache_workshop_data = function(force = FALSE){
 #' @param path `character` giving a path to file(s) in the original tarball
 get_workshop_data = function(path){
   bfc = .get_cache()
-  bfcquery(bfc, path)
+  do.call(
+    "rbind",
+    lapply(
+      path,
+      function(x) {
+        bfcquery(
+          bfc,
+          x
+        )
+      }
+    )
+  )
+  
 }
