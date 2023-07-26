@@ -8,7 +8,7 @@ vignette: >
 
 # Background
 
-The purpose of flow cytometry is to make inferences regarding some cell type(s) of interest. Often this involves establishing/drawing a gating hierachy to sequentially filter down to the cell type(s) of interest. This process is very often done manually, and can be very labour intensive. Importantly, manual approach implies **large variation** when one person does it vs. the next, or even if the same person does it multiple times. The `cytoverse` offers a suite of tools to tackle this problem in a reproducible and programmatic manner.
+The purpose of flow cytometry is to make inferences regarding some cell type(s) of interest. Often this involves establishing/drawing a gating hierarchy to sequentially filter down to the cell type(s) of interest. This process is very often done manually, and can be very labour intensive. Importantly, manual approach implies **large variation** when one person does it vs. the next, or even if the same person does it multiple times. The `cytoverse` offers a suite of tools to tackle this problem in a reproducible and programmatic manner.
 
 ## GatingSet and GatingHeirarchy
 
@@ -78,14 +78,20 @@ For convenience, we are using a previously defined **transformerList** object. T
 <details>
 ```{r demo_transformation_gs, echo = TRUE, eval = TRUE, message=FALSE}
 # transformation of GatingSet
-t.rds <- dplyr::filter(get_workshop_data("/fj_wsp"), # a previously defined transformation
-                       grepl(pattern = "transform", 
-                             x = rname))$rpath
+t.rds <- dplyr::filter(
+  get_workshop_data("/fj_wsp"), # a previously defined transformation
+  grepl(
+    pattern = "transform", 
+    x = rname
+  )
+)$rpath
 my_trans <- readRDS(file = t.rds)
 
 # make into transformerList object
-my_trans_list <- flowWorkspace::transformerList(from = names(my_trans),
-                                                trans = my_trans)
+my_trans_list <- flowWorkspace::transformerList(
+  from = names(my_trans),
+  trans = my_trans
+)
 
 gs <- flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
 ```
@@ -97,7 +103,6 @@ gs <- flowWorkspace::transform(gs, my_trans_list) # transforms underlying data
 2. How would be able to tell if a `GatingSet` has been transformed?
 *Hint*: Try `help.search("get_transformation")`.
 3. Why might it be beneficial to compensate and transform a `GatingSet` rather than a `cytoframe` or a `cytoset`?
-
 
 ## A note about `GatingHierarchy`
 
@@ -133,12 +138,14 @@ A `singlets` gate is mostly used for data clean up, by removing out `doublets`.
 
 ```{r singlet_gate_viz, echo = T, eval = T, message = FALSE }
 # visualization
-singlet_vis <- autoplot(gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) extracts the underlying data
-                        x = "FSC-A",
-                        y = "FSC-H",
-                        bins = 256
-                        )+
-              facet_wrap(~sampleNames(gs)) # leverage the metadata that is saved within the GatingSet to facet plots 
+singlet_vis <- autoplot(
+  gs_pop_get_data(gs,"root"), # gs_pop_get_data(gs, node) extracts the underlying data
+  x = "FSC-A",
+  y = "FSC-H",
+  bins = 256
+  ) +
+  facet_wrap(~sampleNames(gs)
+  ) # leverage the metadata that is saved within the GatingSet to facet plots 
 singlet_vis
 ```
 
@@ -146,20 +153,27 @@ Now, we estimate and add!
 
 ```{r estimate_singlets_gate, echo = T, eval = T, message = FALSE}
 # estimate and add
-gs_add_gating_method(gs = gs, # gatingset
-                     alias = "singlets", # name given to the population
-                     pop = "+", # indicate whether events inside or outside the gate should be filtered
-                     parent = "root", # where to attach this node
-                     dims = "FSC-A,FSC-H", # dimensions used to estimate the gate
-                     gating_method = "singletGate", # one of the available gating methods
-                     gating_args = "wider_gate = FALSE", # arguments passed to singletGate
-                     )
+gs_add_gating_method(
+  gs = gs, # gatingset
+  alias = "singlets", # name given to the population
+  pop = "+", # indicate whether events inside or outside the gate should be filtered
+  parent = "root", # where to attach this node
+  dims = "FSC-A,FSC-H", # dimensions used to estimate the gate
+  gating_method = "singletGate", # one of the available gating methods
+  gating_args = "wider_gate = FALSE", # arguments passed to singletGate
+)
 # visualize
 singlet_vis + 
-  geom_gate(gs_pop_get_gate(gs,"singlets"))+
+  geom_gate(
+    gs_pop_get_gate(
+      gs,
+      "singlets"
+    )
+  )+
   facet_wrap(~name)
 
 ```
+
 
 #### Estimating cutpoint and ranges using `gate_quantile` and `gate_mindensity2`
 
@@ -170,30 +184,41 @@ singlet_vis +
 ## Example of a quantile gate
 
 ## visualize
-live_viz <- ggcyto(gs,
-                   subset = "singlets",
-                   aes(x = "Live", y = "FSC-A"))+
-            geom_hex(bins = 128)+
-            facet_wrap(~name)
+live_viz <- ggcyto(
+  gs,
+  subset = "singlets",
+  aes(x = "Live", y = "FSC-A")
+) +
+geom_hex(bins = 128)+
+facet_wrap(~name)
 # live_viz
 
 # add gate using gate_quantile
-gs_add_gating_method(gs,
-                     alias = "live",
-                     pop = "-",
-                     parent = "singlets",
-                     dims = "U450-A",
-                     gating_method = "gate_quantile",
-                     gating_args = "probs = 0.95")
+gs_add_gating_method(
+  gs,
+  alias = "live",
+  pop = "-",
+  parent = "singlets",
+  dims = "U450-A",
+  gating_method = "gate_quantile",
+  gating_args = list(
+    probs = 0.95
+  )
+)
 
 # add gate using gate_mindensity2
-gs_add_gating_method(gs,
-                     alias = "live_mindensity",
-                     pop = "-",
-                     parent = "singlets",
-                     dims = "U450-A",
-                     gating_method = "gate_mindensity2",
-                     gating_args = "max = 100, gate_range = c(50,75)")
+gs_add_gating_method(
+  gs,
+  alias = "live_mindensity",
+  pop = "-",
+  parent = "singlets",
+  dims = "U450-A",
+  gating_method = "gate_mindensity2",
+  gating_args = list(
+    max = 100, 
+    gate_range = c(50, 75)
+  )
+)
 
 # visualize the 2 extimated gates
 live_viz+
@@ -216,13 +241,19 @@ t_cell_vis <- ggcyto(
 # t_cell_vis
 
 # estimate and add
-gs_add_gating_method(gs,
-                     alias = "MAIT Cells",
-                     pop = "++",
-                     parent = "live",
-                     dims = "G660-A,V710-A",
-                     gating_method = "gate_quantile",
-                     gating_args = "probs = 0.95, min = 50, max = 200")
+gs_add_gating_method(
+  gs,
+  alias = "MAIT Cells",
+  pop = "++",
+  parent = "live",
+  dims = "G660-A,V710-A",
+  gating_method = "gate_quantile",
+  gating_args = list(
+    probs = 0.95, 
+    min = 50, 
+    max = 200
+  )
+)
 # visualize
 t_cell_vis+
   geom_gate(gs_pop_get_gate(gs,"MAIT Cells"))
@@ -239,13 +270,20 @@ cd3_ellipse <- ggcyto(gs,
   geom_hex(bins = 256)
 
 # estimate and add
-gs_add_gating_method(gs,
-                     alias = "CD3+",
-                     pop = "+",
-                     parent = "live",
-                     dims = "U785-A,V510-A",
-                     gating_method = "gate_flowclust_2d",
-                     gating_args = "K = 3, target = c(100,150),quantile = 0.9, plot = FALSE")
+gs_add_gating_method(
+  gs,
+  alias = "CD3+",
+  pop = "+",
+  parent = "live",
+  dims = "U785-A,V510-A",
+  gating_method = "gate_flowclust_2d",
+  gating_args = list(
+    K = 3,
+    target = c(100,150),
+    quantile = 0.9,
+    plot = FALSE
+  )
+)
 
 # visualize
 cd3_ellipse+
@@ -261,28 +299,35 @@ cd3_ellipse+
 
 #### Quad gate
 
-When there are population(s) of interest in all 4 quadrants, it is useful to estimate a `Quad gate`. For this, we can once again utilize `gate_quantile` and `gate_mindensity2`.
+When there are population(s) of interest in all 4 quadrants, it is useful to estimate a `quadrant gate` using `gate_quad_tmix`.
 *Note*: Pay attention to `alias` and `pop` arguments!
 
-```{r viz_cd4_cd8,echo=TRUE, eval=TRUE,message=FALSE}
+```{r viz_cd4_cd8,echo=TRUE, eval=TRUE, message=FALSE}
 # plot subsets
-t_subsets <- ggcyto(gs,subset = "CD3+",
-                  aes(x = "CD45RA", y = "CCR7"))+
-  geom_hex(bins = 256)+
-  facet_wrap(~name)
+t_subsets <- ggcyto(
+  gs,
+  subset = "CD3+",
+  aes(x = "CD45RA", y = "CCR7")
+)+
+geom_hex(bins = 256)+
+facet_wrap(~name)
 
 # visualize
 # t_subsets
 
 # estimate and add
-gs_add_gating_method(gs,
-                     alias = "*",
-                     pop = "+/-+/-",
-                     parent = "CD3+",
-                     dims = "CD45RA,CCR7",
-                     gating_method = "gate_quantile",
-                     gating_args = "probs = 0.9")
-
+gs_add_gating_method(
+  gs,
+  alias = "*",
+  pop = "+/-+/-",
+  parent = "CD3+",
+  dims = "CD45RA,CCR7",
+  gating_method = "gate_quad_sequential",
+  gating_args = list(
+    gFunc = "mindensity"
+  ),
+  collapseDataForGating = TRUE
+)
 
 # visualize (exercise)
 # Fill with call to ggcyto
@@ -318,12 +363,20 @@ cd3_vis <- ggcyto(
 # cd3_vis
 
 # using rectangle gate to add T cell gate
-cd3_rectangle <- matrix(c(140, 205, 0, 200),
-                       nrow = 2,ncol = 2,
-                       byrow = F,
-                       dimnames = list(NULL, # rownames
-                                       c("V510-A","U570-A"))) # colnames are channel names
-cd3_rectangle_gate <- rectangleGate(.gate = cd3_rectangle,filterId = "CD3+ T cells")
+cd3_rectangle <- matrix(
+  c(140, 205, 0, 200),
+  nrow = 2,
+  ncol = 2,
+  byrow = F,
+  dimnames = list(
+    c("min", "max"), # rownames
+    c("V510-A","U570-A")
+  )
+) # colnames are channel names
+cd3_rectangle_gate <- rectangleGate(
+  .gate = cd3_rectangle,
+  filterId = "CD3+ T cells"
+)
 cd3_vis+geom_gate(cd3_rectangle_gate)
 ```
 
@@ -336,8 +389,10 @@ cd3_range <- matrix(data = c(140,200))
 colnames(cd3_range) <- "V510-A"
 
 # construct gate
-cd3_range_gate <- rectangleGate(.gate = cd3_range,
-                                filterId = "CD3+ Range") 
+cd3_range_gate <- rectangleGate(
+  .gate = cd3_range,
+  filterId = "CD3+ Range"
+) 
 
 cd3_vis + geom_gate(cd3_range_gate)
 ```
@@ -345,9 +400,11 @@ cd3_vis + geom_gate(cd3_range_gate)
 To add this gate we call `gs_pop_add` like so:
 
 ```{r show_add_gate, echo = TRUE, eval=TRUE}
-gs_pop_add(gs = gs,
-           parent = "live",
-           gate = cd3_range_gate)
+gs_pop_add(
+  gs,
+  parent = "live",
+  gate = cd3_range_gate
+)
 ```
 
 Each call to `gs_pop_add` requires a `recompute(gs)` call. 
@@ -385,21 +442,27 @@ nkt_vis <- ggcyto(gs, subset = "root",
 
 # define coordinates
 ## coordinates are based on visualization!
-nkt_poly <- matrix(c(
-  115,140, # are arranged as x,y pair
-  150,150,
-  150,180,
-  200,180,
-  200,140), # coordinates
+nkt_poly <- matrix(
+  c(
+    115,140, # are arranged as x,y pair
+    150,150,
+    150,180,
+    200,180,
+    200,140 
+  ), 
   ncol = 2,
   byrow = T, # indicates that add as x,y pair
-  dimnames = list(NULL, # rownames 
-                  c("R670-A","V510-A")) # colnames are channel names
+  dimnames = list(
+    NULL, # rownames 
+    c("R670-A","V510-A") # colnames are channel names
+  ) 
 )
 
 # create a gate
-nkt_poly_gate <- polygonGate(nkt_poly,
-                             filterId = "NKT cells")
+nkt_poly_gate <- polygonGate(
+  nkt_poly,
+  filterId = "NKT cells"
+)
 # visualize
 nkt_vis + geom_gate(nkt_poly_gate)
 ```
@@ -408,12 +471,13 @@ Editing a gate after construction is straight forward.
 
 ```{r edit_poly_gate, echo=TRUE, eval=TRUE, message=FALSE}
 # move up and scale
-nkt_poly_gate_scale <- flowCore::transform_gate(nkt_poly_gate, # gate object
-                                          dx = 1, # which dimension to shift and by how much
+nkt_poly_gate_scale <- flowCore::transform_gate(
+  nkt_poly_gate, # gate object
+  dx = 1, # which dimension to shift and by how much
                                         # dy = 1,
                                         # scale = 2 # scales both dimensions equally
-                                          scale = c(1.05,1.05) # individually scale each dimension
-                                          )
+  scale = c(1.05,1.05) # individually scale each dimension
+)
 nkt_vis+geom_gate(nkt_poly_gate_scale)
 ```
 
@@ -433,7 +497,11 @@ We can use `booleanFilter` to simply **negate** a gated population! The resultin
 not_mait <- booleanFilter(`!MAIT Cells`, filterId = "not_MAIT")
 
 # add Boolean gate
-gs_pop_add(gs, not_mait, parent = "live")
+gs_pop_add(
+  gs, 
+  not_mait, 
+  parent = "live"
+)
 
 recompute(gs)
 
@@ -452,8 +520,10 @@ Let's create by combining `not_MAIT` and `MAIT Cells`
 
 ```{r example_or_filter, echo=TRUE, eval=FALSE, message=FALSE}
 # using an OR ('|') operator
-all_cells <- booleanFilter(`not_MAIT | MAIT Cells`,
-                               filterId = "All")
+all_cells <- booleanFilter(
+  `not_MAIT|MAIT Cells`,
+  filterId = "All"
+)
 # add population
 gs_pop_add(gs, all_cells, parent = "live")
 recompute(gs)
