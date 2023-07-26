@@ -15,40 +15,131 @@ Flow cytometry data (regardless of the type of instrument used) is generally sav
 In the workshop, all the cytoverse packages are included in the instance you launched on the Bioconductor Workshop Galaxy, and the docker image this uses will remain available indefinitely (see the [README.md](https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html#notes-on-using-the-docker-image-1) for details).  That said, if you want to install and use `cytoverse` packages outside of docker, the standard Bioconductor tooling works:
 
 ```{r install_libraries, echo=TRUE, eval=FALSE, message=FALSE}
-install.packages("BioManager")
+install.packages("BiocManager")
+BiocManager::install("cytolib")
 BiocManager::install("flowCore")
 BiocManager::install("flowWorkspace")
 BiocManager::install("ggcyto")
 BiocManager::install("openCyto")
 BiocManager::install("flowStats")
+BiocManager::install("CytoML")
 ```
 
 For the moment, we only need to load `flowCore` and `flowWorkspace`.
 
-```{r load_library_download_cache, eval=TRUE, echo=TRUE, message = FALSE}
+```{r load_library_download_cache, eval=TRUE, echo=TRUE, message = FALSE, warning = FALSE}
 library(flowCore)
 library(flowWorkspace)
 library(CytoverseBioc2023)
 cache_workshop_data()
 ```
 
+## FlowRepository workshop data
+
+In this `cytoverse` workshop we will demonstrate the use of `cytoverse` packages to analyse publicly available datasets hosted on [FlowRepository](http://flowrepository.org/). The first dataset [FR-FCM-ZZEC](http://flowrepository.org/id/FR-FCM-ZZEC) contains FCS files for OMIP-025, a study to evaluate the memory and follicular helper phenotypes of human T- and NK- cell populations using intracellular cytokine staining. The second dataset [FR-FCM-ZZ36](http://flowrepository.org/id/FR-FCM-ZZ36) contains FCS files for OMIP-018, a study designed to phenotype T cells for expression of various chemokine receptors. All the data required for this workshop, including these FlowRepository datasets can be downloaded to a `data` folder and cached locally by running `cache_workshop_data()`. 
+
+```{r, eval = FALSE, echo = FALSE}
+# copy output below
+fs::dir_tree("data")
+```
+
+```{r workshop_data, eval = FALSE, echo = TRUE}
+# structure of cached workshop data
+data
+├── FR-FCM-ZZEC
+│   ├── AViD CD14 BV510 stained control.fcs
+│   ├── CCR7 BV785 stained control.fcs
+│   ├── CD154 BV605 stained control.fcs
+│   ├── CD3 APC stained control.fcs
+│   ├── CD3 BV570 stained control.fcs
+│   ├── CD4 BUV395 stained control.fcs
+│   ├── CD45RA APC-H7 stained control.fcs
+│   ├── CD56 BV655 stained control.fcs
+│   ├── CD8 BV711 stained control.fcs
+│   ├── CD8 PerCP-Cy5.5 stained control.fcs
+│   ├── CXCR5 PE-eF610 stained control.fcs
+│   ├── IFNg V450 stained control.fcs
+│   ├── IL2 PE stained control.fcs
+│   ├── PD-1 PE-Cy7 stained control.fcs
+│   ├── Sample CMV.fcs
+│   ├── Sample DMSO.fcs
+│   ├── Sample SEB.fcs
+│   ├── TNFa FITC stained control.fcs
+│   ├── Unstained control.fcs
+│   └── control_files.csv
+├── FlowRepository_FR-FCM-ZZ36_files
+│   ├── Compensation Controls_APC Stained Control.fcs
+│   ├── Compensation Controls_APC-Cy7 Stained Control.fcs
+│   ├── Compensation Controls_Alexa Fluor 405 Stained Control.fcs
+│   ├── Compensation Controls_Alexa Fluor 430 Stained Control.fcs
+│   ├── Compensation Controls_Alexa Fluor 488 Stained Control.fcs
+│   ├── Compensation Controls_PE Stained Control.fcs
+│   ├── Compensation Controls_PE-Cy5 Stained Control.fcs
+│   ├── Compensation Controls_PE-Cy5-5 Stained Control.fcs
+│   ├── Compensation Controls_PE-Cy7 Stained Control.fcs
+│   ├── Compensation Controls_PE-Texas Red Stained Control.fcs
+│   ├── Compensation Controls_PerCP-Cy5-5 Stained Control.fcs
+│   ├── Compensation Controls_Qdot 605 Stained Control.fcs
+│   ├── Compensation Controls_Qdot 655 Stained Control.fcs
+│   ├── Compensation Controls_Qdot 800 Stained Control.fcs
+│   ├── Compensation Controls_Unstained Control.fcs
+│   ├── control_files.csv
+│   ├── pbmc_luca.fcs
+│   └── spillover_from_FJ.csv
+├── fcs_data
+│   ├── 4000_BDC-CR1.fcs
+│   ├── 4000_BDC-CR2.fcs
+│   ├── 4000_TNK-CR1.fcs
+│   ├── 4000_TNK-CR2.fcs
+│   ├── 4001_BDC-CR1.fcs
+│   ├── 4001_BDC-CR2.fcs
+│   ├── 4001_TNK-CR1.fcs
+│   ├── 4001_TNK-CR2.fcs
+│   ├── 4002_BDC-CR1.fcs
+│   ├── 4002_BDC-CR2.fcs
+│   ├── 4002_TNK-CR1.fcs
+│   ├── 4002_TNK-CR2.fcs
+│   ├── 4003_BDC-CR1.fcs
+│   ├── 4003_BDC-CR2.fcs
+│   ├── 4003_TNK-CR1.fcs
+│   └── 4003_TNK-CR2.fcs
+├── fj_wsp
+│   ├── 210224_BDC_CR1_analysis_template.wsp
+│   ├── 210224_BDC_CR2_analysis_template.wsp
+│   ├── 210224_TNK-CR2_analysis_template.wsp
+│   ├── 210520_TNK-CR1_analysis_template.wsp
+│   ├── analysis_copy.wsp
+│   └── fj_transform.gz
+├── gating_template
+│   └── gating_template_TNK.csv
+└── metadata
+    └── 220115_Demographics_for_raw_data_upload.csv
+```
+
+Throughout this workshop we will use `get_workshop_data()` to return information about the location of the cached files so that they can be easily accessed for downstream analyses. `get_workshop_data()` returns a tibble containing information about the cached data including the path to the requested file(s) as indicated in the `rpath` variable.
+
+```{r, eval = TRUE}
+# get location of cached data
+cache_info <- get_workshop_data("gating_template_TNK.csv")
+colnames(cache_info)
+```
 
 ## `cytoverse` data structures for **.fcs** files
 
-There are 3 **main** data structures that represent flow cytometry data in `cytoverse`: `cytoframe`, `cytoset`, and `GatingSet`.  
+There are four **main** data structures that represent flow cytometry data in `cytoverse`: `cytoframe`, `cytoset`, `GatingHierarchy` and `GatingSet`.  
 
 - `cytoframe`: a single **.fcs** file,
 - `cytoset`: a list like object that can store multiple **.fcs** files,
+- `GatingHierarchy`: a list like object that allows building and attaching gates and filter to a `cytoframe`
 - `GatingSet`: a list like object that allows building and attaching gates and filter to a `cytoset`
 
 Some of these have overlapping functionality, and we'll eventually explain when you would prefer one data structure to another as we continue through this workshop. 
 
 *Note:* <details>*There are additional legacy data structures called `flowFrame` and `flowSet` in `cytoverse` that are analogous to `cytoframe` and `cytoset` in function. We will not use these data structures in this workshop.* </details>
 
-
 ## Reading in FCS files
 
-There are 2 preferred approaches to read in **.fcs** file(s) into R:
+There are two preferred approaches to read in **.fcs** file(s) into R:
 
 - Read in individual **.fcs** files as `cytoframe`,
 - Read in a set of **.fcs** files as `cytoset`,
@@ -66,7 +157,11 @@ knitr::include_graphics("images/example_fcs_path.png")
 For technical reasons, we can't easily distribute the **.fcs** files in this way for this workshop, but instead reference them through a file cache. This cache is essentially a set of folders, however, and we specify which files we want in it with `get_workshop_data`. (If you want to explore it, you can examine it with `BiocFileCache::bfcinfo(CytoverseBioc2023:::.get_cache())`.)
 
 ```{r load_cytoframe, eval=TRUE, echo=TRUE, message = FALSE}
-cf <- load_cytoframe_from_fcs(get_workshop_data("data/fcs_data/4000_TNK-CR1.fcs")$rpath)
+cf <- load_cytoframe_from_fcs(
+  get_workshop_data(
+    "data/fcs_data/4000_TNK-CR1.fcs"
+  )$rpath
+)
 
 # a cytoframe object
 cf
@@ -78,7 +173,7 @@ The `cytoframe` object has 3 slots where various data is stored.
 - `parameters(cf)` stores information pertaining to channels: channel name, marker description,and data ranges as an AnnotatedDataFrame,
 - `keyword(cf)` stores additional information extracted from the **.fcs** file header. The file header follow ISAC guidelines. Visit [here](https://isac-net.org/page/Data-Standards) for more information. 
 
-## Working with `cytoframe`s
+## Working with `cytoframe` objects
 
 A few useful definitions that help us get oriented with the underlying data in the `cytoframe` object.
 
@@ -120,9 +215,17 @@ colnames(cf)
 # markernames
 markernames(cf)
 
-# expression
-exprs(cf)[1:5,1:5]
+# instrument channel ranges
+range(cf, type = "instrument")
 
+# expression
+exprs(cf)[1:5, 1:5]
+
+# number of events
+nrow(cf)
+
+# number of channels 
+ncol(cf)
 ```
 
 Notice that there is a correspondence between channels, markers, and the expression matrix. i.e. the `names` of the named vector `markernames(cf)` are a subset of the columns of the expression matrix `exprs(cf)` as well as the columns of the `cytoframe`.
@@ -130,21 +233,24 @@ Notice that there is a correspondence between channels, markers, and the express
 ```{r correspondance, echo=TRUE,message=FALSE}
 # interested marker: CD4
 # easy to find which channel is mapped to CD4
-marker_cd4 <- flowCore::getChannelMarker(frm = cf, name = "CD4")
+CD4_chan <- flowCore::getChannelMarker(
+  frm = cf,
+  name = "CD4"
+)$name
 
-# view the structure
-marker_cd4
+# inspect CD4_chan
+CD4_chan
 
 # extract expression of cd4
-e_cd4 <- exprs(cf)[,marker_cd4[,"name"]]
+e_cd4 <- exprs(cf[, CD4_chan])
 head(e_cd4)
 
 # subset cytorame by column
-s_cf <- cf[,marker_cd4[,"name"]]
+s_cf <- cf[, CD4_chan]
 s_cf
 
 # subset cytoframe by row
-s2_cf <- cf[1:100,]
+s2_cf <- cf[1:100, ]
 s2_cf
 ```
 
@@ -157,26 +263,43 @@ Below, we show examples of how to manipulate the `cytoframe` object and create a
 new_name <- c("U785-A" = "test")
 
 # create a new cytoframe subset
-s_cf <- cf[1:150,] |> realize_view() # realize_view creates a new cytoframe, distinct from the original
+cf_sub <- cf[1:150, ] |> realize_view() # realize_view creates a new cytoframe, distinct from the original
 
 # old markernames
-markernames(s_cf)
+markernames(cf_sub)
 
 # set new markername
-markernames(s_cf) <- new_name
-markernames(s_cf)
+markernames(cf_sub) <- new_name
+markernames(cf_sub)
 
 # manipulating expression values
 # notice the data range 
-s_cf
-hist(exprs(s_cf))
+range(cf_sub[, "U785-A"])
 
-# transform
-exprs(s_cf) <- exprs(s_cf)/100
+# visualise original channel ditribution
+plot(
+  density(
+    exprs(cf_sub[, "U785-A"])
+  ),
+  main = "U785-A"
+)
+
+# asinh transform
+exprs(cf_sub)[, "U785-A"] <- asinh(exprs(cf_sub)[, "U785-A"])
 
 # notice the data range after transformation
-s_cf
-hist(exprs(s_cf))
+range(
+  cf_sub[, "U785-A"],
+  type = "instrument"
+)
+
+# visualise channel distribution
+plot(
+  density(
+    exprs(cf_sub[, "U785-A"])
+  ),
+  main = "U785-A"
+)
 
 ```
 
@@ -199,7 +322,11 @@ In a experimental sense, a single **.fcs** file is not very interesting, since t
 
 
 ```{r cytoset_example, echo=TRUE, message=TRUE}
-cs <- load_cytoset_from_fcs(files = get_workshop_data(path = "data/fcs_data/")$rpath)
+cs <- load_cytoset_from_fcs(
+  files = get_workshop_data(
+    path = "data/fcs_data/"
+  )$rpath
+)
 cs
 ```
 
@@ -212,8 +339,21 @@ Generally, each FCS file replicate has unique metadata properties that can (**an
 pData(cs)
 
 # create metadata
-metadata <- data.frame(Treatment = sample(c("Untreated","Treated"),length(cs), replace = TRUE),
-                       panel = ifelse(grepl(pattern = "TNK",x = sampleNames(cs)),"T Cell Panel","Myeloid Panel"))
+metadata <- data.frame(
+  Treatment = sample(
+    c("Untreated","Treated"),
+    length(cs),
+    replace = TRUE
+  ),
+  panel = ifelse(
+    grepl(
+      pattern = "TNK",
+      x = sampleNames(cs)
+    ),
+    "T Cell Panel",
+    "Myeloid Panel"
+  )
+)
 ```
 
 Let's see what happens when `rownames` do not match!
@@ -231,7 +371,6 @@ row.names(metadata) <- sampleNames(cs)
 pData(cs) <- metadata
 pData(cs)
 ```
-
 
 The benefit of having metadata is that we can use many of the sub-setting operations in a metadata specific manner. 
 
@@ -253,22 +392,23 @@ Below is an example of `cytoset` sub-setting which also highlights how the opera
 
 ```{r cytoset_subset_2, echo=TRUE,message=TRUE}
 # demonstrate how cs point to the same underlying data
-range(exprs(cs[[1]])[,"B515-A"])
+range(cs[[1, "B515-A"]])
 
 # subset and show prior to transformation
 cs_small <- cs[1]
-range(exprs(cs_small[[1]])[,"B515-A"])
+range(cs_small[[1, "B515-A"]])
 
 # create a transformList
 trans <- transformList("B515-A",asinh)
+
 # transform
 cs_small <- transform(cs_small,trans)
 
 # after transformation
-range(exprs(cs_small[[1]])[,"B515-A"])
+range(cs_small[[1, "B515-A"]])
 
 # whole cs 
-range(exprs(cs[[1]])[,"B515-A"])
+range(cs[[1, "B515-A"]])
 ```
 
 As you see, the transformation was applied to a subset `cs_small` however the original `cs` was also altered highlighting that both objects were pointing to the same data. To confirm this, you can use `cs_get_uri` or `cf_get_uri`:
@@ -278,27 +418,27 @@ cs_get_uri(cs_small)
 cs_get_uri(cs)
 ```
 
-
 To perform a **deep copy** we can use `realize_view()`
 
 ```{r cytoset_deep_copy, echo=TRUE, message=TRUE}
 # look at underlying expression
-range(exprs(cs[[2]])[,"B515-A"])
+range(cs[[2, "B515-A"]])
 
 # subset and show prior to transformation
 cs_small2 <- realize_view(cs[2])
-range(exprs(cs_small2[[1]])[,"B515-A"])
+range(cs_small2[[1, "B515-A"]])
 
 # create a transformList
 trans <- transformList("B515-A",asinh)
+
 # transform
 cs_small2 <- transform(cs_small2,trans)
 
 # after transformation
-range(exprs(cs_small2[[1]])[,"B515-A"])
+range(cs_small2[[1, "B515-A"]])
 
 # whole cs 
-range(exprs(cs[[2]])[,"B515-A"])
+range(cs[[2, "B515-A"]])
 ```
 
 Notice that `cs` is left unchanged. 
@@ -309,7 +449,11 @@ Notice that `cs` is left unchanged.
 ```r
 cf_log_trans <- cf
 exprs(cf_log_trans) <- log2(exprs(cf))
-plot(exprs(cf)[,"V510-A"], exprs(cf_log_trans)[,"V510-A"], main = "Effect of log2 transformation on  V510-A (CD3)")
+plot(
+  exprs(cf)[,"V510-A"], 
+  exprs(cf_log_trans)[,"V510-A"],
+  main = "Effect of log2 transformation on  V510-A (CD3)"
+)
 ```
 
 ## Adding additional **.fcs** files to `cytoset`
@@ -322,7 +466,11 @@ cs_small <- realize_view(cs[1]) # cs[1] subsets cs into a cytoset while realize_
 cs_small
 
 # no need to assign back to cs_small, because this function operates by reference and returns NULL anyways.
-cs_add_cytoframe(cs = cs_small, sn = "Sample Name", cf = cs[[3]]) # cs[[3]] results in a cytoframe
+cs_add_cytoframe(
+  cs = cs_small,
+  sn = "Sample Name",
+  cf = cs[[3]]   # cs[[3]] results in a cytoframe
+) 
 cs_small
 ```
 
