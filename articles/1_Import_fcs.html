@@ -150,94 +150,10 @@ contains FCS files for OMIP-025, a study to evaluate the memory and
 follicular helper phenotypes of human T- and NK- cell populations using
 intracellular cytokine staining. The second dataset <a href="http://flowrepository.org/id/FR-FCM-ZZ36" class="external-link">FR-FCM-ZZ36</a> contains
 FCS files for OMIP-018, a study designed to phenotype T cells for
-expression of various chemokine receptors. All the data required for
-this workshop, including these FlowRepository datasets can be downloaded
-to a <code>data</code> folder and cached locally by running
-<code><a href="../reference/cache_workshop_data.html">cache_workshop_data()</a></code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of cached workshop data</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>├── FR<span class="sc">-</span>FCM<span class="sc">-</span>ZZEC</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>│   ├── AViD CD14 BV510 stained control.fcs</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>│   ├── CCR7 BV785 stained control.fcs</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>│   ├── CD154 BV605 stained control.fcs</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>│   ├── CD3 APC stained control.fcs</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>│   ├── CD3 BV570 stained control.fcs</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>│   ├── CD4 BUV395 stained control.fcs</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>│   ├── CD45RA APC<span class="sc">-</span>H7 stained control.fcs</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>│   ├── CD56 BV655 stained control.fcs</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>│   ├── CD8 BV711 stained control.fcs</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>│   ├── CD8 PerCP<span class="sc">-</span>Cy5<span class="fl">.5</span> stained control.fcs</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>│   ├── CXCR5 PE<span class="sc">-</span>eF610 stained control.fcs</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>│   ├── IFNg V450 stained control.fcs</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>│   ├── IL2 PE stained control.fcs</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>│   ├── PD<span class="dv">-1</span> PE<span class="sc">-</span>Cy7 stained control.fcs</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>│   ├── Sample CMV.fcs</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>│   ├── Sample DMSO.fcs</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>│   ├── Sample SEB.fcs</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>│   ├── TNFa FITC stained control.fcs</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>│   ├── Unstained control.fcs</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>│   └── control_files.csv</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>├── FlowRepository_FR<span class="sc">-</span>FCM<span class="sc">-</span>ZZ36_files</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_APC Stained Control.fcs</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_APC<span class="sc">-</span>Cy7 Stained Control.fcs</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Alexa Fluor <span class="dv">405</span> Stained Control.fcs</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Alexa Fluor <span class="dv">430</span> Stained Control.fcs</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Alexa Fluor <span class="dv">488</span> Stained Control.fcs</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE Stained Control.fcs</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Cy5 Stained Control.fcs</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Cy5<span class="dv">-5</span> Stained Control.fcs</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Cy7 Stained Control.fcs</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Texas Red Stained Control.fcs</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PerCP<span class="sc">-</span>Cy5<span class="dv">-5</span> Stained Control.fcs</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Qdot <span class="dv">605</span> Stained Control.fcs</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Qdot <span class="dv">655</span> Stained Control.fcs</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Qdot <span class="dv">800</span> Stained Control.fcs</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Unstained Control.fcs</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>│   ├── control_files.csv</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>│   ├── pbmc_luca.fcs</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>│   └── spillover_from_FJ.csv</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>├── fcs_data</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>│   ├── 4000_BDC<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>│   ├── 4000_BDC<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>│   ├── 4000_TNK<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>│   ├── 4000_TNK<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>│   ├── 4001_BDC<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>│   ├── 4001_BDC<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>│   ├── 4001_TNK<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>│   ├── 4001_TNK<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>│   ├── 4002_BDC<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>│   ├── 4002_BDC<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>│   ├── 4002_TNK<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>│   ├── 4002_TNK<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>│   ├── 4003_BDC<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>│   ├── 4003_BDC<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>│   ├── 4003_TNK<span class="sc">-</span>CR1.fcs</span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>│   └── 4003_TNK<span class="sc">-</span>CR2.fcs</span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>├── fj_wsp</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>│   ├── 210224_BDC_CR1_analysis_template.wsp</span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>│   ├── 210224_BDC_CR2_analysis_template.wsp</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>│   ├── 210224_TNK<span class="sc">-</span>CR2_analysis_template.wsp</span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>│   ├── 210520_TNK<span class="sc">-</span>CR1_analysis_template.wsp</span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>│   ├── analysis_copy.wsp</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>│   └── fj_transform.gz</span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>├── gating_template</span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>│   └── gating_template_TNK.csv</span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>└── metadata</span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    └── 220115_Demographics_for_raw_data_upload.csv</span></code></pre></div>
-<p>Throughout this workshop we will use <code><a href="../reference/cache_workshop_data.html">get_workshop_data()</a></code>
-to return information about the location of the cached files so that
-they can be easily accessed for downstream analyses.
-<code><a href="../reference/cache_workshop_data.html">get_workshop_data()</a></code> returns a tibble containing information
-about the cached data including the path to the requested file(s) as
-indicated in the <code>rpath</code> variable.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># get location of cached data</span></span>
-<span><span class="va">cache_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"gating_template_TNK.csv"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cache_info</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] "rid"                "rname"              "create_time"       </span></span>
-<span><span class="co">##  [4] "access_time"        "rpath"              "rtype"             </span></span>
-<span><span class="co">##  [7] "fpath"              "last_modified_time" "etag"              </span></span>
-<span><span class="co">## [10] "expires"</span></span></code></pre>
+expression of various chemokine receptors.</p>
+<p>The data required for this workshop, including subsets extracted from
+the FlowRepository datasets are made available locally in a file cache
+by running <code><a href="../reference/cache_workshop_data.html">cache_workshop_data()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="cytoverse-data-structures-for--fcs-files">
@@ -296,10 +212,64 @@ interact with that. For instance,</p>
 <strong>.fcs</strong> files in this way for this workshop, but instead
 reference them through a file cache. This cache is essentially a set of
 folders, however, and we specify which files we want in it with
-<code>get_workshop_data</code>. (If you want to explore it, you can
-examine it with
-<code>BiocFileCache::bfcinfo(CytoverseBioc2023:::.get_cache())</code>.)</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code>get_workshop_data</code>.</p>
+<p>If you want to explore it, you can examine it with
+<code>BiocFileCache::bfcinfo(CytoverseBioc2023:::.get_cache())</code> or
+you can see some additional details below:</p>
+<details><div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of cached workshop data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">/</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>├── FlowRepository_FR<span class="sc">-</span>FCM<span class="sc">-</span>ZZ36_files</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_APC Stained Control.fcs</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_APC<span class="sc">-</span>Cy7 Stained Control.fcs</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Alexa Fluor <span class="dv">405</span> Stained Control.fcs</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Alexa Fluor <span class="dv">430</span> Stained Control.fcs</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Alexa Fluor <span class="dv">488</span> Stained Control.fcs</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE Stained Control.fcs</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Cy5 Stained Control.fcs</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Cy5<span class="dv">-5</span> Stained Control.fcs</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Cy7 Stained Control.fcs</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PE<span class="sc">-</span>Texas Red Stained Control.fcs</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_PerCP<span class="sc">-</span>Cy5<span class="dv">-5</span> Stained Control.fcs</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Qdot <span class="dv">605</span> Stained Control.fcs</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Qdot <span class="dv">655</span> Stained Control.fcs</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Qdot <span class="dv">800</span> Stained Control.fcs</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>│   ├── Compensation Controls_Unstained Control.fcs</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>│   ├── control_files.csv</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>│   ├── pbmc_luca.fcs</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>│   └── spillover_from_FJ.csv</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>├── fcs_data</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>│   ├── 4000_BDC<span class="sc">-</span>CR1.fcs</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>│   ├── 4000_TNK<span class="sc">-</span>CR1.fcs</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>│   ├── 4001_BDC<span class="sc">-</span>CR1.fcs</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>│   ├── 4001_TNK<span class="sc">-</span>CR1.fcs</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>│   ├── 4002_TNK<span class="sc">-</span>CR1.fcs</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>│   └── 4003_TNK<span class="sc">-</span>CR1.fcs</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>├── fj_wsp</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>│   ├── 210224_BDC_CR1_analysis_template.wsp</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>│   ├── 210224_BDC_CR2_analysis_template.wsp</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>│   ├── 210224_TNK<span class="sc">-</span>CR2_analysis_template.wsp</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>│   ├── 210520_TNK<span class="sc">-</span>CR1_analysis_template.wsp</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>│   ├── analysis_copy.wsp</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>│   └── fj_transform.gz</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>├── gating_template</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>│   └── gating_template_TNK.csv</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>└── metadata</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    └── 220115_Demographics_for_raw_data_upload.csv</span></code></pre></div>
+<p>Throughout this workshop we will use <code><a href="../reference/cache_workshop_data.html">get_workshop_data()</a></code>
+to return information about the location of the cached files so that
+they can be easily accessed for downstream analyses.
+<code><a href="../reference/cache_workshop_data.html">get_workshop_data()</a></code> returns a tibble containing information
+about the cached data including the path to the requested file(s) as
+indicated in the <code>rpath</code> variable.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># get location of cached data</span></span>
+<span><span class="va">cache_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span><span class="st">"gating_template_TNK.csv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cache_info</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1] "rid"                "rname"              "create_time"       </span></span>
+<span><span class="co">##  [4] "access_time"        "rpath"              "rtype"             </span></span>
+<span><span class="co">##  [7] "fpath"              "last_modified_time" "etag"              </span></span>
+<span><span class="co">## [10] "expires"</span></span></code></pre>
+</details><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/load_cytoframe_from_fcs.html" class="external-link">load_cytoframe_from_fcs</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/cache_workshop_data.html">get_workshop_data</a></span><span class="op">(</span></span>
 <span>    <span class="st">"data/fcs_data/4000_TNK-CR1.fcs"</span></span>
@@ -308,7 +278,7 @@ examine it with
 <span></span>
 <span><span class="co"># a cytoframe object</span></span>
 <span><span class="va">cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c64e4a619d_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c9f2f6579_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -560,7 +530,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytorame by column</span></span>
 <span><span class="va">s_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span>, <span class="va">CD4_chan</span><span class="op">]</span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c64e4a619d_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c9f2f6579_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 1 observables:</span></span>
 <span><span class="co">##        name       desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P23 U785-A CD4 BUV805    262143  -80.5002    262143</span></span>
@@ -571,7 +541,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytoframe by row</span></span>
 <span><span class="va">s2_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
 <span><span class="va">s2_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c64e4a619d_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c9f2f6579_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 100 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -748,19 +718,17 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <code class="sourceCode R"><span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 5c67b679c8f_4000_BDC-CR1.fcs 5c67b679c8f_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5c64e4a619d_4000_TNK-CR1.fcs 5c64e4a619d_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c648239713_4001_BDC-CR1.fcs 5c648239713_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5c65fc6fb43_4001_TNK-CR1.fcs 5c65fc6fb43_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c66f62b28_4002_TNK-CR1.fcs   5c66f62b28_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c63ff6d52f_4003_TNK-CR1.fcs 5c63ff6d52f_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 5c96e8f135b_4000_BDC-CR1.fcs 5c96e8f135b_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5c9f2f6579_4000_TNK-CR1.fcs   5c9f2f6579_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c942bafdf3_4001_BDC-CR1.fcs 5c942bafdf3_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5c91bd37a03_4001_TNK-CR1.fcs 5c91bd37a03_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c94dbe6dd4_4002_TNK-CR1.fcs 5c94dbe6dd4_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c911b6b86a_4003_TNK-CR1.fcs 5c911b6b86a_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create metadata</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  Treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Untreated"</span>,<span class="st">"Treated"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span>,</span>
-<span>    replace <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  Treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Untreated"</span>,<span class="st">"Treated"</span><span class="op">)</span>,</span>
+<span>    length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span></span>
@@ -784,12 +752,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5c67b679c8f_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5c64e4a619d_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5c648239713_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span>
-<span><span class="co">## 5c65fc6fb43_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5c66f62b28_4002_TNK-CR1.fcs    Treated  T Cell Panel</span></span>
-<span><span class="co">## 5c63ff6d52f_4003_TNK-CR1.fcs Untreated  T Cell Panel</span></span></code></pre>
+<span><span class="co">## 5c96e8f135b_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c9f2f6579_4000_TNK-CR1.fcs    Treated  T Cell Panel</span></span>
+<span><span class="co">## 5c942bafdf3_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c91bd37a03_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 5c94dbe6dd4_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 5c911b6b86a_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p>This is much more convenient than going back and forth between the
@@ -806,8 +774,8 @@ full set of files.</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5c67b679c8f_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5c648239713_4001_BDC-CR1.fcs   Treated Myeloid Panel</span></span></code></pre>
+<span><span class="co">## 5c96e8f135b_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c942bafdf3_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span></code></pre>
 <div class="section level3">
 <h3 id="cytoset-views-and-aliasing">Cytoset views and aliasing<a class="anchor" aria-label="anchor" href="#cytoset-views-and-aliasing"></a>
 </h3>
@@ -856,10 +824,10 @@ To confirm this, you can use <code>cs_get_uri</code> or
 <code>cf_get_uri</code>:</p>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs_small</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpInkTn6/08dfd69e-a0aa-480c-94af-b4152e07b82a"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpNdOH3t/560506f9-5c23-4374-a2c5-7386955452c1"</span></span></code></pre>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpInkTn6/08dfd69e-a0aa-480c-94af-b4152e07b82a"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpNdOH3t/560506f9-5c23-4374-a2c5-7386955452c1"</span></span></code></pre>
 <p>To perform a <strong>deep copy</strong> we can use
 <code><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view()</a></code></p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
@@ -965,12 +933,12 @@ attempted to be coerced to a single array like object. (Set
 <span><span class="va">n_cell_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">nrow</span><span class="op">)</span></span>
 <span><span class="va">n_cell_events</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                [,1]</span></span>
-<span><span class="co">## 5c67b679c8f_4000_BDC-CR1.fcs 912254</span></span>
-<span><span class="co">## 5c64e4a619d_4000_TNK-CR1.fcs 102015</span></span>
-<span><span class="co">## 5c648239713_4001_BDC-CR1.fcs 924474</span></span>
-<span><span class="co">## 5c65fc6fb43_4001_TNK-CR1.fcs  92703</span></span>
-<span><span class="co">## 5c66f62b28_4002_TNK-CR1.fcs  372224</span></span>
-<span><span class="co">## 5c63ff6d52f_4003_TNK-CR1.fcs 146150</span></span></code></pre>
+<span><span class="co">## 5c96e8f135b_4000_BDC-CR1.fcs 912254</span></span>
+<span><span class="co">## 5c9f2f6579_4000_TNK-CR1.fcs  102015</span></span>
+<span><span class="co">## 5c942bafdf3_4001_BDC-CR1.fcs 924474</span></span>
+<span><span class="co">## 5c91bd37a03_4001_TNK-CR1.fcs  92703</span></span>
+<span><span class="co">## 5c94dbe6dd4_4002_TNK-CR1.fcs 372224</span></span>
+<span><span class="co">## 5c911b6b86a_4003_TNK-CR1.fcs 146150</span></span></code></pre>
 <div class="section level3">
 <h3 id="exercises">Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
 </h3>
