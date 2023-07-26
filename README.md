@@ -6,7 +6,8 @@ A number of packages make up the `cytoverse`. [flowCore](https://bioconductor.or
 
 # Workshop outlines
 
-This website contains training materials that will be presented at a workshop at [Bioc2023](https://bioc2023.bioconductor.org/schedule/), on August 2nd.  After the conference, we'll add a link to videos of the workshop.
+[This website](https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html) contains training materials that will be presented at a workshop at [Bioc2023](https://bioc2023.bioconductor.org/schedule/), on August 2nd.  If you couldn't attend the conference, don't worry, as we'll add links to videos of the workshop.
+You may also explore these training materials at your own pace.
 
 ## Learning goals
 
@@ -14,21 +15,13 @@ The aim of this workshop is to empower flow cytometry users and analysts towards
 
 By the end of this workshop, the attendees will be able to
 
--   [Import flow cytometry data](articles/Import_fcs.html)
--   [Understand the difference between **uncompensated**, **compensated**, and **transformed** data](articles/Spillover_v2.html),
--   Identify and [generate important plots](articles/ggcyto_1-5.html) to assess the **data** and  **quality**,
--   Identify sub-populations by [manual or semi-automated gating of markers](Gating_1.html),
--   [Generate plots summarizing the expression of markers and abundance of various sub-populations](articles/Reporting_1.html)
-
-## Prerequisites/assumptions
-
--   Some R knowledge,
--   Basic flow cytometry knowledge,
--   Willingness to ask questions and learn
-
-## Data
-
-For this workshop, we will use subset of a public data set: [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932) that can be found in **flowrepository.org**. The dataset was published in the following [paper](https://doi.org/10.1038/s41467-022-34638-2).
+-   [Import flow cytometry data](articles/1_Import_fcs.html)
+-   [Understand the difference between **uncompensated**, **compensated**, and **transformed** data](articles/2_Spillover_transformation.html),
+-   Identify sub-populations by [manual or semi-automated gating of markers](articles/3_Gating_1.html),
+-   [Access and extract expression matrix from a gated data](articles/4_Gating_2.html),
+-   Be aware of [csv-templating of Gating](articles/5_Gating_gatingTemplate.html) to perform large-scale gating
+-   Identify and [generate important plots](articles/6_ggcyto.html) to assess the **data** and  **quality**,
+-   [Generate plots summarizing the expression of markers and abundance of various sub-populations](articles/7_Reporting.html)
 
 ## Workshop schedule
 
@@ -41,16 +34,38 @@ For this workshop, we will use subset of a public data set: [FR-FCM-Z5PC](https:
 | Visualization using `ggcyto`                     | 10 minutes |
 | Reporting                                        | 10 minutes |
 | Wrap-up                                          | 10 minutes |
-# Journey into the `cytoverse`!
-
-Let's begin!    
 
 
-# Notes on using the docker image
+## Prerequisites/assumptions
+
+-   Some R knowledge,
+-   Basic flow cytometry knowledge,
+-   Willingness to ask questions and learn
+
+## Data
+
+For this workshop, we will use subset of a public data set: [FR-FCM-Z5PC](https://flowrepository.org/public_experiment_representations/5932) that can be found in **flowrepository.org**. The dataset was published in the following [paper](https://doi.org/10.1038/s41467-022-34638-2).
+
+---
+
+# Journey into the `cytoverse`
+
+What do these various packages do, and where should you look for a piece of functionality?
+
+* [flowWorkspace](https://www.bioconductor.org/packages/release/bioc/html/flowWorkspace.html): provides core data structures and methods for use in cytometry data analysis, including compensation, transformation, and gating. 
+* [flowCore](https://bioconductor.org/packages/release/bioc/html/flowCore.html): provides additional data structures and methods for use in cytometry data analysis, however in some cases has been superceded by `flowWorkspace`
+* [ggcyto](https://www.bioconductor.org/packages/release/bioc/html/ggcyto.html): make plots of distributions of cells and their gates using a ggplot2-based framework
+* CytoML: import and export of cytometry data to or from FlowJo, BD FACSDIVA, and Cytobank workspace formats.
+* CytoQC: wrangle and standardize collections of FCS files.
+* [openCyto](https://bioconductor.org/packages/release/bioc/html/openCyto.html): openCyto enables the development of reproducible automated analysis pipelines
+* flowClust: implements various unsupervised clustering methods
+* flowStats: enables calculation of sample-level summaries of gated populations
+
+---
+
 # Notes on using the docker image
 
 ```sh
 docker run -network=host -e PASSWORD=<choose_a_password_for_rstudio> -p 8787:8787 ghcr.io/ozettetech/cytoverse-bioc-2023:latest
 ````
 
-*NOTE*: Running docker that uses the password in plain text like above exposes the password to others in a multi-user system (like a shared workstation or compute node). In practice, consider using an environment variable instead of plain text to pass along passwords and other secrets in docker command lines.

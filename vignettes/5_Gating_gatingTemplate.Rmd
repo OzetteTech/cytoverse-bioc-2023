@@ -1,5 +1,5 @@
 ---
-title: "Gating Cells in cytoverse: Part 2"
+title: "Gating Cells in cytoverse using gatingTemplates (optional)"
 vignette: >
   %\VignetteIndexEntry{Gating Cells}
   %\VignetteEngine{knitr::rmarkdown}
@@ -8,7 +8,7 @@ vignette: >
 
 ## Using openCyto gatingTemplate
 
-In [**Part 1**](Gating_1.Rmd) we identified various gates available in `cytoverse` and how to use them. Here, we show how users can compose a similar gating scheme by using a `gatingTemplate`.
+In [**Part 1**](3_Gating_1.Rmd) we identified various gates available in `cytoverse` and how to use them. Here, we show how users can compose a similar gating scheme by using a `gatingTemplate`.
 
 A `gatingTemplate` is a csv file that describes the gating sequence and the gating methods. In the `gatingTemplate` csv file, we can leverage the various automated gating methods that we have previously seen, without explicitly requiring to script it in **R**.
 
@@ -22,7 +22,7 @@ library(CytoverseBioc2023)
 cache_workshop_data()
 
 # make gs available
-gs <- make_transformed_gs()
+gs <- make_transformed_gs(add_gates = TRUE)
 ```
 
 ```{r gatingTemplate_load, echo=TRUE, eval= TRUE, message = FALSE}

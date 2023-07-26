@@ -2,6 +2,7 @@
 
 export(cache_workshop_data)
 export(get_workshop_data)
+export(make_cytoset)
 export(make_transformed_gs)
 import(BiocFileCache)
 import(flowStats)
