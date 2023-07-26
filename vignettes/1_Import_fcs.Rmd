@@ -36,93 +36,9 @@ cache_workshop_data()
 
 ## FlowRepository workshop data
 
-In this `cytoverse` workshop we will demonstrate the use of `cytoverse` packages to analyse publicly available datasets hosted on [FlowRepository](http://flowrepository.org/). The first dataset [FR-FCM-ZZEC](http://flowrepository.org/id/FR-FCM-ZZEC) contains FCS files for OMIP-025, a study to evaluate the memory and follicular helper phenotypes of human T- and NK- cell populations using intracellular cytokine staining. The second dataset [FR-FCM-ZZ36](http://flowrepository.org/id/FR-FCM-ZZ36) contains FCS files for OMIP-018, a study designed to phenotype T cells for expression of various chemokine receptors. All the data required for this workshop, including these FlowRepository datasets can be downloaded to a `data` folder and cached locally by running `cache_workshop_data()`. 
+In this `cytoverse` workshop we will demonstrate the use of `cytoverse` packages to analyse publicly available datasets hosted on [FlowRepository](http://flowrepository.org/). The first dataset [FR-FCM-ZZEC](http://flowrepository.org/id/FR-FCM-ZZEC) contains FCS files for OMIP-025, a study to evaluate the memory and follicular helper phenotypes of human T- and NK- cell populations using intracellular cytokine staining. The second dataset [FR-FCM-ZZ36](http://flowrepository.org/id/FR-FCM-ZZ36) contains FCS files for OMIP-018, a study designed to phenotype T cells for expression of various chemokine receptors. 
 
-```{r, eval = FALSE, echo = FALSE}
-# copy output below
-fs::dir_tree("data")
-```
-
-```{r workshop_data, eval = FALSE, echo = TRUE}
-# structure of cached workshop data
-data
-├── FR-FCM-ZZEC
-│   ├── AViD CD14 BV510 stained control.fcs
-│   ├── CCR7 BV785 stained control.fcs
-│   ├── CD154 BV605 stained control.fcs
-│   ├── CD3 APC stained control.fcs
-│   ├── CD3 BV570 stained control.fcs
-│   ├── CD4 BUV395 stained control.fcs
-│   ├── CD45RA APC-H7 stained control.fcs
-│   ├── CD56 BV655 stained control.fcs
-│   ├── CD8 BV711 stained control.fcs
-│   ├── CD8 PerCP-Cy5.5 stained control.fcs
-│   ├── CXCR5 PE-eF610 stained control.fcs
-│   ├── IFNg V450 stained control.fcs
-│   ├── IL2 PE stained control.fcs
-│   ├── PD-1 PE-Cy7 stained control.fcs
-│   ├── Sample CMV.fcs
-│   ├── Sample DMSO.fcs
-│   ├── Sample SEB.fcs
-│   ├── TNFa FITC stained control.fcs
-│   ├── Unstained control.fcs
-│   └── control_files.csv
-├── FlowRepository_FR-FCM-ZZ36_files
-│   ├── Compensation Controls_APC Stained Control.fcs
-│   ├── Compensation Controls_APC-Cy7 Stained Control.fcs
-│   ├── Compensation Controls_Alexa Fluor 405 Stained Control.fcs
-│   ├── Compensation Controls_Alexa Fluor 430 Stained Control.fcs
-│   ├── Compensation Controls_Alexa Fluor 488 Stained Control.fcs
-│   ├── Compensation Controls_PE Stained Control.fcs
-│   ├── Compensation Controls_PE-Cy5 Stained Control.fcs
-│   ├── Compensation Controls_PE-Cy5-5 Stained Control.fcs
-│   ├── Compensation Controls_PE-Cy7 Stained Control.fcs
-│   ├── Compensation Controls_PE-Texas Red Stained Control.fcs
-│   ├── Compensation Controls_PerCP-Cy5-5 Stained Control.fcs
-│   ├── Compensation Controls_Qdot 605 Stained Control.fcs
-│   ├── Compensation Controls_Qdot 655 Stained Control.fcs
-│   ├── Compensation Controls_Qdot 800 Stained Control.fcs
-│   ├── Compensation Controls_Unstained Control.fcs
-│   ├── control_files.csv
-│   ├── pbmc_luca.fcs
-│   └── spillover_from_FJ.csv
-├── fcs_data
-│   ├── 4000_BDC-CR1.fcs
-│   ├── 4000_BDC-CR2.fcs
-│   ├── 4000_TNK-CR1.fcs
-│   ├── 4000_TNK-CR2.fcs
-│   ├── 4001_BDC-CR1.fcs
-│   ├── 4001_BDC-CR2.fcs
-│   ├── 4001_TNK-CR1.fcs
-│   ├── 4001_TNK-CR2.fcs
-│   ├── 4002_BDC-CR1.fcs
-│   ├── 4002_BDC-CR2.fcs
-│   ├── 4002_TNK-CR1.fcs
-│   ├── 4002_TNK-CR2.fcs
-│   ├── 4003_BDC-CR1.fcs
-│   ├── 4003_BDC-CR2.fcs
-│   ├── 4003_TNK-CR1.fcs
-│   └── 4003_TNK-CR2.fcs
-├── fj_wsp
-│   ├── 210224_BDC_CR1_analysis_template.wsp
-│   ├── 210224_BDC_CR2_analysis_template.wsp
-│   ├── 210224_TNK-CR2_analysis_template.wsp
-│   ├── 210520_TNK-CR1_analysis_template.wsp
-│   ├── analysis_copy.wsp
-│   └── fj_transform.gz
-├── gating_template
-│   └── gating_template_TNK.csv
-└── metadata
-    └── 220115_Demographics_for_raw_data_upload.csv
-```
-
-Throughout this workshop we will use `get_workshop_data()` to return information about the location of the cached files so that they can be easily accessed for downstream analyses. `get_workshop_data()` returns a tibble containing information about the cached data including the path to the requested file(s) as indicated in the `rpath` variable.
-
-```{r, eval = TRUE}
-# get location of cached data
-cache_info <- get_workshop_data("gating_template_TNK.csv")
-colnames(cache_info)
-```
+The data required for this workshop, including subsets extracted from the FlowRepository datasets are made available locally in a file cache by running `cache_workshop_data()`.
 
 ## `cytoverse` data structures for **.fcs** files
 
@@ -154,7 +70,71 @@ Normally, you might download a folder with a set of FCS files and interact with 
 knitr::include_graphics("images/example_fcs_path.png")
 ```
 
-For technical reasons, we can't easily distribute the **.fcs** files in this way for this workshop, but instead reference them through a file cache. This cache is essentially a set of folders, however, and we specify which files we want in it with `get_workshop_data`. (If you want to explore it, you can examine it with `BiocFileCache::bfcinfo(CytoverseBioc2023:::.get_cache())`.)
+For technical reasons, we can't easily distribute the **.fcs** files in this way for this workshop, but instead reference them through a file cache. This cache is essentially a set of folders, however, and we specify which files we want in it with `get_workshop_data`. 
+
+If you want to explore it, you can examine it with `BiocFileCache::bfcinfo(CytoverseBioc2023:::.get_cache())` or you can see some additional details below:
+
+<details>
+
+```{r, eval = FALSE, echo = FALSE}
+# copy output below
+download.file(CytoverseBioc2023:::zip_link, destfile = "data.tar.xz")
+untar("data.tar.xz")
+fs::dir_tree("data")
+```
+
+```{r workshop_data, eval = FALSE, echo = TRUE}
+# structure of cached workshop data
+data/
+├── FlowRepository_FR-FCM-ZZ36_files
+│   ├── Compensation Controls_APC Stained Control.fcs
+│   ├── Compensation Controls_APC-Cy7 Stained Control.fcs
+│   ├── Compensation Controls_Alexa Fluor 405 Stained Control.fcs
+│   ├── Compensation Controls_Alexa Fluor 430 Stained Control.fcs
+│   ├── Compensation Controls_Alexa Fluor 488 Stained Control.fcs
+│   ├── Compensation Controls_PE Stained Control.fcs
+│   ├── Compensation Controls_PE-Cy5 Stained Control.fcs
+│   ├── Compensation Controls_PE-Cy5-5 Stained Control.fcs
+│   ├── Compensation Controls_PE-Cy7 Stained Control.fcs
+│   ├── Compensation Controls_PE-Texas Red Stained Control.fcs
+│   ├── Compensation Controls_PerCP-Cy5-5 Stained Control.fcs
+│   ├── Compensation Controls_Qdot 605 Stained Control.fcs
+│   ├── Compensation Controls_Qdot 655 Stained Control.fcs
+│   ├── Compensation Controls_Qdot 800 Stained Control.fcs
+│   ├── Compensation Controls_Unstained Control.fcs
+│   ├── control_files.csv
+│   ├── pbmc_luca.fcs
+│   └── spillover_from_FJ.csv
+├── fcs_data
+│   ├── 4000_BDC-CR1.fcs
+│   ├── 4000_TNK-CR1.fcs
+│   ├── 4001_BDC-CR1.fcs
+│   ├── 4001_TNK-CR1.fcs
+│   ├── 4002_TNK-CR1.fcs
+│   └── 4003_TNK-CR1.fcs
+├── fj_wsp
+│   ├── 210224_BDC_CR1_analysis_template.wsp
+│   ├── 210224_BDC_CR2_analysis_template.wsp
+│   ├── 210224_TNK-CR2_analysis_template.wsp
+│   ├── 210520_TNK-CR1_analysis_template.wsp
+│   ├── analysis_copy.wsp
+│   └── fj_transform.gz
+├── gating_template
+│   └── gating_template_TNK.csv
+└── metadata
+    └── 220115_Demographics_for_raw_data_upload.csv
+```
+
+Throughout this workshop we will use `get_workshop_data()` to return information about the location of the cached files so that they can be easily accessed for downstream analyses. `get_workshop_data()` returns a tibble containing information about the cached data including the path to the requested file(s) as indicated in the `rpath` variable.
+
+```{r, eval = TRUE}
+# get location of cached data
+cache_info <- get_workshop_data("gating_template_TNK.csv")
+colnames(cache_info)
+```
+
+</details>
+
 
 ```{r load_cytoframe, eval=TRUE, echo=TRUE, message = FALSE}
 cf <- load_cytoframe_from_fcs(
@@ -340,10 +320,8 @@ pData(cs)
 
 # create metadata
 metadata <- data.frame(
-  Treatment = sample(
-    c("Untreated","Treated"),
-    length(cs),
-    replace = TRUE
+  Treatment = rep(c("Untreated","Treated"),
+    length.out = length(cs)
   ),
   panel = ifelse(
     grepl(

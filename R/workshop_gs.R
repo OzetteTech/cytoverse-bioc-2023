@@ -25,12 +25,7 @@ make_transformed_gs = function(add_gates = FALSE) {
     name = stringr::str_match(fcs_files_TNK$rname, "4[^.]+"),
     status = "Healthy",
     panel = "T Cell",
-    mock_treatment = sample(
-      x = c("Treated", "Control"),
-      size = 4,
-      prob = c(0.5, 0.5),
-      replace = TRUE
-    ),
+    mock_treatment = rep(c("Control", "Treated"), length.out = length(cs)),
     row.names = sampleNames(cs)
   )
   pData(cs) <- meta
