@@ -5,10 +5,11 @@ articles:
   1_Import_fcs: 1_Import_fcs.html
   2_Spillover_transformation: 2_Spillover_transformation.html
   3_Gating_1: 3_Gating_1.html
+  4_Gating_2: 4_Gating_2.html
   5_Gating_gatingTemplate: 5_Gating_gatingTemplate.html
   6_ggcyto: 6_ggcyto.html
   7_Reporting: 7_Reporting.html
-last_built: 2023-07-26T23:52Z
+last_built: 2023-07-27T16:12Z
 urls:
   reference: https://cdn.ozetteai.com/cytoverse-bioc-2023/reference
   article: https://cdn.ozetteai.com/cytoverse-bioc-2023/articles
