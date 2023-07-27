@@ -1,0 +1,131 @@
+---
+title: "Gating cells in cytoverse: accessing gated data"
+vignette: >
+  %\VignetteIndexEntry{Gating Cells}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Background 
+
+In this section we describe the methods available to access and extract the gated data within a `GatingSet`. 
+It is important to note here that the **gates** essentially act as filter for the data and may be utilize to subset the original data. 
+
+
+```{r load_libraries, eval=TRUE, echo=TRUE, message=FALSE}
+library(flowWorkspace)
+library(flowCore)
+library(CytoverseBioc2023)
+cache_workshop_data()
+```
+
+
+## Gating paths: get and set
+
+Let's first look at the gates that are attached to the `GatingSet`. For this example, we will make use of a `GatingSet` that we have previously prepared. 
+
+```{r load_gs, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+gs <- make_transformed_gs(add_gates = TRUE)
+gs
+```
+
+We have previously used `plot(gs)` to visualize the gating hierarchy as a tree as shown below:
+
+```{r tree_plot, echo=FALSE, eval=TRUE}
+plot(gs, bool = TRUE)
+```
+
+To extract the full gating path we can use `gs_get_pop_paths` method.
+
+```{r get_pop_paths, echo=TRUE, eval=TRUE, message=TRUE}
+# get all paths
+gs_get_pop_paths(gs)
+```
+
+When there are a lot of gates, this list can become very long as each node is shown as a distinct path. Suppose you would like to only view the leaf nodes. For this, we use `gs_get_leaf_nodes`.
+
+```{r leaf_nodes, echo=TRUE, eval=TRUE}
+# get leaf nodes
+gs_get_leaf_nodes(gs, 
+                  ancestor = "root") # can select leafs of a specific node
+
+```
+
+To change the name of a node, for instance, **CD4-CD8a-** above is not super clear and we want to update this to **Double Negative CD3+ T cells** for readability, we can use `gs_pop_set_name` method.
+
+```{r rename_name, echo=TRUE, message=FALSE}
+# rename node
+gs_pop_set_name(gs,
+                 "CD4-CD8a-",
+                 "Double Negative CD3+ T cells")
+
+# check
+gs_get_leaf_nodes(gs)
+```
+
+### Exercise
+
+1. Run `gs_get_pop_paths(gs)` by include a `path = 1` argument. How is the output different compared to not providing `path`? What happens when you change this to `path = 2`?
+2. Suppose you do not know what is the parent population for `Double Negative CD3+ T cells`, what is an easy approach to get this information? *Hint*: Try `help(gs_pop_get_paths)` to check other available methods.
+
+
+## Extracting filtered data 
+
+Often, users may also want to extract the embedded expression data for a specified gated population for some downstream application. The `cytoverse` makes it super easy to extract this data. Moreover, the extracted data is preserved as a `cytoframe` or a `cytoset` for ease of use.
+
+The 2 main methods are:
+1.    `gs_pop_get_data`
+2.    `gh_pop_get_data`
+
+```{r extract_data, echo=TRUE, eval=TRUE, message = FALSE}
+# extract data
+extracted <- gs_pop_get_data(gs,
+                y = "live",
+                inverse.transform = FALSE)
+extracted
+```
+
+### Exercise
+
+1. Try running the above code as `gh_pop_get_data`. How are the results different?
+2. Extract the data from the gate `Double Negative CD3+ T cells` for the 1st sample and store it as `sample_1`. Transform the expression value for `FSC-A`. What happens to the data in `gs`?
+
+*Hint*:
+
+<details>
+```{}
+# plot
+ggcyto(gs,
+       subset = "Double Negative CD3+ T cells", 
+       aes(x = "FSC-A", y = "SSC-A"))+
+  geom_hex(bins = 256)
+```
+
+Notice that altering the extracted data leads to altered data within the `GatingSet`. This is because we did not create a new copy of the data using `realize_view` method. Importantly, this further highlights that the `cytoframe`, `cytoset`, and the `GatingSet` are all pointing to the same data!
+</details>
+
+3. what does `inverse.transform` argument do?
+4. Run the following code:
+
+<details>
+*Note*: This is only for example.
+```{r echo=TRUE, eval=FALSE}
+another_CD3_gate <- matrix(c(-Inf,Inf), nrow = 2, ncol=1)
+colnames(another_CD3_gate) <- "FSC-A"
+another_CD3_gate <- rectangleGate(.gate = another_CD3_gate, filterId = "CD3+ T cells")
+gs_pop_add(gs, parent = "non-NKT Cells", gate = another_CD3_gate)
+recompute(gs)
+plot(gs)
+```
+</details>
+
+Now try to extract the `CD3+ T cells` population using either `gs_` or `gh_` methods as above.
+
+## Saving extracted data
+
+Depending on the method called, the extracted data is either preserved as a `cytoframe` or a `cytoset`. As you experienced in the exercise, manipulating the extracted without performing a deep copy using `realize_view` leads to alteration of the data within the `GatingSet` object. As such, if extracting for further downstream application, it maybe worthwhile to save the data. For this, please refer to the [Importing and Basics of working with FCS files](articles/1_Import_fcs.html) for more details. 
+
+# Conclusion
+
+In this brief section we demonstrated how users/analysts could extract the embedded data from a `GatingSet`. Feel free to explore the `flowWorkspace` vignette for additional available methods.
+In the next section, [Reporting](articles/7_Reporting.html), we will go over how to extract various statistics regarding the gated populations.
