@@ -25,7 +25,7 @@ navbar:
       - text: "Gating Cells with gatingTemplates"
         href: articles/5_Gating_gatingTemplate.html
       - text: "Visualizations using ggcyto"
-        href: articles/5_ggcyto.html
+        href: articles/6_ggcyto.html
       - text: "Reporting: Counts, Frequency, etc."
         href: articles/6_Reporting.html 
         
