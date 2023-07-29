@@ -27,7 +27,7 @@ navbar:
       - text: "Visualizations using ggcyto"
         href: articles/6_ggcyto.html
       - text: "Reporting: Counts, Frequency, etc."
-        href: articles/6_Reporting.html 
+        href: articles/7_Reporting.html 
         
      
 

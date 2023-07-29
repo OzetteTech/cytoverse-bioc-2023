@@ -221,9 +221,9 @@ Seems like there are a lot of MAIT Cells that are CD8a+ or negative for both CD8
 ### Exercise
 
 1. Prepare an overlay as above using the `autoplot` method.
-*Hint*
-<details>
 
+*Hint*:
+<details>
 ```{r echo=TRUE, eval=FALSE}
 example <- autoplot(
   # add your code
@@ -238,6 +238,7 @@ example <- autoplot(
 ```
 
 </details>
+
 2. Construct a `rectangleGate` for CD8+ cells and add it to the plot you create.
 3. Why are the scales not **inverse transformed**?
 
