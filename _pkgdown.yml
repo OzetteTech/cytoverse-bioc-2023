@@ -20,8 +20,10 @@ navbar:
         href: articles/2_Spillover_transformation.html
       - text: "Gating Cells with scripts"
         href: articles/3_Gating_1.html
+      - text: "Accessing gated data"
+        href: articles/4_Gating_2.html
       - text: "Gating Cells with gatingTemplates"
-        href: articles/4_Gating_gatingTemplate.html
+        href: articles/5_Gating_gatingTemplate.html
       - text: "Visualizations using ggcyto"
         href: articles/5_ggcyto.html
       - text: "Reporting: Counts, Frequency, etc."
