@@ -23,7 +23,7 @@ In this section, we aim to clarify the concept of Spillover, and the use of **sp
 
 ## Spillover
 
-Flow cytometers (optics based: spectral or non-spectral) collect fluorescent signal from a cell as result of a laser excitation. Briefly, cell type **C** has been labelled with a marker **M** that is conjugated to a fluorophore (**F**). **F** has excitation maxima at certain wavelength (**W**) resulting in fluorescence. While the fluorescence has a emission maxima, the emission profile of **F** can span many nanometers. The cytometer has a dedicated detector (channel) **A** to detect peak emission of **F**. However, due to the spread of the emission of **F**, some signal from **F** is also "spilled" onto detector **B**, a detector for a different fluorophore.
+Flow cytometers (optics based: spectral or non-spectral) collect fluorescent signal from a cell as result of a laser excitation. Briefly, cell type **C** has been labelled with a marker **M** that is conjugated to a fluorophore (**F**). **F** is excited by a laser resulting in fluorescence. While the fluorescence has a emission maxima, the emission profile of **F** can span many nanometers. The cytometer has a dedicated detector (channel) **A** to detect peak emission of **F**. However, due to the spread of the emission of **F**, some signal from **F** is also "spilled" onto detector **B**, a detector for a different fluorophore.
 
 The image below provides a concrete example.
 
@@ -33,7 +33,7 @@ The **spillover** of signal onto secondary detector(s) is *additive* and can be 
 
 Raw Signal in $B = \text{Signal from FITC (spillover)} + \text{Signal from another (perhaps dedicated) fluorophore}.$
 
-FITC signal detected erroneously by secondary detectors can be performed by a process of **fluorescence compensation** which requires a set of controls be present to calculate the spillover. These controls are called *Single Colour Controls* and are acquired prior to sample acquisition. The purpose of the single colour control is to estimate the amount of spillover of emission from fluorophore **F** onto non-primary detectors (detector **B** in the image above).
+FITC signal detected erroneously by secondary detectors can be estimated by a process of **fluorescence compensation** which requires a set of controls be present to calculate the spillover. These controls are called *Single Colour Controls* and are acquired prior to sample acquisition. The purpose of the single colour control is to estimate the amount of spillover of emission from fluorophore **F** onto non-primary detectors (detector **B** in the image above).
 
 We note, but will not discuss further here that there are a class of more advanced fluorescence-based cytometers known as *spectral* flow cytometers. Spectral instruments require a different and more specialized procedure to perform compensation.
 
@@ -209,9 +209,9 @@ pheatmap::pheatmap(
 )
 ```
 
-Looking at the figure, column 2: B610-A has high spillover from flurophore: PE-Dazzle594 and PE.
+Looking at the figure, column 2: B610-A (detector for fluorophore BB630) has high spillover from flurophore: PE-Dazzle594 and PE.
 
-In fact, when we look at the emission spectrum of the 2 dyes we see that this issue is apparent:
+In fact, when we look at the emission spectrum of the 2 dyes (PE and BB630) we see that this issue is apparent:
 
 ![Spectra from PE and BB630P2.](images/spectrumChart.png)The image was created at <https://www.bdbiosciences.com/en-ca/resources/bd-spectrum-viewer> using the BD spectrum viewer tool.
 
@@ -235,7 +235,7 @@ cf_comp <- compensate(
 
 ## Transformation and visualization
 
-Cytometry data tends to have a very high dynamic range. For example: the range of values in `PE-Cy5-5-A` channel in the FCS we have been working with is `-111 2621543`. The difference between cells that do not express a marker of interest and a cell that expresses variable level of marker could be order of magnitude difference. In such a scenario, transformation of the data can aid in **better visualization and representation of the biological phenomena**.
+Cytometry data tends to have a very high dynamic range. For example: the range of values in `PE-Cy5-5-A` channel in the FCS we have been working with is `-111 2621543`. The difference between cells that do not express a marker of interest and a cell that expresses variable level of marker could be order of magnitude. In such a scenario, transformation of the data can aid in **better visualization and representation of the biological phenomena**.
 
 There are multiple approaches to transform the data in `cytoverse`. We will identify a few common ones as well as demonstrate how to create new transformations.
 
