@@ -176,4 +176,4 @@ As we see, we were able to extract median expression of the marker **CD4** on 4 
 # Conclusion
 
 In this section, we show how to easily generate reports and visualizations from the `GatingSet` object which we created earlier. We demonstrated some approaches to easily extract counts, frequencies, MFI, or a user defined metric from the `GatingSet` object easily. 
-Also, as noted in the section [Visualizations](5_ggcyto.Rmd), the `ggcyto` makes use of the `ggplot2` framework providing a familiar user interface. Importantly, this allows users to prepare intricate figures for events within the `GatingSet`.
+Also, as noted in the section [Visualizations](6_ggcyto.html), the `ggcyto` makes use of the `ggplot2` framework providing a familiar user interface. Importantly, this allows users to prepare intricate figures for events within the `GatingSet`.

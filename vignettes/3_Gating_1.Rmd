@@ -12,7 +12,7 @@ The purpose of flow cytometry is to make inferences regarding some cell type(s) 
 
 ## GatingSet and GatingHeirarchy
 
-In the previous sections, we have seen (and worked with) `flowFrame`, `flowSet`, `cytoframe`, and `cytoset`. These objects hold the underlying data, allowing us to visualize it, manipulate it, etc.
+In the previous sections, we have seen (and worked with) `cytoframe`, and `cytoset`. These objects hold the underlying data, allowing us to visualize it, manipulate it, etc.
 
 In this section we work with `GatingSet` and `GatingHierarchy`. These objects, like the name suggests, store information regarding various gates and filters that we will generate. Importantly, we can save the `GatingSet` which will completely package the analysis as well as the **.fcs** files in an opensource format that can be shared, allowing reproducibility.
 
@@ -22,7 +22,7 @@ In **part 2** of this sections, we will go over methods to extract gated data fo
 
 In **part 3 (optional)**, we will demonstrate how analysts can automate this process by utilizing a `gatingTemplate` (a csv file that can be used to define and build the hierarchy).
 
-## Building the gating tree: manual and semi-supervised
+## Creating a `GatingSet`
 
 Required libraries
 
@@ -52,7 +52,9 @@ We have now created a `GatingSet` called **gs**.
 1. How would you check the metadata associated with the `GatingSet`?
 2. How would you subset `gs` to only include samples where **Treatment = Control**?
 
-Now, we revisit some of the concepts that we have seen previously: **compensation** and **transformation** as it pertains to a `GatingSet`.
+The `GatingSet` needs to be **compensated** and **transformed** before we start attaching gates.
+
+*Note*: The approach to **compensate** and **transform** a `GatingSet` is similar to that of `cytoframe` and `cytoset`; As such, we ask you to run the code below, up to line **125**. 
 
 We can directly compensate the `GatingSet` object.
 
@@ -115,7 +117,8 @@ The `GatingHierarchy` is a data structure that stores the sample-wise gating inf
 You can access the `GatingHierarchy` using the `[[` subset operation. 
 
 ### Exercise
-1. Try running `gh_get_compensation(gs)`. Why do you get an error message? How would you fix this?
+1. Try running `gh_get_compensations(gs)`. Why do you get an error message? How would you fix this?
+2. What other methods have `gs_` and `gh_`? 
 2. What is the difference between `gs[1]` and `gs[[1]]`?
 3. Why are there multiple data structures to represent and hold flow cytometry data in the `cytoverse`?
 
@@ -131,6 +134,14 @@ Below, we demonstrate various types of gates that could be estimated **automatic
 ### Automatic estimation of gates
 
 The `gs_add_gating_method` call from `openCyto` library can be leveraged for automatic estimation of gates, as well as clean scripting! Available gating methods can be listed by calling `gt_list_methods()`.
+Please see additional examples here: [cytoverse](https://cytoverse.org/examples/index.html).
+
+List of available methods.
+
+```{r show_available_gating_methods, echo=FALSE, eval=TRUE}
+# show openCyto gating methods
+gt_list_methods()
+```
 
 #### Singlets gate
 
@@ -299,7 +310,7 @@ cd3_ellipse+
 
 #### Quad gate
 
-When there are population(s) of interest in all 4 quadrants, it is useful to estimate a `quadrant gate` using `gate_quad_tmix`.
+When there are population(s) of interest in all 4 quadrants, it is useful to estimate a `quadrant gate` using `gate_quad_sequential`.
 *Note*: Pay attention to `alias` and `pop` arguments!
 
 ```{r viz_cd4_cd8,echo=TRUE, eval=TRUE, message=FALSE}
@@ -328,10 +339,6 @@ gs_add_gating_method(
   ),
   collapseDataForGating = TRUE
 )
-
-# visualize (exercise)
-# Fill with call to ggcyto
-# 1. Gates/Nodes are a combination of CD45RA[+/-]CCR7[+-] 
 ```
 
 ##### Exercise
@@ -341,9 +348,11 @@ gs_add_gating_method(
 2. How would you remove the gates attached by `gs_add_gating_method`?
 *Hint*: Try running `help(gs_add_gating_method)` and read the details.
 <details>`gs_remove_gating_method` reverses the the results of `gs_add_gating_method` in a step wise manner.</details>
+3. Are there other arguments for `gs_add_gating_method`? How can you use them?
 
+*Note*: `gs_add_gating_method` keeps a history of the calls made. If you reload a previously saved `GatingSet` via `load_gs` to work on, start with a clean history using `gs_add_gating_method_init(gs)` so that errors do not arise.
 
-### Programmatic construction of gates
+### Explicit construction of gates
 
 Suppose you would like to add a gate that has a particular shape or range that cannot be easily estimated using the automatic estimation approaches above. In this case, you could **programmatically** define a gate by either providing ranges, coordinates, or logical statements as demonstrated below.
 
@@ -370,9 +379,9 @@ cd3_rectangle <- matrix(
   byrow = F,
   dimnames = list(
     c("min", "max"), # rownames
-    c("V510-A","U570-A")
+    c("V510-A","U570-A") # colnames are channel names
   )
-) # colnames are channel names
+) 
 cd3_rectangle_gate <- rectangleGate(
   .gate = cd3_rectangle,
   filterId = "CD3+ T cells"
@@ -385,7 +394,7 @@ When a single dimension is provided:
 ```{r example_manual_rect_2, echo = TRUE, eval=TRUE, message=FALSE}
 # provide the range
 cd3_range <- matrix(data = c(140,200))
-# set the column name to the requirec channel
+# set the column name to the required channel
 colnames(cd3_range) <- "V510-A"
 
 # construct gate
@@ -411,7 +420,8 @@ Each call to `gs_pop_add` requires a `recompute(gs)` call.
 
 ##### Exercise
 
-1. Try to run the following code.
+1. Try to run the following code: 
+
 <details>
 ```{r no_recompute, echo=TRUE, eval=FALSE}
 no_recompute <- ggcyto(gs, 
@@ -420,9 +430,13 @@ no_recompute <- ggcyto(gs,
   geom_hex(bins = 256)
 no_recompute
 ```
-Why do you get an error? Try calling `recompute(gs)`. Now rerun the code.</details>
+</details> 
 
-*Note*:<details>While `gs_add_pop` attaches the gates to the `GatingSet`, the index of the filtered events are not calculated until you call `recompute`.</details>
+Why do you get an error?
+
+<details>
+While `gs_add_pop` attaches the gates to the `GatingSet`, the index of the filtered events are not calculated until you call `recompute`.
+</details>
 
 #### Polygon gate
 
@@ -453,7 +467,7 @@ nkt_poly <- matrix(
   ncol = 2,
   byrow = T, # indicates that add as x,y pair
   dimnames = list(
-    NULL, # rownames 
+    NULL, # rownames have no meaning in polygonGates
     c("R670-A","V510-A") # colnames are channel names
   ) 
 )
@@ -485,6 +499,7 @@ nkt_vis+geom_gate(nkt_poly_gate_scale)
 
 1.  Construct a new `Rectangular gate` that can be used to filter **CD4- CD3+** population. *Hint*: Visualize the data and then define the best ranges.
 2.  How would you rotate this gate? *Hint*: try running `help(flowCore::transform_gate)`.
+3.  Think back to the `CD3+` gate we created using `gs_add_gating_method`, how would you edit it? *Hint*: try running `help.search("get or set gate")`. 
 
 
 #### Boolean Gates
@@ -532,6 +547,7 @@ recompute(gs)
 #### Exercise
 
 1. How would you create a `booleanFilter` that only filters out **naive** T cells defined as **CD45RA+CCR7+**? Can you visualize the result?
+2. How would you remove the gate called `All`?
 2. How would you remove an attached gate? Is `recompute` required after removal of a gate?
 3. What happens if you remove a parent gate?
 
@@ -544,11 +560,14 @@ We have been creating and adding many gates to our `GatingSet`. A useful way to 
 plot(gs, bool = TRUE)
 ```
 
-Another useful approach is to visualize the gated data, with gates that we have generated. See [articles/5_ggcyto.html] for more.
+Another useful approach is to visualize the gated data, with gates that we have generated. See the section of [visualization](6_ggcyto.html) for more.
 
 ```{r viz_gs, echo=TRUE, eval=TRUE,message=FALSE}
 # visualize the full gating hierarchy
-autoplot(gs[[1]],bins = 256, bool = TRUE)+
+autoplot(
+  gs[[1]],
+  bins = 256, 
+  bool = TRUE)+
   ggcyto_par_set(limits = "data") # set data range to be determined by data
 ```
 
@@ -563,8 +582,10 @@ save_gs(gs, path = "path/to/a/folder")
 
 ## Conclusion
 
-In this section, we spent some time identifying various types of gates that are available in `cytoverse`. As well, we demonstrated how to programmatically create such gates, either manually (i.e. by defining ranges or vertices) or in a semi-automated and data driven manner.
+In this section, we spent some time identifying various types of gates that are available in `cytoverse`. As well, we demonstrated how to programmatically create such gates, either manually (i.e. by defining ranges or vertices) or in a semi-automated and data driven manner. 
 
-In [**Part 2**](4_Gating_gatingTemplate.Rmd) we will take a look at how users can leverage a `gatingTemplate` generate gates as we have done here, but with minimal scripting. It is worth noting that while the use `gatingTemplate` minimizes scripting, it does not compromise on reproducibility!
+Next, we go over methods to [extract the gated data](4_Gating_2.html). 
 
-Lastly, we also made ample use of the `ggcyto` library in order to generate visualizations that helped in QC'ing the data and the gates that we generated. We will go over `ggcyto` in more detail in [**Visualizations**](5_ggcyto.Rmd).
+The [**(Optional) Part 3**](5_Gating_gatingTemplate.html) goes over how users can leverage a `gatingTemplate` to generate gates as we have done here, but with minimal scripting. It is worth noting that while the use `gatingTemplate` minimizes scripting, it does not compromise on reproducibility!
+
+Lastly, we also made ample use of the `ggcyto` library in order to generate visualizations that helped in QC'ing the data and the gates that we generated. We will go over `ggcyto` in more detail in [**Visualizations**](6_ggcyto.html).
