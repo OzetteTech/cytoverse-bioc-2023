@@ -36,7 +36,9 @@ cache_workshop_data()
 
 ## FlowRepository workshop data
 
-In this `cytoverse` workshop we will demonstrate the use of `cytoverse` packages to analyse publicly available datasets hosted on [FlowRepository](http://flowrepository.org/). The first dataset [FR-FCM-ZZEC](http://flowrepository.org/id/FR-FCM-ZZEC) contains FCS files for OMIP-025, a study to evaluate the memory and follicular helper phenotypes of human T- and NK- cell populations using intracellular cytokine staining. The second dataset [FR-FCM-ZZ36](http://flowrepository.org/id/FR-FCM-ZZ36) contains FCS files for OMIP-018, a study designed to phenotype T cells for expression of various chemokine receptors. 
+In this `cytoverse` workshop we will demonstrate the use of `cytoverse` packages to analyse publicly available datasets hosted on [FlowRepository](http://flowrepository.org/). 
+The first dataset [FR-FCM-Z5PC](https://flowrepository.org/id/FR-FCM-Z5PC) contains FCS files from a study [assessing the post recovery immune phenotypes from patients infected with COVID-19](https://www.nature.com/articles/s41467-022-34638-2). We are using a subset of the FCS files. 
+The second dataset [FR-FCM-ZZ36](http://flowrepository.org/id/FR-FCM-ZZ36) contains FCS files for OMIP-018, a study designed to phenotype T cells for expression of various chemokine receptors. 
 
 The data required for this workshop, including subsets extracted from the FlowRepository datasets are made available locally in a file cache by running `cache_workshop_data()`.
 
