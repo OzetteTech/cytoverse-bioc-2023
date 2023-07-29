@@ -59,13 +59,16 @@
       <a href="../articles/3_Gating_1.html">Gating Cells with scripts</a>
     </li>
     <li>
-      <a href="../articles/4_Gating_gatingTemplate.html">Gating Cells with gatingTemplates</a>
+      <a href="../articles/4_Gating_2.html">Accessing gated data</a>
     </li>
     <li>
-      <a href="../articles/5_ggcyto.html">Visualizations using ggcyto</a>
+      <a href="../articles/5_Gating_gatingTemplate.html">Gating Cells with gatingTemplates</a>
     </li>
     <li>
-      <a href="../articles/6_Reporting.html">Reporting: Counts, Frequency, etc.</a>
+      <a href="../articles/6_ggcyto.html">Visualizations using ggcyto</a>
+    </li>
+    <li>
+      <a href="../articles/7_Reporting.html">Reporting: Counts, Frequency, etc.</a>
     </li>
   </ul>
 </li>
@@ -154,8 +157,9 @@ node is shown as a distinct path. Suppose you would like to only view
 the leaf nodes. For this, we use <code>gs_get_leaf_nodes</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get leaf nodes</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_get_leaf_nodes.html" class="external-link">gs_get_leaf_nodes</a></span><span class="op">(</span><span class="va">gs</span>, </span>
-<span>                  ancestor <span class="op">=</span> <span class="st">"root"</span><span class="op">)</span> <span class="co"># can select leafs of a specific node</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_get_leaf_nodes.html" class="external-link">gs_get_leaf_nodes</a></span><span class="op">(</span></span>
+<span>  <span class="va">gs</span>, </span>
+<span>  ancestor <span class="op">=</span> <span class="st">"root"</span><span class="op">)</span> <span class="co"># can select leafs of a specific node</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "/singlet/live/lymphocytes/CD3+ T cells/NKT cells"                                           </span></span>
 <span><span class="co">## [2] "/singlet/live/lymphocytes/CD3+ T cells/non-NKT Cells/conv_Tcells/MAIT Cells"                </span></span>
 <span><span class="co">## [3] "/singlet/live/lymphocytes/CD3+ T cells/non-NKT Cells/conv_Tcells/not_MAIT"                  </span></span>
@@ -169,9 +173,10 @@ update this to <strong>Double Negative CD3+ T cells</strong> for
 readability, we can use <code>gs_pop_set_name</code> method.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># rename node</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_set_name.html" class="external-link">gs_pop_set_name</a></span><span class="op">(</span><span class="va">gs</span>,</span>
-<span>                 <span class="st">"CD4-CD8a-"</span>,</span>
-<span>                 <span class="st">"Double Negative CD3+ T cells"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/gs_pop_set_name.html" class="external-link">gs_pop_set_name</a></span><span class="op">(</span></span>
+<span>  <span class="va">gs</span>,</span>
+<span>  <span class="st">"CD4-CD8a-"</span>,</span>
+<span>  <span class="st">"Double Negative CD3+ T cells"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`4000_TNK-CR1`</span></span>
 <span><span class="co">## NULL</span></span>
 <span><span class="co">## </span></span>
@@ -240,9 +245,10 @@ the results different?</li>
 <li>Extract the data from the gate
 <code>Double Negative CD3+ T cells</code> for the 1st sample and store
 it as <code>sample_1</code>. Transform the expression value for
-<code>FSC-A</code>. What happens to the data in <code>gs</code>?</li>
+<code>FSC-A</code>. What happens to the data in
+<code>gs</code>?<em>Hint</em>
+</li>
 </ol>
-<p><em>Hint</em>:</p>
 <details><pre><code><span><span class="co"># plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/ggcyto/man/ggcyto.html" class="external-link">ggcyto</a></span><span class="op">(</span><span class="va">gs</span>,</span>
 <span>       subset <span class="op">=</span> <span class="st">"Double Negative CD3+ T cells"</span>, </span>
@@ -258,7 +264,7 @@ the same data!
 <li>what does <code>inverse.transform</code> argument do?</li>
 <li>Run the following code:</li>
 </ol>
-<details><p><em>Note</em>: This is only for example.</p>
+<details><p>This is only for example.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">another_CD3_gate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>,<span class="cn">Inf</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">another_CD3_gate</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"FSC-A"</span></span>

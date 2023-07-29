@@ -59,13 +59,16 @@
       <a href="../articles/3_Gating_1.html">Gating Cells with scripts</a>
     </li>
     <li>
-      <a href="../articles/4_Gating_gatingTemplate.html">Gating Cells with gatingTemplates</a>
+      <a href="../articles/4_Gating_2.html">Accessing gated data</a>
     </li>
     <li>
-      <a href="../articles/5_ggcyto.html">Visualizations using ggcyto</a>
+      <a href="../articles/5_Gating_gatingTemplate.html">Gating Cells with gatingTemplates</a>
     </li>
     <li>
-      <a href="../articles/6_Reporting.html">Reporting: Counts, Frequency, etc.</a>
+      <a href="../articles/6_ggcyto.html">Visualizations using ggcyto</a>
+    </li>
+    <li>
+      <a href="../articles/7_Reporting.html">Reporting: Counts, Frequency, etc.</a>
     </li>
   </ul>
 </li>
@@ -116,15 +119,14 @@ interpretation.</p>
 fluorescent signal from a cell as result of a laser excitation. Briefly,
 cell type <strong>C</strong> has been labelled with a marker
 <strong>M</strong> that is conjugated to a fluorophore
-(<strong>F</strong>). <strong>F</strong> has excitation maxima at
-certain wavelength (<strong>W</strong>) resulting in fluorescence. While
-the fluorescence has a emission maxima, the emission profile of
-<strong>F</strong> can span many nanometers. The cytometer has a
-dedicated detector (channel) <strong>A</strong> to detect peak emission
-of <strong>F</strong>. However, due to the spread of the emission of
-<strong>F</strong>, some signal from <strong>F</strong> is also
-“spilled” onto detector <strong>B</strong>, a detector for a different
-fluorophore.</p>
+(<strong>F</strong>). <strong>F</strong> is excited by a laser resulting
+in fluorescence. While the fluorescence has a emission maxima, the
+emission profile of <strong>F</strong> can span many nanometers. The
+cytometer has a dedicated detector (channel) <strong>A</strong> to
+detect peak emission of <strong>F</strong>. However, due to the spread
+of the emission of <strong>F</strong>, some signal from
+<strong>F</strong> is also “spilled” onto detector <strong>B</strong>, a
+detector for a different fluorophore.</p>
 <p>The image below provides a concrete example.</p>
 <div class="figure">
 <img src="https://static.bio-rad-antibodies.com/2016/flow-cytometry/fig-9-spectral-profiles.png" alt=""><p class="caption">Excitation/Emission spectra for FITC. Taken from
@@ -138,7 +140,7 @@ below).</p>
 (spillover)} + \text{Signal from another (perhaps dedicated)
 fluorophore}.\)</span></p>
 <p>FITC signal detected erroneously by secondary detectors can be
-performed by a process of <strong>fluorescence compensation</strong>
+estimated by a process of <strong>fluorescence compensation</strong>
 which requires a set of controls be present to calculate the spillover.
 These controls are called <em>Single Colour Controls</em> and are
 acquired prior to sample acquisition. The purpose of the single colour
@@ -470,10 +472,10 @@ diagonal!</p></li>
 <strong>fluorophore</strong>. Visualizing it as a heatmap is sometimes
 more helpful</p>
 <p><img src="2_Spillover_transformation_files/figure-html/explain_spillover-1.png" width="960"></p>
-<p>Looking at the figure, column 2: B610-A has high spillover from
-flurophore: PE-Dazzle594 and PE.</p>
-<p>In fact, when we look at the emission spectrum of the 2 dyes we see
-that this issue is apparent:</p>
+<p>Looking at the figure, column 2: B610-A (detector for fluorophore
+BB630) has high spillover from flurophore: PE-Dazzle594 and PE.</p>
+<p>In fact, when we look at the emission spectrum of the 2 dyes (PE and
+BB630) we see that this issue is apparent:</p>
 <p><img src="images/spectrumChart.png" alt="Spectra from PE and BB630P2.">The image was created at <a href="https://www.bdbiosciences.com/en-ca/resources/bd-spectrum-viewer" class="external-link uri">https://www.bdbiosciences.com/en-ca/resources/bd-spectrum-viewer</a>
 using the BD spectrum viewer tool.</p>
 </div>
@@ -504,9 +506,9 @@ In the <code>cytoverse</code> this is done by a simple call to
 the range of values in <code>PE-Cy5-5-A</code> channel in the FCS we
 have been working with is <code>-111 2621543</code>. The difference
 between cells that do not express a marker of interest and a cell that
-expresses variable level of marker could be order of magnitude
-difference. In such a scenario, transformation of the data can aid in
-<strong>better visualization and representation of the biological
+expresses variable level of marker could be order of magnitude. In such
+a scenario, transformation of the data can aid in <strong>better
+visualization and representation of the biological
 phenomena</strong>.</p>
 <p>There are multiple approaches to transform the data in
 <code>cytoverse</code>. We will identify a few common ones as well as

@@ -59,13 +59,16 @@
       <a href="../articles/3_Gating_1.html">Gating Cells with scripts</a>
     </li>
     <li>
-      <a href="../articles/4_Gating_gatingTemplate.html">Gating Cells with gatingTemplates</a>
+      <a href="../articles/4_Gating_2.html">Accessing gated data</a>
     </li>
     <li>
-      <a href="../articles/5_ggcyto.html">Visualizations using ggcyto</a>
+      <a href="../articles/5_Gating_gatingTemplate.html">Gating Cells with gatingTemplates</a>
     </li>
     <li>
-      <a href="../articles/6_Reporting.html">Reporting: Counts, Frequency, etc.</a>
+      <a href="../articles/6_ggcyto.html">Visualizations using ggcyto</a>
+    </li>
+    <li>
+      <a href="../articles/7_Reporting.html">Reporting: Counts, Frequency, etc.</a>
     </li>
   </ul>
 </li>
@@ -145,12 +148,13 @@ Bioconductor tooling works:</p>
 <p>In this <code>cytoverse</code> workshop we will demonstrate the use
 of <code>cytoverse</code> packages to analyse publicly available
 datasets hosted on <a href="http://flowrepository.org/" class="external-link">FlowRepository</a>. The first dataset
-<a href="http://flowrepository.org/id/FR-FCM-ZZEC" class="external-link">FR-FCM-ZZEC</a>
-contains FCS files for OMIP-025, a study to evaluate the memory and
-follicular helper phenotypes of human T- and NK- cell populations using
-intracellular cytokine staining. The second dataset <a href="http://flowrepository.org/id/FR-FCM-ZZ36" class="external-link">FR-FCM-ZZ36</a> contains
-FCS files for OMIP-018, a study designed to phenotype T cells for
-expression of various chemokine receptors.</p>
+<a href="https://flowrepository.org/id/FR-FCM-Z5PC" class="external-link">FR-FCM-Z5PC</a>
+contains FCS files from a study <a href="https://www.nature.com/articles/s41467-022-34638-2" class="external-link">assessing the
+post recovery immune phenotypes from patients infected with
+COVID-19</a>. We are using a subset of the FCS files. The second dataset
+<a href="http://flowrepository.org/id/FR-FCM-ZZ36" class="external-link">FR-FCM-ZZ36</a>
+contains FCS files for OMIP-018, a study designed to phenotype T cells
+for expression of various chemokine receptors.</p>
 <p>The data required for this workshop, including subsets extracted from
 the FlowRepository datasets are made available locally in a file cache
 by running <code><a href="../reference/cache_workshop_data.html">cache_workshop_data()</a></code>.</p>
@@ -278,7 +282,7 @@ indicated in the <code>rpath</code> variable.</p>
 <span></span>
 <span><span class="co"># a cytoframe object</span></span>
 <span><span class="va">cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c858b8f692_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c61461bfc3_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -530,7 +534,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytorame by column</span></span>
 <span><span class="va">s_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span>, <span class="va">CD4_chan</span><span class="op">]</span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c858b8f692_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c61461bfc3_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 1 observables:</span></span>
 <span><span class="co">##        name       desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P23 U785-A CD4 BUV805    262143  -80.5002    262143</span></span>
@@ -541,7 +545,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytoframe by row</span></span>
 <span><span class="va">s2_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
 <span><span class="va">s2_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '5c858b8f692_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '5c61461bfc3_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 100 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -718,12 +722,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <code class="sourceCode R"><span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 5c811b72d57_4000_BDC-CR1.fcs 5c811b72d57_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5c858b8f692_4000_TNK-CR1.fcs 5c858b8f692_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c8413f8cf_4001_BDC-CR1.fcs   5c8413f8cf_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 5c8208ff8c1_4001_TNK-CR1.fcs 5c8208ff8c1_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c848da4cf0_4002_TNK-CR1.fcs 5c848da4cf0_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 5c81edd68a2_4003_TNK-CR1.fcs 5c81edd68a2_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 5c63fbe0a2a_4000_BDC-CR1.fcs 5c63fbe0a2a_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5c61461bfc3_4000_TNK-CR1.fcs 5c61461bfc3_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c65cdae6d7_4001_BDC-CR1.fcs 5c65cdae6d7_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 5c675638bfa_4001_TNK-CR1.fcs 5c675638bfa_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c617e41c0f_4002_TNK-CR1.fcs 5c617e41c0f_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 5c64993faa2_4003_TNK-CR1.fcs 5c64993faa2_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create metadata</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -752,12 +756,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5c811b72d57_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5c858b8f692_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5c8413f8cf_4001_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5c8208ff8c1_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 5c848da4cf0_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 5c81edd68a2_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
+<span><span class="co">## 5c63fbe0a2a_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c61461bfc3_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 5c65cdae6d7_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c675638bfa_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 5c617e41c0f_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 5c64993faa2_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p>This is much more convenient than going back and forth between the
@@ -774,8 +778,8 @@ full set of files.</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 5c811b72d57_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 5c8413f8cf_4001_BDC-CR1.fcs  Untreated Myeloid Panel</span></span></code></pre>
+<span><span class="co">## 5c63fbe0a2a_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 5c65cdae6d7_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span></code></pre>
 <div class="section level3">
 <h3 id="cytoset-views-and-aliasing">Cytoset views and aliasing<a class="anchor" aria-label="anchor" href="#cytoset-views-and-aliasing"></a>
 </h3>
@@ -824,10 +828,10 @@ To confirm this, you can use <code>cs_get_uri</code> or
 <code>cf_get_uri</code>:</p>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs_small</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpPRqlub/5ed64824-7392-487f-8db5-3b8ba5fbf44a"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpAiJFaH/abecdde4-bf37-40ca-a2fb-24a9080fe3df"</span></span></code></pre>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpPRqlub/5ed64824-7392-487f-8db5-3b8ba5fbf44a"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpAiJFaH/abecdde4-bf37-40ca-a2fb-24a9080fe3df"</span></span></code></pre>
 <p>To perform a <strong>deep copy</strong> we can use
 <code><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view()</a></code></p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
@@ -933,12 +937,12 @@ attempted to be coerced to a single array like object. (Set
 <span><span class="va">n_cell_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">nrow</span><span class="op">)</span></span>
 <span><span class="va">n_cell_events</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                [,1]</span></span>
-<span><span class="co">## 5c811b72d57_4000_BDC-CR1.fcs 912254</span></span>
-<span><span class="co">## 5c858b8f692_4000_TNK-CR1.fcs 102015</span></span>
-<span><span class="co">## 5c8413f8cf_4001_BDC-CR1.fcs  924474</span></span>
-<span><span class="co">## 5c8208ff8c1_4001_TNK-CR1.fcs  92703</span></span>
-<span><span class="co">## 5c848da4cf0_4002_TNK-CR1.fcs 372224</span></span>
-<span><span class="co">## 5c81edd68a2_4003_TNK-CR1.fcs 146150</span></span></code></pre>
+<span><span class="co">## 5c63fbe0a2a_4000_BDC-CR1.fcs 912254</span></span>
+<span><span class="co">## 5c61461bfc3_4000_TNK-CR1.fcs 102015</span></span>
+<span><span class="co">## 5c65cdae6d7_4001_BDC-CR1.fcs 924474</span></span>
+<span><span class="co">## 5c675638bfa_4001_TNK-CR1.fcs  92703</span></span>
+<span><span class="co">## 5c617e41c0f_4002_TNK-CR1.fcs 372224</span></span>
+<span><span class="co">## 5c64993faa2_4003_TNK-CR1.fcs 146150</span></span></code></pre>
 <div class="section level3">
 <h3 id="exercises">Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
 </h3>
