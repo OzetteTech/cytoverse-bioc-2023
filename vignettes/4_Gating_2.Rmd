@@ -46,8 +46,9 @@ When there are a lot of gates, this list can become very long as each node is sh
 
 ```{r leaf_nodes, echo=TRUE, eval=TRUE}
 # get leaf nodes
-gs_get_leaf_nodes(gs, 
-                  ancestor = "root") # can select leafs of a specific node
+gs_get_leaf_nodes(
+  gs, 
+  ancestor = "root") # can select leafs of a specific node
 
 ```
 
@@ -55,9 +56,10 @@ To change the name of a node, for instance, **CD4-CD8a-** above is not super cle
 
 ```{r rename_name, echo=TRUE, message=FALSE}
 # rename node
-gs_pop_set_name(gs,
-                 "CD4-CD8a-",
-                 "Double Negative CD3+ T cells")
+gs_pop_set_name(
+  gs,
+  "CD4-CD8a-",
+  "Double Negative CD3+ T cells")
 
 # check
 gs_get_leaf_nodes(gs)
@@ -88,9 +90,7 @@ extracted
 ### Exercise
 
 1. Try running the above code as `gh_pop_get_data`. How are the results different?
-2. Extract the data from the gate `Double Negative CD3+ T cells` for the 1st sample and store it as `sample_1`. Transform the expression value for `FSC-A`. What happens to the data in `gs`?
-
-*Hint*:
+2. Extract the data from the gate `Double Negative CD3+ T cells` for the 1st sample and store it as `sample_1`. Transform the expression value for `FSC-A`. What happens to the data in `gs`?*Hint*
 
 <details>
 ```{}
@@ -101,14 +101,14 @@ ggcyto(gs,
   geom_hex(bins = 256)
 ```
 
-Notice that altering the extracted data leads to altered data within the `GatingSet`. This is because we did not create a new copy of the data using `realize_view` method. Importantly, this further highlights that the `cytoframe`, `cytoset`, and the `GatingSet` are all pointing to the same data!
-</details>
+Notice that altering the extracted data leads to altered data within the `GatingSet`. This is because we did not create a new copy of the data using `realize_view` method. Importantly, this further highlights that the `cytoframe`, `cytoset`, and the `GatingSet` are all pointing to the same data!</details>
+
 
 3. what does `inverse.transform` argument do?
 4. Run the following code:
 
 <details>
-*Note*: This is only for example.
+This is only for example.
 ```{r echo=TRUE, eval=FALSE}
 another_CD3_gate <- matrix(c(-Inf,Inf), nrow = 2, ncol=1)
 colnames(another_CD3_gate) <- "FSC-A"

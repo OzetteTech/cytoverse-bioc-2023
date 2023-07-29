@@ -21,6 +21,8 @@ library(ggcyto)
 theme_set(theme_bw())
 ```
 
+First, extract a `cytoframe` from the richly gated `GatingSet` we worked in [Gating cells in cytoverse](articles/3_Gating_1.html). Shortly we'll also see how to work with the `GatingSet` itself.
+
 ```{r boilerplate, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 library(CytoverseBioc2023)
 cache_workshop_data()
@@ -28,11 +30,10 @@ gs <- make_transformed_gs(add_gates = TRUE)
 cf <- gh_pop_get_data(gs[[1]],"root")
 ```
 
-First, extract a `cytoframe` from the richly gated `GatingSet` we worked in [Gating cells in cytoverse](articles/3_Gating_1.html). Shortly we'll also see how to work with the `GatingSet` itself.
 
 ## Hit the ground running using `autoplot`
 
-The `autoplot` method is a convenient for rapid generation of plots with minimal effort.
+The `autoplot` method is convenient for rapid generation of plots with minimal effort.
 
 1.  Bivariate plot
 
@@ -91,7 +92,7 @@ ggcyto(gs,
   facet_wrap(~name)
 ```
 
-The marker combination "CD8a vs CD4" is used to at the node `r gs_get_pop_paths(gs)[8]` to define CD4+ vs CD8+ T cells. Unlike with `autoplot`, `ggcyto` method allows us to look at the data from the point of `subset`. In the above example, `subset = "singlet"`.
+The marker combination "CD8a vs CD4" is used to at the node **`r gs_get_pop_paths(gs)[8]`** to define CD4+ vs CD8+ T cells. Unlike with `autoplot`, `ggcyto` method allows us to look at the data from the point of `subset`. In the above example, `subset = "singlet"`.
 
 ### Exercise
 
@@ -195,7 +196,7 @@ Seems like MAIT Cells tend to have higher PD1 expression than CD8+ T Cells! This
 
 ## Backgating and overlays
 
-There are instances when you may want to visualize a gated population (children/grandchildren/siblings) together with the parent. This is the idea behind backgating. We have already seen met this approach above using `geom_overlay` where density of 1 node was project on top of density of a different unrelated node.
+There are instances when you may want to visualize a gated population (children/grandchildren/siblings) together with the parent. This is the idea behind backgating. We have already seen met this approach above using `geom_overlay` where density of 1 node was projected on top of density of a different unrelated node.
 
 Below, we go through another example where we ask the question: what is the general expression level of CD4 and CD8a on MAIT cells compared to all CD3+ T cells?
 
@@ -216,6 +217,31 @@ mait_expression
 ```
 
 Seems like there are a lot of MAIT Cells that are CD8a+ or negative for both CD8a and CD4 compared to CD4+.
+
+### Exercise
+
+1. Prepare an overlay as above using the `autoplot` method.
+
+*Hint*:
+<details>
+```{r echo=TRUE, eval=FALSE}
+example <- autoplot(
+  # add your code
+  axis_inverse_transform = TRUE,
+  bins = 256
+)+
+  geom_overlay(
+    gs_pop_get_data(gs, "MAIT Cells"),
+    size = 0.5,
+    colour = "red"
+  )
+```
+
+</details>
+
+2. Construct a `rectangleGate` for CD8+ cells and add it to the plot you create.
+3. Why are the scales not **inverse transformed**?
+
 
 # Conclusion
 
