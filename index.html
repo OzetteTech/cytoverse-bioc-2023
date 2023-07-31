@@ -106,7 +106,7 @@
 <div class="section level1">
 <h1 id="workshop-outlines">Workshop outlines<a class="anchor" aria-label="anchor" href="#workshop-outlines"></a>
 </h1>
-<p><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html">This website</a> contains training materials that will be presented at a workshop at <a href="https://bioc2023.bioconductor.org/schedule/" class="external-link">Bioc2023</a>, on August 2nd. If you couldn’t attend the conference, don’t worry, as we’ll add links to videos of the workshop. You may also explore these training materials at your own pace.</p>
+<p><a href="https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html">This website</a> contains training materials that will be presented at a workshop at <a href="https://bioc2023.bioconductor.org/schedule/" class="external-link">Bioc2023</a>, on August 2nd. During Bioc2023, you can launch an instance of rstudio server containing these materials by navigating to workshop.bioconductor.org. If you couldn’t attend the conference, don’t worry, as we’ll add links to videos of the workshop. You may also explore these training materials at your own pace.</p>
 <div class="section level2">
 <h2 id="learning-goals">Learning goals<a class="anchor" aria-label="anchor" href="#learning-goals"></a>
 </h2>
@@ -139,11 +139,11 @@
 </tr>
 <tr class="even">
 <td>Basics of working with FCS files</td>
-<td>15 minutes</td>
+<td>30 minutes</td>
 </tr>
 <tr class="odd">
 <td>Spillover, Transformation</td>
-<td>15 minutes</td>
+<td>25 minutes</td>
 </tr>
 <tr class="even">
 <td>Gating Cells in the <code>cytoverse</code>
@@ -153,11 +153,11 @@
 <tr class="odd">
 <td>Visualization using <code>ggcyto</code>
 </td>
-<td>10 minutes</td>
+<td>on your own</td>
 </tr>
 <tr class="even">
 <td>Reporting</td>
-<td>10 minutes</td>
+<td>on your own</td>
 </tr>
 <tr class="odd">
 <td>Wrap-up</td>
@@ -165,6 +165,11 @@
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level2">
+<h2 id="survey-of-open-source-users">Survey of open source users<a class="anchor" aria-label="anchor" href="#survey-of-open-source-users"></a>
+</h2>
+<p>We’d love to know more about the open source community so that we can better support their needs. Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSc3t5IznfJFVJCOJB3SZVNryeOcSlSMDOUEg6rIXrRYza_sOw/viewform?usp=sf_link" class="external-link">complete our survey</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="prerequisitesassumptions">Prerequisites/assumptions<a class="anchor" aria-label="anchor" href="#prerequisitesassumptions"></a>
@@ -207,6 +212,7 @@
 <div class="section level1">
 <h1 id="notes-on-using-the-docker-image">Notes on using the docker image<a class="anchor" aria-label="anchor" href="#notes-on-using-the-docker-image"></a>
 </h1>
+<p>You can get an instance of rstudio server that contains these materials, and all of their dependencies by installing docker, and then running</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-network</span><span class="op">=</span>host <span class="at">-e</span> PASSWORD=<span class="op">&lt;</span>choose_a_password_for_rstudio<span class="op">&gt;</span> -p 8787:8787 ghcr.io/ozettetech/cytoverse-bioc-2023:latest</span></code></pre></div>
 </div>
 
