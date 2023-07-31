@@ -282,7 +282,7 @@ indicated in the <code>rpath</code> variable.</p>
 <span></span>
 <span><span class="co"># a cytoframe object</span></span>
 <span><span class="va">cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '6653b6e6e3a_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '6613935468d_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -534,7 +534,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytorame by column</span></span>
 <span><span class="va">s_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span>, <span class="va">CD4_chan</span><span class="op">]</span></span>
 <span><span class="va">s_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '6653b6e6e3a_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '6613935468d_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 102015 cells and 1 observables:</span></span>
 <span><span class="co">##        name       desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P23 U785-A CD4 BUV805    262143  -80.5002    262143</span></span>
@@ -545,7 +545,7 @@ expression matrix <code>exprs(cf)</code> as well as the columns of the
 <code class="sourceCode R"><span><span class="co"># subset cytoframe by row</span></span>
 <span><span class="va">s2_cf</span> <span class="op">&lt;-</span> <span class="va">cf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
 <span><span class="va">s2_cf</span></span></code></pre></div>
-<pre><code><span><span class="co">## cytoframe object '6653b6e6e3a_4000_TNK-CR1.fcs'</span></span>
+<pre><code><span><span class="co">## cytoframe object '6613935468d_4000_TNK-CR1.fcs'</span></span>
 <span><span class="co">## with 100 cells and 33 observables:</span></span>
 <span><span class="co">##                   name            desc     range  minRange  maxRange</span></span>
 <span><span class="co">## $P1              FSC-A              NA    262143    0.0000    262143</span></span>
@@ -722,12 +722,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <code class="sourceCode R"><span><span class="co"># prior to providing metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                      name</span></span>
-<span><span class="co">## 66566acd875_4000_BDC-CR1.fcs 66566acd875_4000_BDC-CR1.fcs</span></span>
-<span><span class="co">## 6653b6e6e3a_4000_TNK-CR1.fcs 6653b6e6e3a_4000_TNK-CR1.fcs</span></span>
-<span><span class="co">## 6656e0c5ae5_4001_BDC-CR1.fcs 6656e0c5ae5_4001_BDC-CR1.fcs</span></span>
-<span><span class="co">## 6655a3dd9da_4001_TNK-CR1.fcs 6655a3dd9da_4001_TNK-CR1.fcs</span></span>
-<span><span class="co">## 6651a54992f_4002_TNK-CR1.fcs 6651a54992f_4002_TNK-CR1.fcs</span></span>
-<span><span class="co">## 66566634b0c_4003_TNK-CR1.fcs 66566634b0c_4003_TNK-CR1.fcs</span></span></code></pre>
+<span><span class="co">## 66111e8addf_4000_BDC-CR1.fcs 66111e8addf_4000_BDC-CR1.fcs</span></span>
+<span><span class="co">## 6613935468d_4000_TNK-CR1.fcs 6613935468d_4000_TNK-CR1.fcs</span></span>
+<span><span class="co">## 661cc88e00_4001_BDC-CR1.fcs   661cc88e00_4001_BDC-CR1.fcs</span></span>
+<span><span class="co">## 6613ac465e2_4001_TNK-CR1.fcs 6613ac465e2_4001_TNK-CR1.fcs</span></span>
+<span><span class="co">## 66158f53433_4002_TNK-CR1.fcs 66158f53433_4002_TNK-CR1.fcs</span></span>
+<span><span class="co">## 6615f27e3fe_4003_TNK-CR1.fcs 6615f27e3fe_4003_TNK-CR1.fcs</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create metadata</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -756,12 +756,12 @@ the <code>sampleNames</code> of the <code>cytoset</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metadata</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 66566acd875_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 6653b6e6e3a_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 6656e0c5ae5_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 6655a3dd9da_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
-<span><span class="co">## 6651a54992f_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
-<span><span class="co">## 66566634b0c_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
+<span><span class="co">## 66111e8addf_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 6613935468d_4000_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 661cc88e00_4001_BDC-CR1.fcs  Untreated Myeloid Panel</span></span>
+<span><span class="co">## 6613ac465e2_4001_TNK-CR1.fcs   Treated  T Cell Panel</span></span>
+<span><span class="co">## 66158f53433_4002_TNK-CR1.fcs Untreated  T Cell Panel</span></span>
+<span><span class="co">## 6615f27e3fe_4003_TNK-CR1.fcs   Treated  T Cell Panel</span></span></code></pre>
 <p>The benefit of having metadata is that we can use many of the
 sub-setting operations in a metadata specific manner.</p>
 <p>This is much more convenient than going back and forth between the
@@ -778,8 +778,8 @@ full set of files.</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html" class="external-link">pData</a></span><span class="op">(</span><span class="va">cs_myeloid</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                              Treatment         panel</span></span>
-<span><span class="co">## 66566acd875_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
-<span><span class="co">## 6656e0c5ae5_4001_BDC-CR1.fcs Untreated Myeloid Panel</span></span></code></pre>
+<span><span class="co">## 66111e8addf_4000_BDC-CR1.fcs Untreated Myeloid Panel</span></span>
+<span><span class="co">## 661cc88e00_4001_BDC-CR1.fcs  Untreated Myeloid Panel</span></span></code></pre>
 <div class="section level3">
 <h3 id="cytoset-views-and-aliasing">Cytoset views and aliasing<a class="anchor" aria-label="anchor" href="#cytoset-views-and-aliasing"></a>
 </h3>
@@ -828,10 +828,10 @@ To confirm this, you can use <code>cs_get_uri</code> or
 <code>cf_get_uri</code>:</p>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs_small</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpiF08qs/6f5c70f1-55c1-4a2b-9fdc-0467e48fca37"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpLlVgrj/0b23d03a-e21f-4ff0-85d3-6be02ab7ddac"</span></span></code></pre>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/flowWorkspace/man/cs_get_uri.html" class="external-link">cs_get_uri</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpiF08qs/6f5c70f1-55c1-4a2b-9fdc-0467e48fca37"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpLlVgrj/0b23d03a-e21f-4ff0-85d3-6be02ab7ddac"</span></span></code></pre>
 <p>To perform a <strong>deep copy</strong> we can use
 <code><a href="https://rdrr.io/pkg/flowWorkspace/man/cytoframe.html" class="external-link">realize_view()</a></code></p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
@@ -937,12 +937,12 @@ attempted to be coerced to a single array like object. (Set
 <span><span class="va">n_cell_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flowCore/man/fsApply.html" class="external-link">fsApply</a></span><span class="op">(</span><span class="va">cs</span>, <span class="va">nrow</span><span class="op">)</span></span>
 <span><span class="va">n_cell_events</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                [,1]</span></span>
-<span><span class="co">## 66566acd875_4000_BDC-CR1.fcs 912254</span></span>
-<span><span class="co">## 6653b6e6e3a_4000_TNK-CR1.fcs 102015</span></span>
-<span><span class="co">## 6656e0c5ae5_4001_BDC-CR1.fcs 924474</span></span>
-<span><span class="co">## 6655a3dd9da_4001_TNK-CR1.fcs  92703</span></span>
-<span><span class="co">## 6651a54992f_4002_TNK-CR1.fcs 372224</span></span>
-<span><span class="co">## 66566634b0c_4003_TNK-CR1.fcs 146150</span></span></code></pre>
+<span><span class="co">## 66111e8addf_4000_BDC-CR1.fcs 912254</span></span>
+<span><span class="co">## 6613935468d_4000_TNK-CR1.fcs 102015</span></span>
+<span><span class="co">## 661cc88e00_4001_BDC-CR1.fcs  924474</span></span>
+<span><span class="co">## 6613ac465e2_4001_TNK-CR1.fcs  92703</span></span>
+<span><span class="co">## 66158f53433_4002_TNK-CR1.fcs 372224</span></span>
+<span><span class="co">## 6615f27e3fe_4003_TNK-CR1.fcs 146150</span></span></code></pre>
 <div class="section level3">
 <h3 id="exercises">Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
 </h3>
