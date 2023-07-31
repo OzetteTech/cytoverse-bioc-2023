@@ -6,7 +6,8 @@ A number of packages make up the `cytoverse`. [flowCore](https://bioconductor.or
 
 # Workshop outlines
 
-[This website](https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html) contains training materials that will be presented at a workshop at [Bioc2023](https://bioc2023.bioconductor.org/schedule/), on August 2nd.  If you couldn't attend the conference, don't worry, as we'll add links to videos of the workshop.
+[This website](https://cdn.ozetteai.com/cytoverse-bioc-2023/index.html) contains training materials that will be presented at a workshop at [Bioc2023](https://bioc2023.bioconductor.org/schedule/), on August 2nd.  During Bioc2023, you can launch an instance of rstudio server containing these materials by navigating to workshop.bioconductor.org.
+If you couldn't attend the conference, don't worry, as we'll add links to videos of the workshop.
 You may also explore these training materials at your own pace.
 
 ## Learning goals
@@ -28,13 +29,17 @@ By the end of this workshop, the attendees will be able to
 | Activity                                         | Time       |
 |--------------------------------------------------|------------|
 | Introduction and use of docker container         | 5 minutes  |
-| Basics of working with FCS files                 | 15 minutes |
-| Spillover, Transformation                        | 15 minutes |
+| Basics of working with FCS files                 | 30 minutes |
+| Spillover, Transformation                        | 25 minutes |
 | Gating Cells in the `cytoverse`                  | 40 minutes |
-| Visualization using `ggcyto`                     | 10 minutes |
-| Reporting                                        | 10 minutes |
+| Visualization using `ggcyto`                     | on your own |
+| Reporting                                        | on your own |
 | Wrap-up                                          | 10 minutes |
 
+
+## Survey of open source users
+
+We'd love to know more about the open source community so that we can better support their needs.  Please [complete our survey](https://docs.google.com/forms/d/e/1FAIpQLSc3t5IznfJFVJCOJB3SZVNryeOcSlSMDOUEg6rIXrRYza_sOw/viewform?usp=sf_link).
 
 ## Prerequisites/assumptions
 
@@ -64,6 +69,8 @@ What do these various packages do, and where should you look for a piece of func
 ---
 
 # Notes on using the docker image
+
+You can get an instance of rstudio server that contains these materials, and all of their dependencies by installing docker, and then running
 
 ```sh
 docker run -network=host -e PASSWORD=<choose_a_password_for_rstudio> -p 8787:8787 ghcr.io/ozettetech/cytoverse-bioc-2023:latest
